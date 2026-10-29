@@ -1,0 +1,67 @@
+{
+  "kinematics": {
+    "title": "Kinematics: describing motion",
+    "scenes": [
+      { "type": "intro", "title": "Everything is moving", "narration": "A cricket ball, a train, a falling mango — kinematics describes how things move, without asking why.", "emoji": "🏏", "bullets": ["Position, distance and displacement", "Speed, velocity and acceleration", "Motion in a straight line and in a plane"] },
+      { "type": "concept_map", "title": "The big ideas", "narration": "Tap each idea. Notice which ones have a direction — those are vectors.", "center": { "label": "Motion", "emoji": "🚆" }, "nodes": [
+        { "label": "Displacement", "emoji": "📍", "detail": "Shortest straight-line change in position, with direction. Unit: metre (m)." },
+        { "label": "Velocity", "emoji": "➡️", "detail": "Rate of change of displacement: v = Δx/Δt. It has direction." },
+        { "label": "Acceleration", "emoji": "🚀", "detail": "Rate of change of velocity: a = Δv/Δt. Unit: m/s²." },
+        { "label": "Distance", "emoji": "🛣️", "detail": "Total length of path travelled. Only size, no direction." },
+        { "label": "Speed", "emoji": "⏱️", "detail": "Distance covered per unit time. Never negative." } ] },
+      { "type": "sort", "title": "Vector or scalar?", "narration": "Sort each quantity. Vectors need a direction; scalars need only a size.", "buckets": ["Vector", "Scalar"], "items": [
+        { "label": "Velocity", "emoji": "➡️", "bucket": 0 }, { "label": "Speed", "emoji": "⏱️", "bucket": 1 }, { "label": "Displacement", "emoji": "📍", "bucket": 0 },
+        { "label": "Distance", "emoji": "🛣️", "bucket": 1 }, { "label": "Acceleration", "emoji": "🚀", "bucket": 0 }, { "label": "Time", "emoji": "⌛", "bucket": 1 } ] },
+      { "type": "formula", "title": "First equation of motion", "narration": "Move the sliders. With constant acceleration, velocity grows in a straight line with time.", "expression": "u + a*t", "display": "v = u + at", "result": { "symbol": "v", "label": "Final velocity", "unit": "m/s" }, "variables": [
+        { "symbol": "u", "label": "Initial velocity", "unit": "m/s", "min": 0, "max": 30, "step": 1, "value": 5 },
+        { "symbol": "a", "label": "Acceleration", "unit": "m/s²", "min": -5, "max": 10, "step": 0.5, "value": 2 },
+        { "symbol": "t", "label": "Time", "unit": "s", "min": 0, "max": 20, "step": 1, "value": 6 } ], "degrees": true },
+      { "type": "hotspot", "title": "Anatomy of a projectile", "narration": "Tap each part of the ball's path to see what is happening there.", "emoji": "⚽", "label": "A ball kicked at an angle", "parts": [
+        { "label": "Launch", "detail": "Velocity u at angle θ splits into uₓ = u cos θ (steady) and uᵧ = u sin θ (changing)." },
+        { "label": "Highest point", "detail": "Vertical velocity is zero here; horizontal velocity is still u cos θ." },
+        { "label": "Path shape", "detail": "The path is a parabola because x grows steadily while y changes with t²." },
+        { "label": "Landing", "detail": "Time of flight T = 2u sin θ / g when launch and landing are at the same height." } ] },
+      { "type": "formula", "title": "Range of a projectile", "narration": "Find the angle that sends the ball farthest. Then try two angles that add up to 90 degrees.", "expression": "u^2 * sin(2*theta) / g", "display": "R = u² sin 2θ / g", "result": { "symbol": "R", "label": "Horizontal range", "unit": "m" }, "variables": [
+        { "symbol": "u", "label": "Launch speed", "unit": "m/s", "min": 5, "max": 40, "step": 1, "value": 20 },
+        { "symbol": "theta", "label": "Angle θ", "unit": "°", "min": 5, "max": 85, "step": 1, "value": 30 },
+        { "symbol": "g", "label": "Gravity g", "unit": "m/s²", "min": 1.6, "max": 24.8, "step": 0.1, "value": 9.8 } ], "degrees": true },
+      { "type": "order", "title": "Solve a motion problem", "narration": "Put the problem-solving steps in the right order.", "items": ["List what is given", "Pick the equation that links them", "Substitute with units", "Solve and check the sign and units"] },
+      { "type": "flashcards", "title": "Key terms", "narration": "Flip each card and say the answer before you look.", "cards": [
+        { "front": "Uniform motion", "back": "Equal displacements in equal intervals of time; acceleration is zero.", "emoji": "🚶" },
+        { "front": "Slope of x–t graph", "back": "Velocity.", "emoji": "📈" },
+        { "front": "Area under v–t graph", "back": "Displacement.", "emoji": "📊" },
+        { "front": "Free fall", "back": "Motion under gravity alone; a = g ≈ 9.8 m/s² downward.", "emoji": "🍎" } ] },
+      { "type": "quiz", "title": "Quick check", "narration": "One question to lock it in.", "q": "A ball is thrown at 20 m/s at 30° (g = 10 m/s²). What is its time of flight?", "options": ["1 s", "2 s", "3 s", "4 s"], "answer": 1, "explanation": "T = 2u sin θ / g = 2 × 20 × 0.5 / 10 = 2 s." }
+    ]
+  },
+  "plants": {
+    "title": "How plants make food",
+    "scenes": [
+      { "type": "intro", "title": "A leaf is a kitchen", "narration": "Green plants make their own food using sunlight. Let's look inside the leaf.", "emoji": "🌿", "bullets": ["Sunlight, water and air go in", "Food and oxygen come out"] },
+      { "type": "cycle", "title": "The oxygen and carbon dioxide cycle", "narration": "Watch the cycle. Plants and animals keep swapping these gases.", "stages": [
+        { "label": "Plants take in CO₂", "emoji": "🌱", "detail": "Through tiny pores called stomata." },
+        { "label": "Photosynthesis", "emoji": "☀️", "detail": "Chlorophyll uses sunlight to make glucose." },
+        { "label": "Oxygen released", "emoji": "💨", "detail": "Oxygen goes out into the air." },
+        { "label": "Animals breathe", "emoji": "🐄", "detail": "Animals use oxygen and breathe out CO₂." } ] },
+      { "type": "hotspot", "title": "Parts of a leaf", "narration": "Tap each part of the leaf.", "emoji": "🍃", "label": "A green leaf", "parts": [
+        { "label": "Chlorophyll", "detail": "Green pigment that traps sunlight." }, { "label": "Stomata", "detail": "Tiny pores for gases to go in and out." },
+        { "label": "Veins", "detail": "Carry water in and food out." } ] },
+      { "type": "sort", "title": "Goes in or comes out?", "narration": "Sort each into what the leaf takes in and what it gives out.", "buckets": ["Takes in", "Gives out"], "items": [
+        { "label": "Sunlight", "emoji": "☀️", "bucket": 0 }, { "label": "Water", "emoji": "💧", "bucket": 0 }, { "label": "Carbon dioxide", "emoji": "🌫️", "bucket": 0 },
+        { "label": "Oxygen", "emoji": "💨", "bucket": 1 }, { "label": "Glucose (food)", "emoji": "🍬", "bucket": 1 } ] },
+      { "type": "quiz", "title": "Quick check", "narration": "Try this one.", "q": "Which gas do plants give out during photosynthesis?", "options": ["Carbon dioxide", "Oxygen", "Nitrogen", "Hydrogen"], "answer": 1, "explanation": "Plants release oxygen as they make glucose." }
+    ]
+  },
+  "numbers": {
+    "title": "Counting fun",
+    "scenes": [
+      { "type": "intro", "title": "Let's count!", "narration": "We will count fruits, animals and toys together.", "emoji": "🥭", "bullets": ["Count one by one", "Touch each thing once"] },
+      { "type": "flashcards", "title": "How many?", "narration": "Count the pictures, then flip the card.", "cards": [
+        { "front": "🍌🍌🍌", "back": "3 bananas", "emoji": "🍌" }, { "front": "🐟🐟🐟🐟🐟", "back": "5 fish", "emoji": "🐟" }, { "front": "⭐⭐", "back": "2 stars", "emoji": "⭐" } ] },
+      { "type": "order", "title": "Smallest to biggest", "narration": "Tap the numbers from smallest to biggest.", "items": ["1", "3", "5", "8"] },
+      { "type": "sort", "title": "More or less than 5?", "narration": "Put each group in the right basket.", "buckets": ["Less than 5", "More than 5"], "items": [
+        { "label": "3 balls", "emoji": "⚽", "bucket": 0 }, { "label": "7 kites", "emoji": "🪁", "bucket": 1 }, { "label": "2 cats", "emoji": "🐱", "bucket": 0 }, { "label": "9 apples", "emoji": "🍎", "bucket": 1 } ] },
+      { "type": "quiz", "title": "Quick check", "narration": "How many?", "q": "🐥🐥🐥🐥 — how many chicks?", "options": ["3", "4", "5", "6"], "answer": 1, "explanation": "Count them: 1, 2, 3, 4." }
+    ]
+  }
+}

@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BookOpenText, FlaskConical, ListChecks, PencilLine, RefreshCw, Sparkles, Target, Volume2, Square } from 'lucide-react';
+import { BookOpenText, Clapperboard, FlaskConical, ListChecks, PencilLine, RefreshCw, Sparkles, Target, Volume2, Square } from 'lucide-react';
+import { VisualLesson } from '@/components/visual/VisualLesson';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crumbs } from '@/components/Crumbs';
 import { Markdown } from '@/components/Markdown';
@@ -15,7 +16,7 @@ import { useLMS, useHydrated } from '@/lib/store';
 import { useTutor } from '@/lib/tutor-store';
 import type { ResolvedUnit } from '@/lib/context';
 
-type Tab = 'lesson' | 'lab' | 'topics';
+type Tab = 'visual' | 'lesson' | 'lab' | 'topics';
 
 export function LearnView({ r }: { r: ResolvedUnit }) {
   const hydrated = useHydrated();
@@ -23,7 +24,7 @@ export function LearnView({ r }: { r: ResolvedUnit }) {
   const sk = useLMS(s => s.skills[r.unitId]);
   const setContext = useTutor(s => s.setContext);
   const lab = labFor(r.title, r.cls);
-  const [tab, setTab] = useState<Tab>('lesson');
+  const [tab, setTab] = useState<Tab>('visual');
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -45,7 +46,7 @@ export function LearnView({ r }: { r: ResolvedUnit }) {
     } finally { setBusy(false); }
   }, [cacheKey, lang, r.ctx]);
 
-  useEffect(() => { if (hydrated) generate(); return () => ctl.current?.abort(); }, [hydrated, generate]);
+  useEffect(() => { if (hydrated && tab === 'lesson') generate(); return () => ctl.current?.abort(); }, [hydrated, generate, tab]);
 
   const [speaking, setSpeaking] = useState(false);
   function speak() {
@@ -58,7 +59,8 @@ export function LearnView({ r }: { r: ResolvedUnit }) {
   }
 
   const tabs: { id: Tab; label: string; icon: typeof BookOpenText; show: boolean }[] = [
-    { id: 'lesson', label: 'AI lesson', icon: BookOpenText, show: true },
+    { id: 'visual', label: 'Picture lesson', icon: Clapperboard, show: true },
+    { id: 'lesson', label: 'Read notes', icon: BookOpenText, show: true },
     { id: 'lab', label: lab ? lab.title : 'Lab', icon: FlaskConical, show: !!lab },
     { id: 'topics', label: `Official sub-topics${r.topics.length ? ` (${r.topics.length})` : ''}`, icon: ListChecks, show: true },
   ];
@@ -97,6 +99,7 @@ export function LearnView({ r }: { r: ResolvedUnit }) {
             ))}
           </div>
           <div className="p-5 sm:p-7">
+            {tab === 'visual' && hydrated && <VisualLesson unitId={r.unitId} title={r.title} ctx={r.ctx} labId={lab?.id} young={(r.cls ?? 9) <= 5} />}
             {tab === 'lesson' && (
               <div className="grid gap-4">
                 <div className="flex flex-wrap items-center gap-2">

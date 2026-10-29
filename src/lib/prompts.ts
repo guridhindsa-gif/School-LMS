@@ -60,6 +60,26 @@ ${MATH_RULE}
 About ${words} words. Do not add a preamble before the first heading.`;
 }
 
+/** Scene-based visual lesson (pictures, animation, interaction) — the default way to learn a chapter. */
+export function visualLessonPrompt(ctx: LearnContext, guide: string) {
+  const lang = LANG[ctx.language || 'en'];
+  const young = ctx.kind === 'board' && (ctx.cls ?? 10) <= 5;
+  return `Design an interactive, animated, picture-first lesson in ${lang} for ${audience(ctx)}
+${scope(ctx)}
+
+Make 6–9 scenes that teach the official sub-topics in order. Learning should happen through pictures, animation and doing, not reading:
+- Start with "intro", end with a "quiz".
+- Use the scene type that best shows each idea: processes → steps, repeating processes → cycle, parts of a thing → hotspot, key ideas → concept_map, differences → compare or sort, history → timeline, every formula or numerical relation → formula (with realistic slider ranges), vocabulary → flashcards, sequences → order.
+- Include at least two interactive scenes (sort, hotspot, formula, order, flashcards or quiz).
+- Use one fitting emoji as the picture for every item (objects, animals, apparatus, people, places). Emojis are the illustrations.
+- "narration": what a friendly teacher says aloud for that scene, ${young ? '1–2 very simple sentences' : '1–3 sentences'}. Labels are short (≤ 5 words); "detail" ≤ 25 words.
+- Be accurate to the ${ctx.kind === 'exam' ? 'exam syllabus' : 'board syllabus'}; no LaTeX anywhere (use plain text and Unicode like x², √, θ).
+
+${guide}
+
+Reply with JSON only: {"title": "...", "scenes": [ {"type": "...", "title": "...", "narration": "...", ...fields for that type} ]}`;
+}
+
 export const QUESTION_SCHEMA = {
   type: 'object',
   properties: {

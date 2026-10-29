@@ -1,6 +1,21 @@
 // A tiny Ollama-compatible server for demos and tests (no model, canned but context-aware replies).
 // Run: npm run mock:ollama   then in another terminal: npm run dev:mock
 import http from 'node:http';
+import fs from 'node:fs';
+
+const SAMPLES = JSON.parse(fs.readFileSync(new URL('../src/data/visual-samples.json', import.meta.url), 'utf8'));
+function visual(prompt) {
+  const unit = pick(prompt, 'Chapter / unit') || 'This chapter';
+  const n = (unit + ' ' + pick(prompt, 'Subject')).toLowerCase();
+  if (/kinematic|projectile|motion in a/.test(n)) return JSON.stringify(SAMPLES.kinematics);
+  if (/photosynth|nutrition in plants|plant/.test(n)) return JSON.stringify(SAMPLES.plants);
+  const topics = (pick(prompt, 'Official sub-topics') || 'Key idea; How it works; Where we use it').split(';').map(t => t.trim()).filter(Boolean).slice(0, 5);
+  return JSON.stringify({ title: unit, scenes: [
+    { type: 'intro', title: unit, narration: `Let's explore ${unit}. (Demo lesson from the mock AI server.)`, emoji: '✨', bullets: topics.slice(0, 3) },
+    { type: 'concept_map', title: 'Big ideas', narration: 'Tap each idea.', center: { label: unit.slice(0, 40), emoji: '📘' }, nodes: topics.map((t, i) => ({ label: t.slice(0, 40), emoji: ['💡', '🔍', '⚙️', '🧪', '📐'][i % 5], detail: `Sub-topic ${i + 1}` })) },
+    { type: 'quiz', title: 'Quick check', narration: 'Try this.', q: `Which is part of ${unit}?`, options: [topics[0].slice(0, 40), 'Cooking', 'Football', 'Films'], answer: 0, explanation: 'It is in the official syllabus.' },
+  ] });
+}
 
 const PORT = Number(process.env.PORT || 11999);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -59,7 +74,8 @@ const server = http.createServer(async (req, res) => {
     const msgs = body.messages || [];
     const userText = msgs.filter(m => m.role === 'user').map(m => m.content).join('\n');
     let content;
-    if (body.format) content = questions(userText);
+    if (body.format && /picture-first lesson/.test(userText)) content = visual(userText);
+    else if (body.format) content = questions(userText);
     else if (/Write a lesson/.test(userText)) content = lesson(userText);
     else content = tutor(msgs);
     if (body.stream === false) {
