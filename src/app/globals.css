@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Mukta:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Palette: chalkboard green + marigold on a faintly green paper. RGB triplets for Tailwind alpha. */
+:root {
+  --bg: 244 246 241;
+  --surface: 255 255 255;
+  --surface-2: 236 241 235;
+  --ink: 25 38 32;
+  --muted: 88 105 96;
+  --line: 218 226 217;
+  --board: 31 77 58;
+  --board-2: 42 95 73;
+  --chalk: 247 242 216;
+  --marigold: 226 144 15;
+  --sky: 44 106 168;
+  --good: 35 132 90;
+  --warn: 184 116 10;
+  --bad: 192 61 20;
+  --violet: 107 79 191;
+  color-scheme: light;
+}
+.dark {
+  --bg: 13 20 17;
+  --surface: 22 32 27;
+  --surface-2: 28 40 34;
+  --ink: 228 237 231;
+  --muted: 155 176 164;
+  --line: 42 56 50;
+  --board: 27 64 48;
+  --board-2: 36 84 64;
+  --chalk: 243 237 207;
+  --marigold: 242 169 59;
+  --sky: 106 167 226;
+  --good: 76 192 138;
+  --warn: 229 163 60;
+  --bad: 240 122 79;
+  --violet: 160 135 240;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body { @apply bg-bg text-ink font-body antialiased; font-size: 16px; line-height: 1.55; }
+h1, h2, h3, h4 { @apply font-display font-bold; line-height: 1.15; text-wrap: balance; }
+:focus-visible { outline: 3px solid rgb(var(--marigold)); outline-offset: 2px; border-radius: 6px; }
+::selection { background: rgb(var(--marigold) / .35); }
+
+@layer components {
+  .card { @apply bg-surface border border-line rounded-2xl shadow-soft; }
+  .eyebrow { @apply font-mono text-[0.7rem] tracking-[0.08em] uppercase text-muted; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold transition active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-marigold text-[#2b1b02] hover:brightness-105 shadow-soft; }
+  .btn-board { @apply btn bg-board text-chalk hover:bg-board2; }
+  .btn-ghost { @apply btn border border-line bg-surface hover:bg-surface2; }
+  .btn-soft { @apply btn bg-surface2 hover:bg-line/70; }
+  .pill { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap; }
+  .tag { @apply inline-flex items-center rounded-md px-2 py-0.5 font-mono text-[0.7rem] bg-surface2 text-muted whitespace-nowrap; }
+  .chalkboard { @apply bg-board text-chalk border-board; background-image: radial-gradient(circle at 20% 0%, rgb(255 255 255 / .06), transparent 40%), radial-gradient(circle at 100% 100%, rgb(0 0 0 / .18), transparent 50%); }
+  .input { @apply w-full rounded-xl border border-line bg-surface px-3 py-2 placeholder:text-muted/70; }
+  .skeleton { @apply relative overflow-hidden rounded-lg bg-surface2; }
+  .skeleton::after { content: ""; @apply absolute inset-0 -translate-x-full animate-shimmer; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .35), transparent); }
+}
+
+/* Lesson / markdown */
+.prose-lms { @apply max-w-[72ch] text-[1.03rem] leading-[1.7]; }
+.prose-lms h2 { @apply mt-7 mb-2 text-2xl text-board; }
+.dark .prose-lms h2 { color: rgb(var(--marigold)); }
+.prose-lms h3 { @apply mt-5 mb-1 text-xl; }
+.prose-lms p { @apply my-2.5; }
+.prose-lms ul, .prose-lms ol { @apply my-2 pl-6 space-y-1; }
+.prose-lms ul { list-style: disc; } .prose-lms ol { list-style: decimal; }
+.prose-lms blockquote { @apply my-4 rounded-r-xl border-l-4 border-marigold bg-marigold/10 px-4 py-2; }
+.prose-lms code { @apply rounded bg-surface2 px-1.5 py-0.5 font-mono text-[0.88em]; }
+.prose-lms pre { @apply my-3 overflow-x-auto rounded-xl bg-surface2 p-3; }
+.prose-lms table { @apply my-3 block overflow-x-auto text-sm; }
+.prose-lms th, .prose-lms td { @apply border border-line px-2 py-1; }
+.prose-lms strong { @apply font-bold; }
+.prose-lms .katex-display { @apply overflow-x-auto overflow-y-hidden py-1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
