@@ -39,10 +39,17 @@ On Windows, run `set OLLAMA_HOST=http://127.0.0.1:11999 && set OLLAMA_MODEL=mock
 ### Student app (`/student`)
 
 - **Onboarding.** The student picks a name, board, class, and a stream for Classes 11–12; repeater JEE and NEET batches are supported.
-- **Home.** An adaptive "Up next" plan lists reviews that are due, then weak chapters, then chapters to continue, then new ones. It also shows mastery, streak, reviews due and a 7-day activity chart.
+- **Home (learning cockpit).**
+  - A **Continue learning** card shows the single best next step from the adaptive plan: due reviews first, then weak chapters, then chapters to continue, then new ones. Three follow-ups sit below it.
+  - A daily mission: a 10-question goal and the revisions that are due.
+  - Subject mastery tiles, revision and weak spots, and a 7-day activity chart.
+  - Level, XP and badges, all derived from the student's real activity (`src/lib/achievements.ts`).
+  - Quick tools, and the entrance tracks open to the student's class.
 - **My syllabus.** Subjects are grouped the way each board requires (compulsory, electives, ICSE Groups I–III). Each subject shows how well its syllabus is verified, its session and a link to the source. Competitive tracks can be added by class and stream.
 - **Subject page.** Every unit shows its marks, sub-topics, mastery band, and Learn / Practice / Test / Lab buttons. **Find my level** runs a diagnostic test that sets a starting mastery for every chapter.
-- **Learn.**
+- **Learn (lesson studio).**
+  - A chapter header with learning objectives and a **Learn → Explore → Practise → Check** path. Each step's status comes from real state: the picture lesson has been watched, the lab or notes have been opened, practice has been attempted, mastery is strong.
+  - The picture lesson is the default tab, followed by Notes, the matching lab and the official sub-topics. Vidya sits in a side panel on wide screens and opens as a drawer on smaller ones.
   - The AI writes a streaming lesson pitched to the class. It is very simple for Classes 1–2, at board depth for Classes 9–10, and includes JEE/NEET extensions for 11–12.
   - Lessons render maths with KaTeX, can be read aloud, and are available in English, Hindi and Punjabi.
   - The visual lab for the chapter opens in a tab next to the lesson, and the tutor sits beside it.
@@ -61,14 +68,17 @@ On Windows, run `set OLLAMA_HOST=http://127.0.0.1:11999 && set OLLAMA_MODEL=mock
   - spring–mass SHM that draws its own graph
   - a function grapher showing roots and vertex
   - an Ohm's-law circuit, series or parallel
-- **Progress.** Mastery by subject, a 12-week activity heatmap, the review queue, and a progress reset.
+- **Progress.** Level and badges, mastery by subject, a 12-week activity heatmap, the review queue, and a progress reset.
 
 ### Other roles
 
-- **Teacher:** timetable, at-risk students, class mastery, an AI lesson builder that the teacher approves, an AI assignment generator, and answer clustering.
+Each role has its own information hierarchy. Figures with no data service behind them yet are marked **Sample data**. Things a teacher, parent or admin saves (approved lessons, assignments, notes, flags) are kept in the browser (`src/lib/school-store.ts`). The interface says so, rather than claiming they reached anyone.
+
+
+- **Teacher:** today's priorities (next class, students who need support), class mastery and coverage against plan, answer clustering, an AI lesson builder with a Draft → In review → Approved flow, and an assignment maker where each question is approved or removed and the assignment is validated before saving.
 - **Parent:** a weekly digest in English, Hindi or Punjabi that can be read aloud, the Holistic Progress Card (teacher, self, peer and parent input), a parent input form, and notification settings.
-- **Principal:** key figures, syllabus coverage, an attendance trend, a score table by class and subject, Class 12 forecasts, and teacher adoption.
-- **Content admin:** a catalogue of all 235 subjects with verification status, sources and sessions; the question tags; and paper blueprints.
+- **Principal:** headline outcomes, then alerts that each come with a recommended action, then the detail: coverage against plan, the attendance trend, a class × subject heatmap with a legend, the Class 12 forecast, and teacher adoption.
+- **Content admin:** a searchable catalogue of all 235 subjects that filters by board, class and status, with sources and sessions; a validated flag-for-review form and review queue; the question tags; and paper blueprints.
 
 ### Adaptive learning engine (`src/lib/adaptive.ts`)
 
@@ -109,20 +119,32 @@ src/
     teacher, parent, principal, admin       role apps
     settings                                AI connection check
   components/
-    AppShell, TutorChat, QuizRunner, Markdown, ui, Confetti, HeroBoard
+    AppShell, TutorChat, QuizRunner, Markdown, ui, cockpit, Confetti, HeroBoard
+    visual/                                 picture-lesson scenes and player
     labs/                                   7 interactive canvas/SVG labs + registry
   lib/
     ollama.ts      server-side Ollama client (cloud or local)
     prompts.ts     tutor, lesson and question prompts
     adaptive.ts    learner model (BKT, ability, spaced review, recommendations)
     store.ts       persisted learner state
+    achievements.ts levels, badges, daily mission (from real state)
+    school-store.ts teacher/parent/admin saves kept on this device
     syllabus.ts    syllabus queries (server only)
   data/syllabus.json
 scripts/mock-ollama.mjs                     Ollama-compatible mock for demos
 ```
 
+## Design system
+
+See [DESIGN.md](DESIGN.md) for the tokens (midnight ink, electric indigo, teal, warm amber), typography, the junior and senior stages, components and design rules.
+
 ## Notes
 
-- Accessibility: keyboard focus styles, reduced-motion support (animations and labs settle to a still frame), ARIA roles on tabs, radios and dialogs, and light/dark themes.
-- Mobile: bottom navigation, safe-area padding, and responsive labs.
+- Accessibility:
+  - A skip link, visible focus, and a tutor drawer and command palette that trap focus and return it on close.
+  - The command palette works from the keyboard (Ctrl K, arrow keys, Enter).
+  - ARIA roles on tabs, radios, dialogs and progress bars.
+  - Reduced-motion support: animations and labs settle to a still frame.
+  - Light and dark themes.
+- Mobile: bottom navigation reaches every main section, including Labs. Safe-area padding, responsive labs, and no sideways scrolling at 390px.
 - AI output is labelled as AI-written. Teacher-facing AI drafts need approval before students see them.

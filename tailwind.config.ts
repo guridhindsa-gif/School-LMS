@@ -1,36 +1,54 @@
 import type { Config } from 'tailwindcss';
 
+/**
+ * Design tokens live in src/app/globals.css as RGB triplets (so Tailwind can apply alpha).
+ * See DESIGN.md for the rationale. Legacy names (board, chalk, marigold, sky) are kept as
+ * aliases of the new semantic tokens so older screens keep working.
+ */
+const c = (v: string) => `rgb(var(--${v}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: 'class',
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        bg: 'rgb(var(--bg) / <alpha-value>)',
-        surface: 'rgb(var(--surface) / <alpha-value>)',
-        surface2: 'rgb(var(--surface-2) / <alpha-value>)',
-        ink: 'rgb(var(--ink) / <alpha-value>)',
-        muted: 'rgb(var(--muted) / <alpha-value>)',
-        line: 'rgb(var(--line) / <alpha-value>)',
-        board: 'rgb(var(--board) / <alpha-value>)',
-        board2: 'rgb(var(--board-2) / <alpha-value>)',
-        chalk: 'rgb(var(--chalk) / <alpha-value>)',
-        marigold: 'rgb(var(--marigold) / <alpha-value>)',
-        sky: 'rgb(var(--sky) / <alpha-value>)',
-        good: 'rgb(var(--good) / <alpha-value>)',
-        warn: 'rgb(var(--warn) / <alpha-value>)',
-        bad: 'rgb(var(--bad) / <alpha-value>)',
-        violet: 'rgb(var(--violet) / <alpha-value>)',
+        bg: c('bg'),
+        surface: c('surface'),
+        surface2: c('surface-2'),
+        surface3: c('surface-3'),
+        ink: c('ink'),
+        muted: c('muted'),
+        line: c('line'),
+        primary: c('primary'),
+        primary2: c('primary-2'),
+        onprimary: c('on-primary'),
+        teal: c('teal'),
+        accent: c('accent'),
+        night: c('night'),
+        night2: c('night-2'),
+        onnight: c('on-night'),
+        good: c('good'),
+        warn: c('warn'),
+        bad: c('bad'),
+        violet: c('violet'),
+        // legacy aliases
+        board: c('night'),
+        board2: c('night-2'),
+        chalk: c('on-night'),
+        marigold: c('accent'),
+        sky: c('primary'),
       },
       fontFamily: {
-        display: ['"Baloo 2"', '"Trebuchet MS"', 'system-ui', 'sans-serif'],
-        body: ['Mukta', '"Segoe UI"', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)'],
+        body: ['var(--font-body)'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
-      borderRadius: { xl2: '1.25rem' },
+      borderRadius: { xl2: '1.25rem', card: 'var(--r-card)', ctl: 'var(--r-ctl)' },
       boxShadow: {
-        soft: '0 1px 2px rgb(0 0 0 / .04), 0 8px 24px -12px rgb(0 0 0 / .18)',
-        lift: '0 2px 4px rgb(0 0 0 / .05), 0 18px 40px -16px rgb(0 0 0 / .28)',
+        soft: 'var(--e1)',
+        lift: 'var(--e2)',
+        float: 'var(--e3)',
       },
       keyframes: {
         shimmer: { '100%': { transform: 'translateX(100%)' } },

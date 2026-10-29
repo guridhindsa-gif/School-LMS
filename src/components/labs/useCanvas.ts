@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 
 export type Draw = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => void;
 
-/** Sizes a canvas to its container (with devicePixelRatio) and runs `draw` every frame. */
+/** Sizes a canvas to its container (with devicePixelRatio) and runs `draw` every frame (colours are re-read each frame, so light/dark switches apply live). */
 export function useCanvas(draw: Draw, ratio = 0.56, animate = true) {
   const ref = useRef<HTMLCanvasElement>(null);
   const drawRef = useRef(draw);
@@ -32,8 +32,12 @@ export function useCanvas(draw: Draw, ratio = 0.56, animate = true) {
   return ref;
 }
 
+// Old token names from the first palette, mapped to the current design tokens.
+const LEGACY: Record<string, string> = { '--board': '--night', '--board-2': '--night-2', '--chalk': '--on-night', '--marigold': '--accent', '--sky': '--primary' };
+
+/** Reads a design token (RGB triplet) as a CSS colour. Called every frame, so theme switches apply immediately. */
 export const cssVar = (name: string, a = 1) => {
   if (typeof window === 'undefined') return '#000';
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const v = getComputedStyle(document.documentElement).getPropertyValue(LEGACY[name] || name).trim();
   return `rgb(${v.split(' ').join(',')}${a < 1 ? `,${a}` : ''})`;
 };

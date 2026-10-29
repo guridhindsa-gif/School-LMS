@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import { Rocket } from 'lucide-react';
 import { cssVar, useCanvas } from './useCanvas';
-import { Readout, Slider } from './Slider';
+import { LabNote, Legend, Readout, Slider } from './Slider';
 
 const G = 9.8;
 
@@ -21,8 +21,8 @@ export default function ProjectileLab() {
     const pad = 34, worldW = 100, worldH = 55;
     const sx = (w - pad * 1.5) / worldW, sy = (h - pad * 1.6) / worldH;
     const X = (m: number) => pad + m * sx, Y = (m: number) => h - pad - m * sy;
-    const chalk = cssVar('--chalk'), mari = cssVar('--marigold');
-    x.fillStyle = cssVar('--board-2'); x.fillRect(0, 0, w, h);
+    const chalk = cssVar('--on-night'), mari = cssVar('--accent');
+    x.fillStyle = cssVar('--night-2'); x.fillRect(0, 0, w, h);
     // grid
     x.strokeStyle = chalk; x.globalAlpha = 0.12; x.lineWidth = 1;
     for (let m = 0; m <= worldW; m += 10) { x.beginPath(); x.moveTo(X(m), Y(0)); x.lineTo(X(m), Y(worldH)); x.stroke(); }
@@ -67,7 +67,7 @@ export default function ProjectileLab() {
 
   return (
     <div className="grid gap-4">
-      <div className="overflow-hidden rounded-2xl"><canvas ref={ref} role="img" aria-label="Projectile motion simulation" /></div>
+      <div className="overflow-hidden rounded-card"><canvas ref={ref} role="img" aria-label="Projectile motion simulation" /></div>
       <div className="grid gap-3">
         <Slider id="pj-u" label="Speed u" value={u} min={5} max={30} unit=" m/s" onChange={setU} />
         <Slider id="pj-a" label="Angle θ" value={deg} min={5} max={85} unit="°" onChange={setDeg} />
@@ -76,9 +76,11 @@ export default function ProjectileLab() {
       <div className="flex flex-wrap gap-2">
         <button className="btn-primary" onClick={() => { launch.current = { t0: -1, u, a, h0 }; }}><Rocket size={17} /> Launch</button>
         <button className="btn-ghost" onClick={() => { trails.current = []; }}>Clear trails</button>
+        <span className="sr-only" aria-live="polite">{`Predicted range ${R.toFixed(1)} metres`}</span>
       </div>
       <Readout items={[['Time of flight', `${T.toFixed(2)} s`], ['Max height', `${H.toFixed(1)} m`], ['Range', `${R.toFixed(1)} m`], ['uₓ, uᵧ', `${ux.toFixed(1)}, ${uy.toFixed(1)} m/s`]]} />
-      <p className="text-sm text-muted">Blue arrow: horizontal velocity (constant). Red arrow: vertical velocity (changes by g every second). From the ground, range is greatest at 45°, and θ and 90° − θ land at the same spot — try 30° and 60°.</p>
+      <Legend items={[['rgb(var(--accent))', 'Path'], ['#9ad1ff', 'Horizontal velocity'], ['#ffb4a2', 'Vertical velocity']]} />
+      <LabNote>Blue arrow: horizontal velocity (constant). Red arrow: vertical velocity (changes by g every second). From the ground, range is greatest at 45°, and θ and 90° − θ land at the same spot — try 30° and 60°.</LabNote>
     </div>
   );
 }

@@ -15,8 +15,8 @@ export function MockView({ exam, units }: { exam: { id: string; name: string; ma
     <div className="grid gap-5">
       <Reveal>
         <Crumbs items={[{ label: 'Competitive exams', href: '/student/exams' }, { label: exam.name, href: `/student/exams/${exam.id}` }, { label: 'Mock test' }]} />
-        <h1 className="mt-2 text-3xl">{exam.name} · mock test</h1>
-        <p className="text-muted">15 questions across {exam.sections.join(', ')}. Marking +{exam.marking[0]}{exam.marking[1] ? ` / −${exam.marking[1]}` : ''}. Units you get wrong feed your adaptive plan.</p>
+        <h1 className="h-page mt-3">{exam.name} · mock test</h1>
+        <p className="mt-1 max-w-2xl text-muted">15 questions across {exam.sections.join(', ')}. Marking +{exam.marking[0]}{exam.marking[1] ? ` / −${exam.marking[1]}` : ''}. Units you get wrong feed your adaptive plan.</p>
       </Reveal>
       {hydrated ? <QuizRunner mode="mock" ctx={ctx} units={units} marking={exam.marking} doneHref={`/student/exams/${exam.id}`} /> : <Skeleton lines={6} />}
     </div>

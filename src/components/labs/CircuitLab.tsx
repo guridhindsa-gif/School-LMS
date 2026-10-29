@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { cssVar, useCanvas } from './useCanvas';
-import { Readout, Slider } from './Slider';
-import { cx } from '../ui';
+import { LabNote, Legend, Readout, Slider } from './Slider';
 
 export default function CircuitLab() {
   const [V, setV] = useState(6);
@@ -13,7 +12,7 @@ export default function CircuitLab() {
   const i1 = mode === 'series' ? I : V / r1, i2 = mode === 'series' ? I : V / r2;
 
   const ref = useCanvas((x, w, h, t) => {
-    const ink = cssVar('--ink'), mari = cssVar('--marigold'), sky = cssVar('--sky');
+    const ink = cssVar('--ink'), mari = cssVar('--accent'), sky = cssVar('--primary');
     x.fillStyle = cssVar('--surface'); x.fillRect(0, 0, w, h);
     const L = w * 0.1, Rr = w * 0.9, T = h * 0.18, B = h * 0.82;
     x.strokeStyle = ink; x.lineWidth = 3; x.lineJoin = 'round';
@@ -71,15 +70,16 @@ export default function CircuitLab() {
 
   return (
     <div className="grid gap-4">
-      <div className="flex gap-2" role="radiogroup" aria-label="Connection">
-        {(['series', 'parallel'] as const).map(m => <button key={m} role="radio" aria-checked={mode === m} onClick={() => setMode(m)} className={cx('rounded-full border px-3 py-1 text-sm font-semibold capitalize', mode === m ? 'border-ink bg-ink text-bg' : 'border-line bg-surface')}>{m}</button>)}
+      <div className="seg w-fit" role="radiogroup" aria-label="Connection">
+        {(['series', 'parallel'] as const).map(m => <button key={m} role="radio" aria-checked={mode === m} onClick={() => setMode(m)} className="capitalize">{m}</button>)}
       </div>
-      <div className="overflow-hidden rounded-2xl border border-line"><canvas ref={ref} role="img" aria-label={`${mode} circuit with ${r1} and ${r2} ohm resistors at ${V} volts`} /></div>
+      <div className="overflow-hidden rounded-card border border-line"><canvas ref={ref} role="img" aria-label={`${mode} circuit with ${r1} and ${r2} ohm resistors at ${V} volts`} /></div>
       <Slider id="c-v" label="Voltage V" value={V} min={1} max={12} unit=" V" onChange={setV} />
       <Slider id="c-r1" label="R₁" value={r1} min={1} max={20} unit=" Ω" onChange={setR1} />
       <Slider id="c-r2" label="R₂" value={r2} min={1} max={20} unit=" Ω" onChange={setR2} />
       <Readout items={[['Total resistance', `${R.toFixed(2)} Ω`], ['Current I = V/R', `${I.toFixed(2)} A`], ['Power P = VI', `${P.toFixed(1)} W`], [mode === 'series' ? 'V across R₁, R₂' : 'I through R₁, R₂', mode === 'series' ? `${(I * r1).toFixed(1)} V, ${(I * r2).toFixed(1)} V` : `${i1.toFixed(2)} A, ${i2.toFixed(2)} A`]]} />
-      <p className="text-sm text-muted">In series the same current flows through both resistors and voltages add up. In parallel each branch gets the full voltage and currents add up, so total resistance is smaller than either resistor: 1/R = 1/R₁ + 1/R₂.</p>
+      <Legend items={[['rgb(var(--primary))', 'Electrons (faster = more current)'], ['rgb(var(--accent))', 'Bulb glow (brighter = more power)']]} />
+      <LabNote>In series the same current flows through both resistors and voltages add up. In parallel each branch gets the full voltage and currents add up, so total resistance is smaller than either resistor: 1/R = 1/R₁ + 1/R₂.</LabNote>
     </div>
   );
 }

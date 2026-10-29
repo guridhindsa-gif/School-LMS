@@ -30,7 +30,7 @@ interface Props {
 interface Answered { q: Question; choice: number | null; correct: boolean; hint: boolean; ms: number; unitId?: string }
 
 const DIFF_LABEL: Record<Difficulty, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
-const DIFF_CLS: Record<Difficulty, string> = { easy: 'bg-good/15 text-good', medium: 'bg-marigold/20 text-warn', hard: 'bg-bad/15 text-bad' };
+const DIFF_CLS: Record<Difficulty, string> = { easy: 'bg-good/15 text-good', medium: 'bg-primary/12 text-primary', hard: 'bg-violet/15 text-violet' };
 
 export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], total, secondsPerQ, doneHref }: Props) {
   const N = total ?? (mode === 'adaptive' ? 8 : mode === 'test' ? 10 : mode === 'diagnostic' ? Math.min(12, Math.max(6, units.length)) : 15);
@@ -173,6 +173,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
       <div role="alert" className="card grid gap-3 border-bad/40 p-6">
         <h2 className="text-xl text-bad">Could not create questions</h2>
         <p>{err}</p>
+        <p className="text-sm text-muted">No questions were shown and nothing was recorded. Your progress is unchanged.</p>
         <div className="flex flex-wrap gap-2">
           <button className="btn-primary" onClick={() => fetchBatch(live ? 3 : N, live ? targetDiff : 'mixed', false)}><RotateCcw size={16} /> Try again</button>
           <Link href="/settings" className="btn-ghost">Check AI settings</Link>
@@ -182,8 +183,8 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
   }
   if (loading && !queue.length) {
     return (
-      <div className="card grid justify-items-center gap-4 p-10 text-center">
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2.4, ease: 'linear' }}><Sparkles className="text-marigold" size={34} /></motion.div>
+      <div className="card grid justify-items-center gap-4 p-10 text-center" role="status" aria-live="polite">
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2.4, ease: 'linear' }}><Sparkles className="text-primary" size={34} /></motion.div>
         <p className="font-semibold">{live ? `Picking ${DIFF_LABEL[targetDiff].toLowerCase()} questions for your level…` : `Setting ${N} questions…`}</p>
         <p className="text-sm text-muted">Your tutor writes fresh questions each time, matched to the official syllabus.</p>
         <Dots />
@@ -201,7 +202,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
         <div className="grid gap-4">
           <div className="flex items-center gap-3">
             <span className="font-mono text-sm text-muted">Question {idx + 1} of {N}</span>
-            <Bar value={done.length / N} className="flex-1" color="rgb(var(--board))" />
+            <Bar value={done.length / N} className="flex-1" color="rgb(var(--primary))" />
           </div>
           <QuestionCard q={q} choice={choice} setChoice={setChoice} revealed={revealed} hint={hint} />
           <div className="flex flex-wrap gap-2">
@@ -210,7 +211,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
             {revealed && <button className="btn-primary" onClick={next} autoFocus>{done.length >= N ? 'See results' : 'Next question'} <ArrowRight size={16} /></button>}
             {revealed && !done[done.length - 1]?.correct && (
               <button className="btn-ghost" onClick={() => ask(`I got this wrong:\n\n${q.q}\n\nI chose "${q.options[choice ?? 0]}". The answer is "${q.options[q.answer]}". Help me understand why, step by step.`)}>
-                <Sparkles size={16} className="text-marigold" /> Explain with tutor</button>
+                <Sparkles size={16} className="text-primary" /> Explain with tutor</button>
             )}
           </div>
         </div>
@@ -222,7 +223,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
             <AnimatePresence mode="wait"><motion.span key={targetDiff} initial={{ y: 6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -6, opacity: 0 }} className={cx('pill w-fit', DIFF_CLS[targetDiff])}>{DIFF_LABEL[targetDiff]}</motion.span></AnimatePresence>
             <span className="text-xs text-muted">Chosen so you get about 7 in 10 right — hard enough to learn, easy enough to keep going.</span>
           </div>
-          <div className="flex gap-1">{Array.from({ length: N }, (_, i) => <span key={i} className={cx('h-2 flex-1 rounded-full', i < done.length ? (done[i].correct ? 'bg-good' : 'bg-bad') : 'bg-surface2')} />)}</div>
+          <div className="flex gap-1" role="img" aria-label={`${done.filter(d => d.correct).length} correct out of ${done.length} answered`}>{Array.from({ length: N }, (_, i) => <span key={i} className={cx('h-2 flex-1 rounded-full', i < done.length ? (done[i].correct ? 'bg-good' : 'bg-accent') : 'bg-surface2')} />)}</div>
         </aside>
         <Confetti fire={fire} />
       </div>
@@ -237,7 +238,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center gap-3">
           <span className="font-mono text-sm text-muted">Question {idx + 1} of {queue.length}</span>
-          <span className={cx('pill ml-auto', left < 60 ? 'bg-bad/15 text-bad' : 'bg-surface2 text-ink')}><Clock size={13} /> {fmt(left)}</span>
+          <span role="timer" aria-label={`Time left ${fmt(left)}`} className={cx('pill ml-auto', left < 60 ? 'bg-bad/15 text-bad' : 'bg-surface2 text-ink')}><Clock size={13} aria-hidden /> {fmt(left)}</span>
           {marking[1] > 0 && <span className="pill bg-surface2 text-muted">+{marking[0]} / −{marking[1]}</span>}
         </div>
         {q && <QuestionCard q={q} choice={answers[idx] ?? null} setChoice={c => setAnswers(a => ({ ...a, [idx]: c! }))} revealed={false} hint={false} />}
@@ -250,10 +251,10 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
       </div>
       <aside className="card grid content-start gap-3 p-5">
         <p className="eyebrow">Question palette</p>
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-5 gap-2" role="group" aria-label="Jump to question">
           {queue.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)} aria-label={`Question ${i + 1}${answers[i] !== undefined ? ', answered' : ''}`}
-              className={cx('h-10 rounded-lg border font-bold', answers[i] !== undefined ? 'border-good bg-good text-white' : 'border-line bg-surface', i === idx && 'ring-2 ring-marigold')}>{i + 1}</button>
+            <button key={i} onClick={() => setIdx(i)} aria-label={`Question ${i + 1}${answers[i] !== undefined ? ', answered' : ''}`} aria-current={i === idx ? 'step' : undefined}
+              className={cx('h-10 rounded-lg border font-bold', answers[i] !== undefined ? 'border-good bg-good text-white' : 'border-line bg-surface', i === idx && 'ring-2 ring-primary ring-offset-2 ring-offset-surface')}>{i + 1}</button>
           ))}
         </div>
         <p className="text-sm text-muted">{answeredCount} answered · {queue.length - answeredCount} left</p>
@@ -270,19 +271,19 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
     const perUnit = mode === 'diagnostic' ? units.map(u => ({ u, list: done.filter(d => d.unitId === u.id) })).filter(x => x.list.length) : [];
     return (
       <div className="grid gap-5">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="chalkboard grid gap-5 rounded-2xl p-6 shadow-lift">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="panel-night grid gap-5 rounded-card p-6 shadow-lift" aria-label="Result summary">
           <div className="flex flex-wrap items-center gap-5">
-            <Trophy className="text-marigold" size={36} />
-            <div className="flex-1"><p className="font-mono text-xs uppercase tracking-widest text-chalk/70">{mode === 'diagnostic' ? 'Your starting level' : mode === 'adaptive' ? 'Practice complete' : 'Result'}</p>
+            <Trophy className="text-accent" size={36} aria-hidden />
+            <div className="flex-1"><p className="font-mono text-xs uppercase tracking-widest text-onnight/70">{mode === 'diagnostic' ? 'Your starting level' : mode === 'adaptive' ? 'Practice complete' : 'Result'}</p>
               <h2 className="text-3xl">{score} / {max}</h2></div>
-            {chapter && after && <div className="flex items-center gap-3"><Ring value={after.pKnown} size={74} color="rgb(var(--marigold))" /><div className="text-sm text-chalk/80">Mastery<br />{Math.round(startMastery.current * 100)}% → <b className="text-chalk">{Math.round(after.pKnown * 100)}%</b></div></div>}
+            {chapter && after && <div className="flex items-center gap-3"><Ring value={after.pKnown} size={74} color="rgb(var(--accent))" /><div className="text-sm text-onnight/80">Mastery<br />{Math.round(startMastery.current * 100)}% → <b className="text-onnight">{Math.round(after.pKnown * 100)}%</b></div></div>}
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[['Correct', right], ['Wrong', wrong], ['Skipped', skip], ['Accuracy', `${Math.round((right / Math.max(1, done.length)) * 100)}%`]].map(([k, v]) => (
-              <div key={k} className="rounded-xl bg-white/[.08] px-4 py-3"><p className="text-xs text-chalk/70">{k}</p><p className="font-display text-2xl font-bold">{v}</p></div>
+              <div key={k} className="rounded-xl bg-white/[.08] px-4 py-3"><p className="text-xs text-onnight/70">{k}</p><p className="font-display text-2xl font-bold">{v}</p></div>
             ))}
           </div>
-          {after && <p className="flex items-center gap-2 text-chalk/85"><CalendarClock size={16} /> Next review: <b>{new Date(after.nextReview).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}</b> (spaced repetition)</p>}
+          {after && <p className="flex items-center gap-2 text-onnight/85"><CalendarClock size={16} /> Next review: <b>{new Date(after.nextReview).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}</b> (spaced repetition)</p>}
         </motion.section>
 
         {perUnit.length > 0 && (
@@ -291,7 +292,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
             {perUnit.map(({ u, list }) => {
               const acc = list.filter(d => d.correct).length / list.length;
               return (
-                <Link key={u.id} href={`/student/learn/${encodeURIComponent(u.id)}`} className="grid grid-cols-[1fr_120px_auto] items-center gap-3 rounded-xl px-2 py-1.5 hover:bg-surface2">
+                <Link key={u.id} href={`/student/learn/${encodeURIComponent(u.id)}`} className="grid grid-cols-[minmax(0,1fr)_80px_auto] items-center gap-3 rounded-ctl px-2 py-1.5 hover:bg-surface2 sm:grid-cols-[minmax(0,1fr)_120px_auto]">
                   <span className="truncate font-semibold">{u.name}</span><Bar value={acc} /><span className="text-sm text-muted">{acc >= 0.7 ? 'Strong' : acc >= 0.4 ? 'Revise' : 'Start here'}</span>
                 </Link>
               );
@@ -302,7 +303,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
         {weak.length > 0 && (
           <section className="card grid gap-2 p-5">
             <h3 className="text-xl">Revise next</h3>
-            <div className="flex flex-wrap gap-2">{weak.slice(0, 8).map(([t, n]) => <span key={t} className="pill bg-bad/10 text-bad">{t} · {n}</span>)}</div>
+            <div className="flex flex-wrap gap-2">{weak.slice(0, 8).map(([t, n]) => <span key={t} className="pill bg-accent/15 text-warn">{t} · {n} missed</span>)}</div>
           </section>
         )}
 
@@ -328,7 +329,7 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
         <div className="flex flex-wrap gap-2">
           <button className="btn-primary" onClick={() => location.reload()}><RotateCcw size={16} /> New set</button>
           <Link href={doneHref} className="btn-ghost">Back to chapter</Link>
-          {weak.length > 0 && <button className="btn-ghost" onClick={() => ask(`I just did a ${mode} on ${ctx.unit || ctx.subject || ctx.exam}. I struggled with: ${weak.map(w => w[0]).slice(0, 4).join(', ')}. Can you help me fix these one at a time?`)}><Sparkles size={16} className="text-marigold" /> Fix my weak spots with the tutor</button>}
+          {weak.length > 0 && <button className="btn-ghost" onClick={() => ask(`I just did a ${mode} on ${ctx.unit || ctx.subject || ctx.exam}. I struggled with: ${weak.map(w => w[0]).slice(0, 4).join(', ')}. Can you help me fix these one at a time?`)}><Sparkles size={16} className="text-primary" /> Fix my weak spots with the tutor</button>}
         </div>
         <Confetti fire={fire} />
       </div>
@@ -345,7 +346,7 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
           {q.topic && <span className="tag">{q.topic}</span>}
         </div>
         <Markdown text={q.q} className="prose-lms !max-w-none text-lg font-semibold" />
-        <div className="grid gap-2" role="radiogroup">
+        <div className="grid gap-2" role="radiogroup" aria-label="Answer options">
           {q.options.map((o, i) => {
             const isAns = revealed && i === q.answer, isWrong = revealed && i === choice && i !== q.answer;
             return (
@@ -353,7 +354,7 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
                 whileTap={revealed ? undefined : { scale: 0.99 }}
                 animate={isWrong ? { x: [0, -6, 6, -3, 0] } : isAns ? { scale: [1, 1.02, 1] } : {}}
                 className={cx('flex items-baseline gap-3 rounded-xl border px-4 py-3 text-left transition',
-                  isAns ? 'border-good bg-good/10' : isWrong ? 'border-bad bg-bad/10' : choice === i ? 'border-sky bg-sky/10 ring-1 ring-sky' : 'border-line bg-surface hover:border-board/50')}>
+                  isAns ? 'border-good bg-good/10' : isWrong ? 'border-bad bg-bad/10' : choice === i ? 'border-primary bg-primary/10 ring-1 ring-primary' : 'border-line bg-surface hover:border-primary/50')}>
                 <b className="font-mono text-muted">{'ABCDEF'[i]}</b>
                 <span className="min-w-0 flex-1"><Markdown text={o} className="opt-md" /></span>
                 {isAns && <CheckCircle2 size={18} className="text-good" />}{isWrong && <XCircle size={18} className="text-bad" />}
@@ -361,9 +362,9 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
             );
           })}
         </div>
-        {hint && !revealed && <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border-l-4 border-marigold bg-marigold/10 px-4 py-3"><b className="flex items-center gap-1"><Lightbulb size={15} /> Hint</b><Markdown text={q.hint} className="prose-lms !max-w-none" /></motion.div>}
+        {hint && !revealed && <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="rounded-ctl border-l-4 border-accent bg-accent/10 px-4 py-3" role="note"><b className="flex items-center gap-1"><Lightbulb size={15} /> Hint</b><Markdown text={q.hint} className="prose-lms !max-w-none" /></motion.div>}
         {revealed && (
-          <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className={cx('rounded-xl px-4 py-3', choice === q.answer ? 'bg-good/10' : 'bg-bad/10')}>
+          <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} role="status" className={cx('rounded-ctl border-l-4 px-4 py-3', choice === q.answer ? 'border-good bg-good/10' : 'border-bad bg-bad/10')}>
             <b>{choice === q.answer ? 'Correct!' : 'Not quite.'}</b>
             {choice !== null && choice !== q.answer && q.whyWrong?.[choice] && <p className="text-sm">Why “{q.options[choice]}” is wrong: {q.whyWrong[choice]}</p>}
             <Markdown text={q.explanation} className="prose-lms !max-w-none" />
@@ -377,7 +378,7 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
 function ConfirmSubmit({ unanswered, onSubmit }: { unanswered: number; onSubmit: () => void }) {
   const [sure, setSure] = useState(false);
   if (!sure && unanswered > 0) return <button className="btn-board ml-auto" onClick={() => setSure(true)}>Submit test</button>;
-  return <button className="btn-board ml-auto" onClick={onSubmit}>{unanswered > 0 ? `${unanswered} unanswered · submit anyway` : 'Submit test'}</button>;
+  return <button className={cx('ml-auto', unanswered > 0 ? 'btn-accent' : 'btn-board')} onClick={onSubmit}>{unanswered > 0 ? `${unanswered} unanswered · submit anyway` : 'Submit test'}</button>;
 }
 
 const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;

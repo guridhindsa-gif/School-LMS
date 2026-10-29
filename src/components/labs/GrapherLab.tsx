@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { cssVar, useCanvas } from './useCanvas';
-import { Readout, Slider } from './Slider';
-import { cx } from '../ui';
+import { LabNote, Legend, Readout, Slider } from './Slider';
 
 type Kind = 'quadratic' | 'sine' | 'linear';
 
@@ -17,7 +16,7 @@ export default function GrapherLab() {
   const ref = useCanvas((x, w, h) => {
     const range = 8, sx = w / (2 * range), sy = h / (2 * range * (h / w));
     const X = (v: number) => w / 2 + v * sx, Y = (v: number) => h / 2 - v * sy;
-    const ink = cssVar('--ink'), line = cssVar('--line'), mari = cssVar('--marigold'), board = cssVar('--board');
+    const ink = cssVar('--ink'), line = cssVar('--line'), mari = cssVar('--accent'), board = cssVar('--primary');
     x.fillStyle = cssVar('--surface'); x.fillRect(0, 0, w, h);
     x.strokeStyle = line; x.lineWidth = 1;
     for (let i = -range; i <= range; i++) { x.beginPath(); x.moveTo(X(i), 0); x.lineTo(X(i), h); x.stroke(); x.beginPath(); x.moveTo(0, Y(i)); x.lineTo(w, Y(i)); x.stroke(); }
@@ -42,13 +41,15 @@ export default function GrapherLab() {
   const eq = kind === 'quadratic' ? `y = ${a}x² ${b < 0 ? '−' : '+'} ${Math.abs(b)}x ${c < 0 ? '−' : '+'} ${Math.abs(c)}` : kind === 'sine' ? `y = ${a} sin(${b}x ${c < 0 ? '−' : '+'} ${Math.abs(c)})` : `y = ${a}x ${b < 0 ? '−' : '+'} ${Math.abs(b)}`;
   return (
     <div className="grid gap-4">
-      <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Function type">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="seg" role="radiogroup" aria-label="Function type">
         {(['quadratic', 'linear', 'sine'] as Kind[]).map(k => (
-          <button key={k} role="radio" aria-checked={kind === k} onClick={() => setKind(k)} className={cx('rounded-full border px-3 py-1 text-sm font-semibold capitalize', kind === k ? 'border-ink bg-ink text-bg' : 'border-line bg-surface')}>{k}</button>
+          <button key={k} role="radio" aria-checked={kind === k} onClick={() => setKind(k)} className="capitalize">{k}</button>
         ))}
-        <span className="ml-auto rounded-xl bg-surface2 px-3 py-1 font-mono">{eq}</span>
+        </div>
+        <span className="ml-auto rounded-ctl bg-surface2 px-3 py-1 font-mono text-sm" aria-live="polite">{eq}</span>
       </div>
-      <div className="overflow-hidden rounded-2xl border border-line"><canvas ref={ref} role="img" aria-label={`Graph of ${eq}`} /></div>
+      <div className="overflow-hidden rounded-card border border-line"><canvas ref={ref} role="img" aria-label={`Graph of ${eq}`} /></div>
       <Slider id="g-a" label="a" value={a} min={-3} max={3} step={0.5} onChange={setA} />
       <Slider id="g-b" label="b" value={b} min={-6} max={6} step={0.5} onChange={setB} />
       {kind !== 'linear' && <Slider id="g-c" label="c" value={c} min={-6} max={6} step={0.5} onChange={setC} />}
@@ -57,7 +58,8 @@ export default function GrapherLab() {
       )}
       {kind === 'sine' && <Readout items={[['Amplitude', String(Math.abs(a))], ['Period', b ? `${(2 * Math.PI / Math.abs(b)).toFixed(2)}` : '∞'], ['Phase shift', b ? (-c / b).toFixed(2) : '—'], ['Range', `[−${Math.abs(a)}, ${Math.abs(a)}]`]]} />}
       {kind === 'linear' && <Readout items={[['Slope', String(a)], ['y-intercept', String(b)], ['x-intercept', a ? (-b / a).toFixed(2) : 'none'], ['Angle', `${(Math.atan(a) * 180 / Math.PI).toFixed(1)}°`]]} />}
-      <p className="text-sm text-muted">Orange dots are where the graph cuts the x-axis (the roots); the red dot is the vertex. When D &lt; 0 the parabola never touches the x-axis, so there are no real roots.</p>
+      <Legend items={[['rgb(var(--primary))', 'Graph'], ['rgb(var(--accent))', 'Roots (x-intercepts)'], ...(kind === 'quadratic' ? [['rgb(var(--bad))', 'Vertex'] as [string, string]] : [])]} />
+      <LabNote>Amber dots are where the graph cuts the x-axis (the roots); the red dot is the vertex. When D &lt; 0 the parabola never touches the x-axis, so there are no real roots.</LabNote>
     </div>
   );
 }

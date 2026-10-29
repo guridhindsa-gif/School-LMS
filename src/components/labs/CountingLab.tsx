@@ -40,12 +40,12 @@ export default function CountingLab() {
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-3">
         <h3 className="font-display text-2xl">How many mangoes are in the basket?</h3>
-        <button className="btn-board" onClick={() => say('How many mangoes are in the basket?')}><Volume2 size={17} /> Listen</button>
-        <div className="ml-auto flex gap-1" aria-label={`${stars} stars`}>
-          {Array.from({ length: 5 }, (_, i) => <Star key={i} size={24} className={i < stars ? 'fill-marigold text-marigold' : 'text-line'} />)}
+        <button className="btn-primary" onClick={() => say('How many mangoes are in the basket?')}><Volume2 size={17} /> Listen</button>
+        <div className="ml-auto flex gap-1" role="img" aria-label={`${stars} of 5 stars`}>
+          {Array.from({ length: 5 }, (_, i) => <Star key={i} size={24} className={i < stars ? 'fill-accent text-accent' : 'text-line'} aria-hidden />)}
         </div>
       </div>
-      <div className="relative h-60 overflow-hidden rounded-2xl bg-gradient-to-b from-sky/15 to-surface2">
+      <div className="relative h-60 overflow-hidden rounded-card bg-gradient-to-b from-primary/10 to-surface2" role="img" aria-label="Mangoes in a basket">
         <AnimatePresence>
           {Array.from({ length: n }, (_, i) => (
             <motion.div key={`${round}-${i}`} className="absolute" style={{ left: `calc(50% - 150px + ${(i / Math.max(1, n - 1)) * 260}px)`, bottom: 58 + (i % 2) * 18 }}
@@ -62,11 +62,12 @@ export default function CountingLab() {
       </div>
       <div className="grid grid-cols-5 gap-2 sm:grid-cols-9">
         {Array.from({ length: 9 }, (_, i) => i + 1).map(k => (
-          <motion.button key={k} onClick={() => tap(k)} whileTap={{ scale: 0.92 }}
+          <motion.button key={k} onClick={() => tap(k)} whileTap={{ scale: 0.92 }} aria-label={`${k} mangoes`}
             animate={wrong === k ? { x: [0, -6, 6, -4, 0] } : right && k === n ? { scale: [1, 1.2, 1] } : {}}
-            className={cx('rounded-2xl py-3 font-display text-3xl font-extrabold transition', right && k === n ? 'bg-good text-white' : wrong === k ? 'bg-bad/15 text-bad' : 'bg-surface2 hover:bg-line')}>{k}</motion.button>
+            className={cx('rounded-2xl py-3 font-display text-3xl font-extrabold transition', right && k === n ? 'bg-good text-white' : wrong === k ? 'bg-bad/15 text-bad' : 'bg-surface2 hover:bg-surface3')}>{k}</motion.button>
         ))}
       </div>
+      <p className="sr-only" role="status">{right ? `Correct, ${n} mangoes` : wrong ? 'Not quite, count again' : ''}</p>
       <p className="text-sm text-muted">Made for Classes 1–2: picture-first, voice instructions, big tap targets, and no reading needed.</p>
       <Confetti fire={fire} />
     </div>

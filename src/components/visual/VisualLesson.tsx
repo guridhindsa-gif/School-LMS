@@ -18,10 +18,10 @@ const TYPE_LABEL: Record<Scene['type'], string> = {
   hotspot: 'Labelled picture', formula: 'Formula explorer', timeline: 'Timeline', flashcards: 'Flip cards', order: 'Put in order', quiz: 'Quick check', lab: 'Simulation',
 };
 
-interface Props { unitId: string; title: string; ctx: LearnContext; labId?: string | null; young?: boolean }
+interface Props { unitId: string; title: string; ctx: LearnContext; labId?: string | null; young?: boolean; onComplete?: () => void }
 
 /** Scene-by-scene animated, interactive lesson with optional voice narration and autoplay. */
-export function VisualLesson({ unitId, title, ctx, labId, young }: Props) {
+export function VisualLesson({ unitId, title, ctx, labId, young, onComplete }: Props) {
   const lang = useLMS(s => s.profile.language);
   const recordAnswer = useLMS(s => s.recordAnswer);
   const ask = useTutor(s => s.ask);
@@ -84,6 +84,7 @@ export function VisualLesson({ unitId, title, ctx, labId, young }: Props) {
   }, [lang, young]);
 
   const next = useCallback(() => setIdx(i => { if (i >= scenes.length - 1) { setFinished(true); setFire(f => f + 1); return i; } return i + 1; }), [scenes.length]);
+  useEffect(() => { if (finished) onComplete?.(); }, [finished, onComplete]);
 
   useEffect(() => {
     if (!scene || finished) return;
@@ -102,7 +103,7 @@ export function VisualLesson({ unitId, title, ctx, labId, young }: Props) {
   if (loading) return <Building />;
   if (err && !lesson) {
     return (
-      <div className="grid gap-3 rounded-2xl bg-bad/10 p-5" role="alert">
+      <div className="grid gap-3 rounded-card border border-bad/30 bg-bad/10 p-5" role="alert">
         <b className="text-bad">Could not build the visual lesson: {err}</b>
         <div className="flex flex-wrap gap-2">
           <button className="btn-primary" onClick={() => load(true)}><RefreshCw size={15} /> Try again</button>
@@ -125,7 +126,7 @@ export function VisualLesson({ unitId, title, ctx, labId, young }: Props) {
         <div className="flex flex-wrap justify-center gap-2">
           <Link href={`/student/practice/${encodeURIComponent(unitId)}`} className="btn-primary"><Target size={17} /> Practise at your level</Link>
           <button className="btn-ghost" onClick={() => { setFinished(false); setIdx(0); }}><RefreshCw size={15} /> Watch again</button>
-          <button className="btn-ghost" onClick={() => ask(`I just finished the visual lesson on ${title}. Ask me 3 questions to check I really understood it.`)}><Sparkles size={15} className="text-marigold" /> Quiz me with the tutor</button>
+          <button className="btn-ghost" onClick={() => ask(`I just finished the visual lesson on ${title}. Ask me 3 questions to check I really understood it.`)}><Sparkles size={15} className="text-primary" /> Quiz me with the tutor</button>
         </div>
         <Confetti fire={fire} />
       </div>
@@ -138,26 +139,26 @@ export function VisualLesson({ unitId, title, ctx, labId, young }: Props) {
       <div className="flex items-center gap-1.5" role="tablist" aria-label="Scenes">
         {scenes.map((s, i) => (
           <button key={i} role="tab" aria-selected={i === idx} aria-label={`Scene ${i + 1}: ${s.title}`} onClick={() => setIdx(i)}
-            className={cx('h-2 flex-1 rounded-full transition', i === idx ? 'bg-marigold' : done.has(i) || i < idx ? 'bg-board/70 dark:bg-chalk/60' : 'bg-surface2 hover:bg-line')} />
+            className={cx('h-2 flex-1 rounded-full transition', i === idx ? 'bg-primary' : done.has(i) || i < idx ? 'bg-teal' : 'bg-surface2 hover:bg-surface3')} />
         ))}
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="pill bg-board text-chalk">{idx + 1} / {scenes.length}</span>
-        <span className="pill bg-marigold/20 text-warn">{TYPE_LABEL[scene.type]}</span>
+        <span className="pill bg-night text-onnight">{idx + 1} / {scenes.length}</span>
+        <span className="pill bg-teal/15 text-teal">{TYPE_LABEL[scene.type]}</span>
         {demo && <span className="pill bg-surface2 text-muted">Offline demo</span>}
         <div className="ml-auto flex gap-1.5">
-          <button className={cx('btn-ghost h-9 text-sm', voice && 'border-board')} aria-pressed={voice} onClick={() => { setVoice(v => { if (v) try { speechSynthesis.cancel(); } catch { /* */ } return !v; }); }} title="Read each scene aloud">
+          <button className={cx('btn-ghost h-9 min-h-0 text-sm', voice && 'border-primary/50 text-primary')} aria-pressed={voice} onClick={() => { setVoice(v => { if (v) try { speechSynthesis.cancel(); } catch { /* */ } return !v; }); }} title="Read each scene aloud">
             {voice ? <Volume2 size={15} /> : <VolumeX size={15} />}<span className="hidden sm:inline">{voice ? 'Voice on' : 'Voice off'}</span>
           </button>
-          <button className={cx('btn-ghost h-9 text-sm', auto && 'border-board')} aria-pressed={auto} onClick={() => setAuto(a => !a)} title="Play through scenes like a video; stops at activities">
+          <button className={cx('btn-ghost h-9 min-h-0 text-sm', auto && 'border-primary/50 text-primary')} aria-pressed={auto} onClick={() => setAuto(a => !a)} title="Play through scenes like a video; stops at activities">
             {auto ? <Pause size={15} /> : <Play size={15} />}<span className="hidden sm:inline">{auto ? 'Pause' : 'Autoplay'}</span>
           </button>
-          <button className="btn-ghost h-9 text-sm" onClick={() => load(true)} title="Make a new version"><RefreshCw size={15} /></button>
+          <button className="btn-ghost h-9 min-h-0 text-sm" onClick={() => load(true)} title="Make a new version" aria-label="Make a new version of this lesson"><RefreshCw size={15} /></button>
         </div>
       </div>
 
-      <section key={idx} className="v-scene grid gap-4 rounded-3xl border border-line bg-surface p-4 sm:p-6">
+      <section key={idx} aria-live="polite" className="v-scene grid gap-4 rounded-card border border-line bg-surface2/40 p-4 sm:p-6">
         <div className="grid gap-1">
           <h3 className="text-2xl sm:text-3xl">{scene.title}</h3>
           {scene.narration && <p className={cx('max-w-3xl text-muted', young && 'text-lg')}>{scene.narration}</p>}
@@ -182,7 +183,7 @@ function Building() {
   return (
     <div className="grid justify-items-center gap-4 py-12 text-center">
       <div className="relative grid h-28 w-28 place-items-center">
-        <span className="absolute inset-0 rounded-full border-4 border-dashed border-marigold/60 v-spin" />
+        <span className="absolute inset-0 rounded-full border-4 border-dashed border-primary/50 v-spin" />
         <span className="emoji v-float text-5xl">🎨</span>
       </div>
       <b className="text-lg">Building your visual lesson</b>

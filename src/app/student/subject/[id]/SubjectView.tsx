@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { ChevronDown, ExternalLink, Play, Target, PencilLine, FlaskConical, Stethoscope } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { BandPill, Bar, Reveal, Ring, VerifiedPill, cx, host } from '@/components/ui';
+import { BandPill, Bar, Notice, Reveal, Ring, VerifiedPill, cx, host } from '@/components/ui';
+import { Crumbs } from '@/components/Crumbs';
 import { band } from '@/lib/adaptive';
 import { labFor } from '@/components/labs/registry';
 import { useLMS } from '@/lib/store';
@@ -24,8 +25,9 @@ export function SubjectView({ subject }: { subject: Subject }) {
   return (
     <div className="grid gap-6">
       <Reveal>
-        <div className="card flex flex-wrap items-center gap-5 p-6">
-          <Ring value={avg} size={84} stroke={9} />
+        <Crumbs items={[{ label: 'My syllabus', href: '/student/syllabus' }, { label: subject.name }]} />
+        <div className="card mt-3 flex flex-wrap items-center gap-5 p-6">
+          <div className="grid justify-items-center gap-1"><Ring value={avg} size={84} stroke={9} /><span className="text-xs text-muted">Subject mastery</span></div>
           <div className="grid min-w-0 flex-1 gap-1.5">
             <p className="eyebrow">{subject.board} · Class {subject.cls}</p>
             <h1 className="text-3xl">{subject.name}</h1>
@@ -34,7 +36,7 @@ export function SubjectView({ subject }: { subject: Subject }) {
               <VerifiedPill v={subject.verified} />
               {subject.session && <span className="tag">{subject.session}</span>}
               {marks && <span className="tag">{marks}</span>}
-              {subject.src && <a className="tag !text-sky hover:underline" href={subject.src} target="_blank" rel="noopener noreferrer">Source: {host(subject.src)} <ExternalLink size={11} className="ml-1" /></a>}
+              {subject.src && <a className="tag !text-primary hover:underline" href={subject.src} target="_blank" rel="noopener noreferrer">Source: {host(subject.src)} <ExternalLink size={11} className="ml-1" /></a>}
             </div>
             {subject.note && <p className="text-sm text-muted">{subject.note}</p>}
           </div>
@@ -45,7 +47,7 @@ export function SubjectView({ subject }: { subject: Subject }) {
       </Reveal>
 
       {!subject.units.length && (
-        <p className="rounded-2xl border border-dashed border-warn/60 p-5 text-warn">The official PDF for this subject could not be read automatically{subject.src ? <> (<a href={subject.src} target="_blank" rel="noopener noreferrer" className="underline">source</a>)</> : null}. Units appear once the content team loads them.</p>
+        <Notice tone="warn" title="Units not loaded yet">The official PDF for this subject could not be read automatically{subject.src ? <> (<a href={subject.src} target="_blank" rel="noopener noreferrer" className="underline">source</a>)</> : null}. Units appear once the content team loads them.</Notice>
       )}
 
       <ol className="grid gap-3">
@@ -58,24 +60,24 @@ export function SubjectView({ subject }: { subject: Subject }) {
             <Reveal key={u.id} delay={Math.min(i * 0.03, 0.3)}>
               <li className="card overflow-hidden">
                 <div className="flex flex-wrap items-center gap-3 p-4">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-surface2 font-mono text-sm text-muted">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-ctl bg-primary/10 font-mono text-sm font-semibold text-primary">{String(i + 1).padStart(2, '0')}</span>
                   <div className="grid min-w-0 flex-1 gap-1">
                     <b className="leading-snug">{u.name}</b>
                     {u.theme && <span className="text-xs text-muted">{u.theme}</span>}
                     <div className="flex flex-wrap items-center gap-2">
-                      {u.marks != null && <span className="tag !bg-ink !text-bg">{u.marks} marks</span>}
+                      {u.marks != null && <span className="tag !bg-night !text-onnight">{u.marks} marks</span>}
                       <BandPill band={b} />
                       {sk?.attempts ? <span className="text-xs text-muted">{sk.correct}/{sk.attempts} correct</span> : null}
                     </div>
                     {sk?.attempts ? <Bar value={sk.pKnown} className="max-w-xs" /> : null}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Link href={`/student/learn/${encodeURIComponent(u.id)}`} className="btn-board text-sm"><Play size={15} /> Learn</Link>
-                    <Link href={`/student/practice/${encodeURIComponent(u.id)}`} className="btn-ghost text-sm"><Target size={15} /> Practice</Link>
-                    <Link href={`/student/test/${encodeURIComponent(u.id)}`} className="btn-ghost text-sm"><PencilLine size={15} /> Test</Link>
+                    <Link href={`/student/learn/${encodeURIComponent(u.id)}`} className="btn-primary text-sm" aria-label={`Learn ${u.name}`}><Play size={15} /> Learn</Link>
+                    <Link href={`/student/practice/${encodeURIComponent(u.id)}`} className="btn-ghost text-sm" aria-label={`Practise ${u.name}`}><Target size={15} /> Practise</Link>
+                    <Link href={`/student/test/${encodeURIComponent(u.id)}`} className="btn-ghost text-sm" aria-label={`Test on ${u.name}`}><PencilLine size={15} /> Test</Link>
                     {lab && <Link href={`/student/labs?lab=${lab.id}`} className="btn-ghost text-sm" title={lab.title}><FlaskConical size={15} /> Lab</Link>}
                     {u.topics.length > 0 && (
-                      <button className="btn-soft h-9 w-9 !px-0" aria-expanded={isOpen} aria-label={`${isOpen ? 'Hide' : 'Show'} sub-topics`} onClick={() => setOpen(isOpen ? null : u.id)}>
+                      <button className="btn-icon" aria-expanded={isOpen} aria-label={`${isOpen ? 'Hide' : 'Show'} sub-topics`} onClick={() => setOpen(isOpen ? null : u.id)}>
                         <ChevronDown size={17} className={cx('transition', isOpen && 'rotate-180')} />
                       </button>
                     )}
@@ -85,7 +87,7 @@ export function SubjectView({ subject }: { subject: Subject }) {
                   {isOpen && (
                     <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
                       <ul className="grid gap-1.5 border-t border-line bg-surface2/50 px-6 py-4 text-sm sm:grid-cols-2">
-                        {u.topics.map(t => <li key={t} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-marigold" />{t}</li>)}
+                        {u.topics.map(t => <li key={t} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal" aria-hidden />{t}</li>)}
                       </ul>
                     </motion.div>
                   )}

@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { cssVar, useCanvas } from './useCanvas';
-import { Readout, Slider } from './Slider';
+import { LabNote, Readout, Slider } from './Slider';
 
 /** Spring–mass oscillator that traces its displacement–time graph (SHM). */
 export default function WavesLab() {
@@ -13,8 +13,8 @@ export default function WavesLab() {
   const omega = Math.sqrt(k / m), T = (2 * Math.PI) / omega, f = 1 / T;
 
   const ref = useCanvas((x, w, h, t) => {
-    const chalk = cssVar('--chalk'), mari = cssVar('--marigold');
-    x.fillStyle = cssVar('--board-2'); x.fillRect(0, 0, w, h);
+    const chalk = cssVar('--on-night'), mari = cssVar('--accent');
+    x.fillStyle = cssVar('--night-2'); x.fillRect(0, 0, w, h);
     const split = Math.min(w * 0.32, 220), mid = h / 2, amp = (h / 2 - 34) * A;
     const y = amp * Math.exp(-damp * t) * Math.cos(omega * t);
     // ceiling + spring
@@ -35,18 +35,18 @@ export default function WavesLab() {
     x.stroke();
     // connector
     x.globalAlpha = 0.35; x.strokeStyle = chalk; x.beginPath(); x.moveTo(cx + 24, boxY); x.lineTo(split + 10 + hist.current.length, boxY); x.stroke(); x.globalAlpha = 1;
-    x.fillStyle = chalk; x.font = '12px Mukta, sans-serif'; x.fillText('displacement x(t)', split + 14, 22); x.fillText('time →', w - 56, h - 10);
+    x.fillStyle = chalk; x.font = '12px Figtree, sans-serif'; x.fillText('displacement x(t)', split + 14, 22); x.fillText('time →', w - 56, h - 10);
   }, 0.5);
 
   return (
     <div className="grid gap-4">
-      <div className="overflow-hidden rounded-2xl"><canvas ref={ref} role="img" aria-label="Spring-mass oscillator drawing its displacement-time graph" /></div>
+      <div className="overflow-hidden rounded-card"><canvas ref={ref} role="img" aria-label="Spring-mass oscillator drawing its displacement-time graph" /></div>
       <Slider id="w-k" label="Spring constant k" value={k} min={5} max={80} unit=" N/m" onChange={v => { setK(v); hist.current = []; }} />
       <Slider id="w-m" label="Mass m" value={m} min={0.1} max={2} step={0.1} unit=" kg" onChange={v => { setM(v); hist.current = []; }} />
       <Slider id="w-a" label="Amplitude" value={A} min={0.2} max={1} step={0.05} onChange={setA} />
       <Slider id="w-d" label="Damping" value={damp} min={0} max={0.5} step={0.02} onChange={v => { setDamp(v); hist.current = []; }} />
       <Readout items={[['ω = √(k/m)', `${omega.toFixed(2)} rad/s`], ['Period T', `${T.toFixed(2)} s`], ['Frequency f', `${f.toFixed(2)} Hz`], ['x(t)', damp ? 'A e^(−bt) cos ωt' : 'A cos ωt']]} />
-      <p className="text-sm text-muted">A stiffer spring (bigger k) or a lighter mass oscillates faster: T = 2π√(m/k). Amplitude does not change the period in SHM. Add damping to see the amplitude die away, as in a real shock absorber.</p>
+      <LabNote>A stiffer spring (bigger k) or a lighter mass oscillates faster: T = 2π√(m/k). Amplitude does not change the period in SHM. Add damping to see the amplitude die away, as in a real shock absorber.</LabNote>
     </div>
   );
 }

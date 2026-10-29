@@ -15,8 +15,8 @@ export function DiagnosticView({ subject, units }: { subject: { id: string; name
     <div className="grid gap-5">
       <Reveal>
         <Crumbs items={[{ label: `${subject.board} · Class ${subject.cls}`, href: '/student/syllabus' }, { label: subject.name, href: `/student/subject/${encodeURIComponent(subject.id)}` }]} />
-        <h1 className="mt-2 text-3xl">Find my level · {subject.name}</h1>
-        <p className="text-muted">A short mixed test across all chapters. Your answers set a starting mastery for each chapter, so the plan on your home page fits you from day one.</p>
+        <h1 className="h-page mt-3">Find my level · {subject.name}</h1>
+        <p className="mt-1 max-w-2xl text-muted">A short mixed test across all chapters. Your answers set a starting mastery for each chapter, so the plan on your home page fits you from day one.</p>
       </Reveal>
       {hydrated ? <QuizRunner mode="diagnostic" ctx={ctx} units={units} doneHref={`/student/subject/${encodeURIComponent(subject.id)}`} /> : <Skeleton lines={6} />}
     </div>

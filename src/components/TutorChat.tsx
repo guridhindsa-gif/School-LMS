@@ -25,6 +25,7 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
   const [mode, setMode] = useState<Mode>('socratic');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
+  const [lastAsk, setLastAsk] = useState('');
   const ctl = useRef<AbortController | null>(null);
   const end = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLTextAreaElement>(null);
@@ -35,7 +36,7 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
   async function send(text?: string) {
     const content = (text ?? draft).trim();
     if (!content || busy) return;
-    setErr(''); setDraft('');
+    setErr(''); setDraft(''); setLastAsk(content);
     const next: TutorMsg[] = [...msgs, { role: 'user', content }];
     setThread(key, [...next, { role: 'assistant', content: '' }]);
     setBusy(true);
@@ -49,8 +50,9 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
         full => setThread(key, [...next, { role: 'assistant', content: full }]), ctl.current.signal);
     } catch (e) {
       const m = friendlyError(e);
-      setThread(key, next);
-      if (m) setErr(m);
+      // Stopped by the student: keep what was streamed. Failed: drop the unanswered question so "Try again" does not duplicate it.
+      if (m) { setThread(key, msgs); setErr(m); }
+      else { const cur = useTutor.getState().threads[key] || []; if (!cur[cur.length - 1]?.content) setThread(key, next); }
     } finally {
       setBusy(false);
       input.current?.focus();
@@ -64,29 +66,31 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
   return (
     <div className={cx('flex min-h-0 flex-col', compact ? 'h-full' : 'h-[calc(100dvh-11rem)] min-h-[420px]')}>
       <div className="flex flex-wrap items-center gap-2 border-b border-line pb-3">
-        <span className="pill bg-board/10 text-board dark:text-chalk"><Sparkles size={13} /> {ctxLabel}</span>
-        <div className="ml-auto flex gap-1 rounded-xl bg-surface2 p-1" role="radiogroup" aria-label="Tutor mode">
+        <span className="pill max-w-full truncate bg-primary/10 text-primary" title={`Vidya is helping with: ${ctxLabel}`}><Sparkles size={13} /> {ctxLabel}</span>
+        <div className="seg ml-auto" role="radiogroup" aria-label="Tutor mode">
           {MODES.map(m => (
             <button key={m.id} role="radio" aria-checked={mode === m.id} title={m.tip} onClick={() => setMode(m.id)}
-              className={cx('flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold transition', mode === m.id ? 'bg-surface shadow-soft text-ink' : 'text-muted hover:text-ink')}>
+              className="!flex items-center gap-1 !px-2.5 !py-1 !text-xs">
               <m.icon size={13} />{m.label}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto py-4" aria-live="polite">
+      <p className="sr-only" aria-live="polite">{busy ? 'Vidya is writing a reply' : ''}</p>
+      <p className="pt-2 text-xs text-muted">{MODES.find(m => m.id === mode)?.tip}</p>
+      <div className="min-h-0 flex-1 overflow-y-auto py-4">
         {!msgs.length && (
           <div className="grid gap-4">
             <div className="flex items-start gap-3">
               <Avatar />
               <div className="rounded-2xl rounded-tl-sm bg-surface2 px-4 py-3">
-                <p className="font-semibold">Namaste! I'm Vidya, your AI tutor.</p>
+                <p className="font-semibold">Namaste! I’m Vidya, your AI tutor.</p>
                 <p className="text-muted">I'll guide you with hints so you learn it yourself. Ask anything{ctx?.unit ? ` about ${short(ctx.unit)}` : ''}.</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pl-11">
-              {starters.map(s => <button key={s} onClick={() => send(s)} className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm hover:border-board hover:bg-surface2">{s}</button>)}
+              {starters.map(s => <button key={s} onClick={() => send(s)} className="rounded-full border border-line bg-surface px-3 py-1.5 text-left text-sm transition hover:border-primary/40 hover:bg-surface2">{s}</button>)}
             </div>
           </div>
         )}
@@ -94,8 +98,8 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
           <AnimatePresence initial={false}>
             {msgs.map((m, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={cx('flex items-start gap-3', m.role === 'user' && 'flex-row-reverse')}>
-                {m.role === 'assistant' ? <Avatar /> : <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-marigold/25 text-sm font-bold">You</span>}
-                <div className={cx('max-w-[85%] min-w-0 rounded-2xl px-4 py-3', m.role === 'user' ? 'rounded-tr-sm bg-board text-chalk' : 'rounded-tl-sm bg-surface2')}>
+                {m.role === 'assistant' ? <Avatar /> : <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/25 text-[11px] font-bold">You</span>}
+                <div className={cx('max-w-[85%] min-w-0 rounded-2xl px-4 py-3', m.role === 'user' ? 'rounded-tr-sm bg-primary text-onprimary' : 'rounded-tl-sm bg-surface2')}>
                   {m.role === 'assistant'
                     ? (m.content ? <Markdown text={m.content} className="prose-lms text-[0.97rem]" /> : <span className="flex items-center gap-2 text-muted"><Dots /> Thinking…</span>)
                     : <p className="whitespace-pre-wrap">{m.content}</p>}
@@ -104,7 +108,12 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
             ))}
           </AnimatePresence>
         </div>
-        {err && <p role="alert" className="mt-3 rounded-xl bg-bad/10 px-3 py-2 text-sm text-bad">{err}</p>}
+        {err && (
+          <div role="alert" className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-bad/30 bg-bad/10 px-3 py-2 text-sm">
+            <span className="flex-1 text-bad">{err}</span>
+            {lastAsk && <button className="btn-ghost h-8 min-h-0 px-3 text-xs" onClick={() => send(lastAsk)}>Try again</button>}
+          </div>
+        )}
         <div ref={end} />
       </div>
 
@@ -124,7 +133,7 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
 
 function Avatar() {
   return (
-    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-board text-chalk shadow-soft" aria-hidden>
+    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary text-onprimary shadow-soft" aria-hidden>
       <Sparkles size={15} />
     </span>
   );

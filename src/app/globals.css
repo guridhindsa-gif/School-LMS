@@ -1,77 +1,129 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Mukta:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Palette: chalkboard green + marigold on a faintly green paper. RGB triplets for Tailwind alpha. */
+/* ============================================================================
+   School LMS design tokens — see DESIGN.md
+   Midnight ink + electric indigo (action) + teal (growth) + warm amber (celebration)
+   on cool, generous neutrals. RGB triplets so Tailwind can apply alpha.
+   ========================================================================== */
 :root {
-  --bg: 244 246 241;
+  --bg: 246 247 251;
   --surface: 255 255 255;
-  --surface-2: 236 241 235;
-  --ink: 25 38 32;
-  --muted: 88 105 96;
-  --line: 218 226 217;
-  --board: 31 77 58;
-  --board-2: 42 95 73;
-  --chalk: 247 242 216;
-  --marigold: 226 144 15;
-  --sky: 44 106 168;
-  --good: 35 132 90;
-  --warn: 184 116 10;
-  --bad: 192 61 20;
-  --violet: 107 79 191;
+  --surface-2: 239 241 248;
+  --surface-3: 226 230 242;
+  --ink: 14 21 42;
+  --muted: 84 94 120;
+  --line: 222 226 238;
+  --primary: 79 70 229;
+  --primary-2: 67 56 202;
+  --on-primary: 255 255 255;
+  --teal: 13 148 136;
+  --accent: 245 158 11;
+  --night: 16 23 50;
+  --night-2: 29 39 78;
+  --on-night: 237 240 255;
+  --good: 5 150 105;
+  --warn: 180 83 9;
+  --bad: 214 48 64;
+  --violet: 124 58 237;
+
+  /* legacy names (older screens / canvas labs) resolve to the new tokens */
+  --board: var(--night); --board-2: var(--night-2); --chalk: var(--on-night); --marigold: var(--accent); --sky: var(--primary);
+
+  /* shape, depth, motion */
+  --r-card: 1.125rem;
+  --r-ctl: .75rem;
+  --e1: 0 1px 2px rgb(14 21 42 / .05), 0 4px 16px -8px rgb(14 21 42 / .12);
+  --e2: 0 2px 4px rgb(14 21 42 / .05), 0 18px 40px -18px rgb(14 21 42 / .28);
+  --e3: 0 4px 10px rgb(14 21 42 / .08), 0 30px 70px -24px rgb(14 21 42 / .38);
+  --ease: cubic-bezier(.22, 1, .36, 1);
+
+  /* type: senior stage by default; junior (Classes 1–5) is friendlier */
+  --font-display: "Bricolage Grotesque", "Noto Sans Devanagari", "Noto Sans Gurmukhi", system-ui, sans-serif;
+  --font-body: Figtree, "Noto Sans Devanagari", "Noto Sans Gurmukhi", "Segoe UI", system-ui, sans-serif;
+  --base-size: 16px;
   color-scheme: light;
 }
 .dark {
-  --bg: 13 20 17;
-  --surface: 22 32 27;
-  --surface-2: 28 40 34;
-  --ink: 228 237 231;
-  --muted: 155 176 164;
-  --line: 42 56 50;
-  --board: 27 64 48;
-  --board-2: 36 84 64;
-  --chalk: 243 237 207;
-  --marigold: 242 169 59;
-  --sky: 106 167 226;
-  --good: 76 192 138;
-  --warn: 229 163 60;
-  --bad: 240 122 79;
-  --violet: 160 135 240;
+  --bg: 8 12 26;
+  --surface: 15 21 40;
+  --surface-2: 22 30 54;
+  --surface-3: 33 42 72;
+  --ink: 232 236 248;
+  --muted: 156 166 194;
+  --line: 38 48 78;
+  --primary: 140 150 255;
+  --primary-2: 170 178 255;
+  --on-primary: 12 16 42;
+  --teal: 45 212 191;
+  --accent: 251 191 36;
+  --night: 21 30 64;
+  --night-2: 32 43 86;
+  --on-night: 237 240 255;
+  --good: 52 211 153;
+  --warn: 251 191 36;
+  --bad: 251 113 133;
+  --violet: 167 139 250;
+  --e1: 0 1px 2px rgb(0 0 0 / .4), 0 6px 18px -10px rgb(0 0 0 / .6);
+  --e2: 0 2px 6px rgb(0 0 0 / .4), 0 20px 44px -18px rgb(0 0 0 / .7);
+  --e3: 0 4px 12px rgb(0 0 0 / .45), 0 30px 70px -24px rgb(0 0 0 / .8);
   color-scheme: dark;
+}
+/* Classes 1–5: rounder, larger, friendlier headings */
+[data-stage="junior"] {
+  --font-display: "Baloo 2", "Noto Sans Devanagari", "Noto Sans Gurmukhi", system-ui, sans-serif;
+  --r-card: 1.5rem;
+  --r-ctl: 1rem;
+  --base-size: 17px;
 }
 
 html, body { height: 100%; }
-body { @apply bg-bg text-ink font-body antialiased; font-size: 16px; line-height: 1.55; }
-h1, h2, h3, h4 { @apply font-display font-bold; line-height: 1.15; text-wrap: balance; }
-:focus-visible { outline: 3px solid rgb(var(--marigold)); outline-offset: 2px; border-radius: 6px; }
-::selection { background: rgb(var(--marigold) / .35); }
+html { font-size: var(--base-size); }
+body { @apply bg-bg text-ink font-body antialiased; line-height: 1.55; font-feature-settings: "ss01", "cv11"; }
+h1, h2, h3, h4 { @apply font-display font-bold; line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
+[data-stage="junior"] h1, [data-stage="junior"] h2, [data-stage="junior"] h3 { letter-spacing: 0; }
+/* Grid children may shrink below their content, so long unbroken text can never widen the page. */
+:where(.grid) > :where(*) { min-width: 0; }
+:focus-visible { outline: 3px solid rgb(var(--primary)); outline-offset: 2px; border-radius: 6px; }
+::selection { background: rgb(var(--primary) / .22); }
 
 @layer components {
-  .card { @apply bg-surface border border-line rounded-2xl shadow-soft; }
-  .eyebrow { @apply font-mono text-[0.7rem] tracking-[0.08em] uppercase text-muted; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold transition active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed; }
-  .btn-primary { @apply btn bg-marigold text-[#2b1b02] hover:brightness-105 shadow-soft; }
-  .btn-board { @apply btn bg-board text-chalk hover:bg-board2; }
-  .btn-ghost { @apply btn border border-line bg-surface hover:bg-surface2; }
-  .btn-soft { @apply btn bg-surface2 hover:bg-line/70; }
+  .card { @apply bg-surface border border-line rounded-card shadow-soft; }
+  .card-hover { @apply transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift; }
+  .panel-night, .chalkboard { @apply bg-night text-onnight border-night; background-image: radial-gradient(120% 90% at 0% 0%, rgb(var(--primary) / .32), transparent 55%), radial-gradient(80% 70% at 100% 100%, rgb(var(--teal) / .18), transparent 60%); }
+  .eyebrow { @apply font-mono text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted; }
+  .h-page { @apply text-3xl sm:text-4xl; }
+  .h-section { @apply text-xl sm:text-2xl; }
+  .btn { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-ctl px-4 py-2 font-semibold transition duration-150 active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100; }
+  .btn-primary { @apply btn bg-primary text-onprimary shadow-soft hover:bg-primary2; }
+  .btn-accent { @apply btn bg-accent text-[#2b1b02] shadow-soft hover:brightness-105; }
+  .btn-board { @apply btn bg-night text-onnight hover:bg-night2; }
+  .btn-ghost { @apply btn border border-line bg-surface hover:border-primary/40 hover:bg-surface2; }
+  .btn-soft { @apply btn bg-surface2 hover:bg-surface3; }
+  .btn-icon { @apply btn h-10 w-10 border border-line bg-surface !px-0 hover:bg-surface2; }
   .pill { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap; }
-  .tag { @apply inline-flex items-center rounded-md px-2 py-0.5 font-mono text-[0.7rem] bg-surface2 text-muted whitespace-nowrap; }
-  .chalkboard { @apply bg-board text-chalk border-board; background-image: radial-gradient(circle at 20% 0%, rgb(255 255 255 / .06), transparent 40%), radial-gradient(circle at 100% 100%, rgb(0 0 0 / .18), transparent 50%); }
-  .input { @apply w-full rounded-xl border border-line bg-surface px-3 py-2 placeholder:text-muted/70; }
+  .tag { @apply inline-flex max-w-full items-center rounded-md px-2 py-0.5 font-mono text-[0.7rem] bg-surface2 text-muted break-words; }
+  .input { @apply w-full rounded-ctl border border-line bg-surface px-3 py-2 placeholder:text-muted/70 transition focus:border-primary/60; }
+  .input[aria-invalid="true"] { @apply border-bad; }
+  .seg { @apply flex gap-1 rounded-ctl bg-surface2 p-1; }
+  .seg > button { @apply rounded-[calc(var(--r-ctl)-.25rem)] px-3 py-1.5 text-sm font-semibold text-muted transition hover:text-ink; }
+  .seg > button[aria-checked="true"], .seg > button[aria-selected="true"], .seg > button[aria-pressed="true"] { @apply bg-surface text-ink shadow-soft; }
   .skeleton { @apply relative overflow-hidden rounded-lg bg-surface2; }
   .skeleton::after { content: ""; @apply absolute inset-0 -translate-x-full animate-shimmer; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .35), transparent); }
+  .dot-grid { background-image: radial-gradient(rgb(var(--ink) / .09) 1px, transparent 1px); background-size: 22px 22px; }
+  .skip-link { @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-ctl focus:bg-primary focus:px-4 focus:py-2 focus:text-onprimary; }
 }
 
 /* Lesson / markdown */
 .prose-lms { @apply max-w-[72ch] text-[1.03rem] leading-[1.7]; }
-.prose-lms h2 { @apply mt-7 mb-2 text-2xl text-board; }
-.dark .prose-lms h2 { color: rgb(var(--marigold)); }
+.prose-lms h2 { @apply mt-8 mb-2 text-2xl text-primary; }
 .prose-lms h3 { @apply mt-5 mb-1 text-xl; }
 .prose-lms p { @apply my-2.5; }
 .prose-lms ul, .prose-lms ol { @apply my-2 pl-6 space-y-1; }
 .prose-lms ul { list-style: disc; } .prose-lms ol { list-style: decimal; }
-.prose-lms blockquote { @apply my-4 rounded-r-xl border-l-4 border-marigold bg-marigold/10 px-4 py-2; }
+.prose-lms blockquote { @apply my-4 rounded-r-xl border-l-4 border-teal bg-teal/10 px-4 py-2; }
 .prose-lms code { @apply rounded bg-surface2 px-1.5 py-0.5 font-mono text-[0.88em]; }
 .prose-lms pre { @apply my-3 overflow-x-auto rounded-xl bg-surface2 p-3; }
 .prose-lms table { @apply my-3 block overflow-x-auto text-sm; }

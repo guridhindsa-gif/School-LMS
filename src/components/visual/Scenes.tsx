@@ -269,11 +269,11 @@ export function FormulaScene({ scene, onDone }: SceneProps<'formula'>) {
       <div className="grid content-start gap-3">
         <div className="rounded-2xl bg-surface2 p-4 text-center">
           <p className="text-sm text-muted">{scene.result.label}</p>
-          <p className="font-display text-5xl font-bold tabular-nums text-board dark:text-marigold">{scene.result.symbol} = {fmt(result)}<span className="ml-1 text-2xl text-muted">{scene.result.unit}</span></p>
+          <p className="font-display text-5xl font-bold tabular-nums text-primary">{scene.result.symbol} = {fmt(result)}<span className="ml-1 text-2xl text-muted">{scene.result.unit}</span></p>
         </div>
         <svg viewBox="0 0 100 60" className="w-full rounded-2xl border border-line bg-surface" role="img" aria-label={`${scene.result.label} against ${v0.label}`}>
           <line x1="8" y1="52" x2="96" y2="52" stroke="rgb(var(--line))" strokeWidth=".4" /><line x1="8" y1="6" x2="8" y2="52" stroke="rgb(var(--line))" strokeWidth=".4" />
-          <path d={path} fill="none" stroke="rgb(var(--board))" strokeWidth="1.1" className="dark:stroke-[rgb(var(--marigold))]" />
+          <path d={path} fill="none" stroke="rgb(var(--primary))" strokeWidth="1.1" />
           {isFinite(result) && <circle cx={X(vals[v0.symbol])} cy={Y(result)} r="1.8" fill="rgb(var(--marigold))" style={{ transition: 'all .15s' }} />}
           <text x="96" y="58" fontSize="3.2" textAnchor="end" fill="rgb(var(--muted))">{v0.symbol} ({v0.unit || '–'}) →</text>
           <text x="9" y="5" fontSize="3.2" fill="rgb(var(--muted))">{scene.result.symbol}</text>
