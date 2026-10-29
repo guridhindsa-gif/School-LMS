@@ -352,10 +352,10 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
               <motion.button key={i} role="radio" aria-checked={choice === i} disabled={revealed} onClick={() => setChoice(i)}
                 whileTap={revealed ? undefined : { scale: 0.99 }}
                 animate={isWrong ? { x: [0, -6, 6, -3, 0] } : isAns ? { scale: [1, 1.02, 1] } : {}}
-                className={cx('flex items-start gap-3 rounded-xl border px-4 py-3 text-left transition',
+                className={cx('flex items-baseline gap-3 rounded-xl border px-4 py-3 text-left transition',
                   isAns ? 'border-good bg-good/10' : isWrong ? 'border-bad bg-bad/10' : choice === i ? 'border-sky bg-sky/10 ring-1 ring-sky' : 'border-line bg-surface hover:border-board/50')}>
                 <b className="font-mono text-muted">{'ABCDEF'[i]}</b>
-                <span className="min-w-0 flex-1"><Markdown text={o} className="prose-lms !max-w-none [&_p]:my-0" /></span>
+                <span className="min-w-0 flex-1"><Markdown text={o} className="opt-md" /></span>
                 {isAns && <CheckCircle2 size={18} className="text-good" />}{isWrong && <XCircle size={18} className="text-bad" />}
               </motion.button>
             );

@@ -86,7 +86,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main className="mx-auto max-w-6xl pb-28 pt-6 lg:pb-12" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))', paddingRight: 'max(16px, env(safe-area-inset-right, 0px))' }}>
+        <main className="mx-auto max-w-6xl pb-28 pt-6 lg:pb-24" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))', paddingRight: 'max(16px, env(safe-area-inset-right, 0px))' }}>
           {children}
         </main>
       </div>
@@ -104,8 +104,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Floating tutor button */}
       {path !== '/student/tutor' && (
         <motion.button onClick={() => setOpen(true)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}
-          className="fixed z-40 flex items-center gap-2 rounded-full bg-board px-4 py-3 font-semibold text-chalk shadow-lift"
-          style={{ right: 'max(16px, env(safe-area-inset-right, 0px))', bottom: 'calc(84px + env(safe-area-inset-bottom, 0px))' }}
+          className="fixed bottom-[calc(84px+env(safe-area-inset-bottom,0px))] z-40 flex items-center gap-2 rounded-full bg-board px-4 py-3 font-semibold text-chalk shadow-lift lg:bottom-6"
+          style={{ right: 'max(16px, env(safe-area-inset-right, 0px))' }}
           aria-label="Open AI tutor">
           <Sparkles size={18} className="text-marigold" /><span className="hidden sm:inline">Ask Vidya</span>
         </motion.button>

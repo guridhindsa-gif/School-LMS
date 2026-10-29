@@ -77,6 +77,8 @@ h1, h2, h3, h4 { @apply font-display font-bold; line-height: 1.15; text-wrap: ba
 .prose-lms table { @apply my-3 block overflow-x-auto text-sm; }
 .prose-lms th, .prose-lms td { @apply border border-line px-2 py-1; }
 .prose-lms strong { @apply font-bold; }
+.opt-md p { margin: 0; }
+.opt-md .katex-display { margin: 0; }
 .prose-lms .katex-display { @apply overflow-x-auto overflow-y-hidden py-1; }
 
 @media (prefers-reduced-motion: reduce) {

@@ -11,10 +11,10 @@ import { useCourse } from '@/lib/use-course';
 import { useTutor } from '@/lib/tutor-store';
 
 const REASON = {
-  review: { label: 'Due for review', icon: RotateCcw, cls: 'bg-sky/15 text-sky' },
-  weak: { label: 'Needs practice', icon: Target, cls: 'bg-bad/15 text-bad' },
-  continue: { label: 'Keep going', icon: ArrowRight, cls: 'bg-marigold/20 text-warn' },
-  new: { label: 'Start next', icon: Sparkles, cls: 'bg-good/15 text-good' },
+  review: { label: 'Due for review', icon: RotateCcw, cls: 'bg-sky text-white' },
+  weak: { label: 'Needs practice', icon: Target, cls: 'bg-bad text-white' },
+  continue: { label: 'Keep going', icon: ArrowRight, cls: 'bg-marigold text-[#2b1b02]' },
+  new: { label: 'Start next', icon: Sparkles, cls: 'bg-good text-white' },
 };
 
 export default function StudentHome() {
@@ -117,11 +117,11 @@ export default function StudentHome() {
         <Reveal delay={0.15}>
           <Card className="grid h-full gap-4">
             <div><p className="eyebrow">Last 7 days</p><h2 className="text-xl">Questions answered</h2></div>
-            <div className="flex h-36 items-end gap-2" role="img" aria-label={`Questions answered per day: ${days.map(d => d.answered).join(', ')}`}>
+            <div className="flex h-40 items-stretch gap-2" role="img" aria-label={`Questions answered per day: ${days.map(d => d.answered).join(', ')}`}>
               {days.map((d, i) => (
-                <div key={d.d} className="flex flex-1 flex-col items-center gap-1">
+                <div key={d.d} className="flex min-w-0 flex-1 flex-col items-center gap-1">
                   <span className="font-mono text-[10px] text-muted tabular-nums">{d.answered || ''}</span>
-                  <div className="relative w-full flex-1">
+                  <div className="relative min-h-0 w-full max-w-10 flex-1 overflow-hidden rounded-t-md">
                     <motion.div className="absolute bottom-0 w-full rounded-t-md bg-board/25" initial={{ height: 0 }} animate={{ height: `${(d.answered / maxA) * 100}%` }} transition={{ delay: i * 0.05, duration: 0.6 }} />
                     <motion.div className="absolute bottom-0 w-full rounded-t-md bg-good" initial={{ height: 0 }} animate={{ height: `${(d.correct / maxA) * 100}%` }} transition={{ delay: 0.1 + i * 0.05, duration: 0.6 }} />
                   </div>

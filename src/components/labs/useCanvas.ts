@@ -16,7 +16,7 @@ export function useCanvas(draw: Draw, ratio = 0.56, animate = true) {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const size = () => {
       const dpr = window.devicePixelRatio || 1;
-      w = c.parentElement!.clientWidth; h = Math.round(w * ratio);
+      w = c.parentElement!.clientWidth; h = Math.round(Math.min(w * ratio, 460));
       c.width = w * dpr; c.height = h * dpr; c.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
