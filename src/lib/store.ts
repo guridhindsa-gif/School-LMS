@@ -4,12 +4,28 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { useEffect, useState } from 'react';
 import { applyAnswer, finishSession, newSkill, type AnswerEvent, type SkillState } from './adaptive';
 import type { Profile } from './types';
+import type { PlanUnit } from './prep-plan';
 
 export interface ChapterRef { id: string; name: string; subject: string; kind: 'board' | 'exam' }
 export interface DayLog { day: string; answered: number; correct: number; minutes: number }
 /** Lesson path steps completed per chapter (epoch ms when done). */
 export type LessonStep = 'learn' | 'explore' | 'assess';
 export type StepLog = Partial<Record<LessonStep, number>> & { assessScore?: number };
+/** A preparation schedule for one target exam (competitive exam id, or `board:<board>:<class>[:<stream>]`). */
+export interface PrepPlan {
+  id: string;
+  kind: 'exam' | 'board';
+  title: string;               // exam name as published (board plans build a translated title instead)
+  units: PlanUnit[];           // syllabus snapshot the plan was made from
+  examDate: string;            // YYYY-MM-DD
+  startDate: string;           // YYYY-MM-DD, first planned day
+  hoursPerDay: number;
+  weeklyMock: boolean;
+  subjects?: string[];         // board plans: chosen subject ids
+  mastery: Record<string, number>; // mastery snapshot when the plan was made (keeps the plan stable)
+  createdAt: number;
+  done: string[];              // ticked task keys
+}
 
 interface State {
   profile: Profile;
@@ -20,12 +36,16 @@ interface State {
   streak: { current: number; best: number; lastDay: string };
   seen: Record<string, string[]>; // question stems already shown per chapter (avoid repeats)
   steps: Record<string, StepLog>; // persistent lesson-path completion per chapter
+  plans: Record<string, PrepPlan>; // exam preparation schedules by target id
   setProfile: (p: Partial<Profile>) => void;
   resetProfile: () => void;
   recordAnswer: (ch: ChapterRef, e: AnswerEvent & { stem?: string }) => SkillState;
   endSession: (chapterId: string, accuracy: number, minutes: number) => void;
   resetProgress: () => void;
   markStep: (chapterId: string, step: LessonStep, score?: number) => void;
+  savePlan: (p: PrepPlan) => void;
+  removePlan: (id: string) => void;
+  toggleTask: (planId: string, key: string) => void;
 }
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -42,6 +62,7 @@ export const useLMS = create<State>()(
       streak: { current: 0, best: 0, lastDay: '' },
       seen: {},
       steps: {},
+      plans: {},
       setProfile: p => set(s => ({ profile: { ...s.profile, ...p } })),
       resetProfile: () => set({ profile: defaultProfile }),
       recordAnswer: (ch, e) => {
@@ -80,11 +101,18 @@ export const useLMS = create<State>()(
         const log = s.log.map(l => (l.day === d ? { ...l, minutes: l.minutes + minutes } : l));
         set({ skills: { ...s.skills, [chapterId]: finishSession(sk, accuracy) }, log });
       },
-      resetProgress: () => set({ skills: {}, chapters: {}, log: [], xp: 0, streak: { current: 0, best: 0, lastDay: '' }, seen: {}, steps: {} }),
+      resetProgress: () => set({ skills: {}, chapters: {}, log: [], xp: 0, streak: { current: 0, best: 0, lastDay: '' }, seen: {}, steps: {}, plans: {} }),
       markStep: (chapterId, step, score) => set(s => {
         const prev = s.steps[chapterId] || {};
         if (prev[step] && score === undefined) return {};
         return { steps: { ...s.steps, [chapterId]: { ...prev, [step]: prev[step] || Date.now(), ...(score !== undefined ? { assessScore: Math.max(score, prev.assessScore ?? 0) } : {}) } } };
+      }),
+      savePlan: p => set(s => ({ plans: { ...s.plans, [p.id]: p } })),
+      removePlan: id => set(s => { const plans = { ...s.plans }; delete plans[id]; return { plans }; }),
+      toggleTask: (planId, key) => set(s => {
+        const p = s.plans[planId]; if (!p) return {};
+        const done = p.done.includes(key) ? p.done.filter(k => k !== key) : [...p.done, key];
+        return { plans: { ...s.plans, [planId]: { ...p, done } } };
       }),
     }),
     { name: 'school-lms', storage: createJSONStorage(() => localStorage), version: 1 },

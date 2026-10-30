@@ -1,4 +1,5 @@
 'use client';
+import { aiHeaders } from '@/lib/ai-settings';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Captions, CaptionsOff, FileText, Pause, Play, RefreshCw, Sparkles, Target, Volume2, VolumeX } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -58,7 +59,7 @@ export function VisualLesson({ unitId, title, ctx, labId, young, onComplete }: P
     ctl.current = new AbortController();
     try {
       const { unitId: _u, ...rest } = ctx;
-      const res = await fetch('/api/ai/visual', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ctx: { ...rest, language: lang } }), signal: ctl.current.signal });
+      const res = await fetch('/api/ai/visual', { method: 'POST', headers: { 'Content-Type': 'application/json', ...aiHeaders() }, body: JSON.stringify({ ctx: { ...rest, language: lang } }), signal: ctl.current.signal });
       if (!res.ok) { const j = await res.json().catch(() => ({})); throw Object.assign(new Error(j.error || 'AI error'), { name: 'AIError' }); }
       const l = sanitizeLesson(await res.json());
       if (l.scenes.length < 3) throw new Error(t('vl.tooFew'));

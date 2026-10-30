@@ -2,6 +2,7 @@
 import type { Difficulty, LearnContext, Question } from './types';
 import { translate, type Lang } from './i18n/core';
 import { useLMS } from './store';
+import { aiHeaders } from './ai-settings';
 
 export class AIError extends Error {
   constructor(message: string, public code = 'error') { super(message); }
@@ -16,7 +17,7 @@ async function check(res: Response) {
 
 /** POSTs and streams the plain-text reply, calling onText with the full text so far. */
 export async function streamText(url: string, body: unknown, onText: (full: string) => void, signal?: AbortSignal) {
-  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal });
+  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', ...aiHeaders() }, body: JSON.stringify(body), signal });
   await check(res);
   const reader = res.body!.getReader();
   const dec = new TextDecoder();
@@ -32,7 +33,7 @@ export async function streamText(url: string, body: unknown, onText: (full: stri
 
 export async function getQuestions(ctx: LearnContext, opts: { n: number; difficulty: Difficulty | 'mixed'; purpose: 'practice' | 'test' | 'diagnostic' | 'mock'; avoid?: string[] }, signal?: AbortSignal): Promise<Question[]> {
   const res = await fetch('/api/ai/questions', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json', ...aiHeaders() },
     body: JSON.stringify({ ctx, ...opts }), signal,
   });
   await check(res);
@@ -43,6 +44,7 @@ export async function getQuestions(ctx: LearnContext, opts: { n: number; difficu
 const CODE_KEY: Record<string, string> = {
   unreachable: 'ai.unreachable', unauthorized: 'ai.unauthorized', model_not_found: 'ai.modelMissing',
   invalid_json: 'ai.badOutput', no_scenes: 'ai.badOutput', no_questions: 'ai.badOutput', bad_request: 'ai.badRequest',
+  claude_key: 'ai.claudeKey', rate_limited: 'ai.rateLimited', claude_billing: 'ai.claudeBilling', busy: 'ai.busy', claude_error: 'ai.claudeError',
 };
 
 /**

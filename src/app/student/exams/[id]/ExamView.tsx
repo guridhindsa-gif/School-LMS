@@ -10,6 +10,10 @@ import { useLMS } from '@/lib/store';
 import { useTutor } from '@/lib/tutor-store';
 import type { Exam } from '@/lib/types';
 import { useT } from '@/lib/i18n';
+import { PrepPlanner, type PlannerSubject } from '@/components/prep/PrepPlanner';
+
+/** Exams whose sections are alternatives (pick yours), not all sat together. */
+const PICK: Record<string, number> = { cuet: 2, nse: 1 };
 
 export function ExamView({ exam }: { exam: Exam }) {
   const [sec, setSec] = useState(0);
@@ -17,6 +21,11 @@ export function ExamView({ exam }: { exam: Exam }) {
   const skills = useLMS(s => s.skills);
   const setContext = useTutor(s => s.setContext);
   const sb = exam.subjects[sec];
+  const planSubjects: PlannerSubject[] = exam.subjects.map((s, i) => ({
+    id: s.name, name: s.name, defaultOn: i < (PICK[exam.id] ?? 99),
+    units: s.units.map(u => ({ id: u.id, name: u.name, subject: s.name, topics: u.topics.length || undefined, cls: u.cls })),
+  }));
+  const officialDates = exam.pattern.filter(([k]) => /session|exam date|date|schedule/i.test(k)).map(([k, v]) => `${k}: ${v}`).join(' · ') || undefined;
   useEffect(() => { setContext({ kind: 'exam', exam: exam.name, examId: exam.id, subject: sb?.name }, exam.name); }, [exam, sb, setContext]);
 
   return (
@@ -34,6 +43,12 @@ export function ExamView({ exam }: { exam: Exam }) {
             </div>
           </div>
           <Link href={`/student/mock/${exam.id}`} className="btn-primary"><Timer size={17} aria-hidden /> {t('exams.mock')}</Link>
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.03}>
+        <div id="prep" className="scroll-mt-24">
+          <PrepPlanner planId={exam.id} kind="exam" title={exam.name} subjects={planSubjects} officialDates={officialDates} examYear={exam.year} />
         </div>
       </Reveal>
 

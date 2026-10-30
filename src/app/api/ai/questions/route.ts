@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { chatJSON, OllamaError } from '@/lib/ollama';
+import { OllamaError } from '@/lib/ollama';
+import { aiFor, chatJSON } from '@/lib/ai';
 import { QUESTION_SCHEMA, questionsPrompt } from '@/lib/prompts';
 import { questionOut, questionsBody } from '@/lib/validate';
 import { errorResponse } from '@/lib/api';
@@ -11,9 +12,11 @@ export const dynamic = 'force-dynamic';
 /** Generates MCQs as structured JSON. Invalid items are dropped; one retry if nothing usable came back. */
 export async function POST(req: Request) {
   try {
+    const ai = aiFor(req);
     const b = questionsBody.parse(await req.json());
     const ctx = b.ctx as LearnContext;
     const ask = () => chatJSON<{ questions?: unknown[] } | unknown[]>(
+      ai,
       [
         { role: 'system', content: 'You write accurate, unambiguous exam questions for Indian school boards and entrance exams. Output JSON only.' },
         { role: 'user', content: questionsPrompt(ctx, b.n, b.difficulty, b.purpose, b.avoid) },

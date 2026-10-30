@@ -223,7 +223,7 @@ export function ExamPrep({ tracks, chosen }: { tracks: { id: string; name: strin
   return (
     <section className="grid gap-4 rounded-card border border-line bg-surface p-6" aria-labelledby="exam-title">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div><p className="text-sm font-semibold text-muted">{t('home.entrance')}</p><h2 id="exam-title" className="h-section">{t('home.examsOpen')}</h2></div>
+        <div><p className="text-sm font-semibold text-muted">{t('home.entrance')}</p><h2 id="exam-title" className="h-section">{t('home.examsOpen')}</h2><p className="mt-1 text-sm text-muted">{t('prep.cta')}</p></div>
         <Link href="/student/exams" className="btn-ghost text-sm">{t('home.allExams')} <ArrowRight size={15} aria-hidden /></Link>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

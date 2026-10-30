@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { chatJSON, OllamaError } from '@/lib/ollama';
+import { OllamaError } from '@/lib/ollama';
+import { aiFor, chatJSON } from '@/lib/ai';
 import { visualLessonPrompt } from '@/lib/prompts';
 import { lessonBody } from '@/lib/validate';
 import { errorResponse } from '@/lib/api';
@@ -12,6 +13,7 @@ export const dynamic = 'force-dynamic';
 /** Generates a scene-based visual lesson (JSON). Invalid scenes are dropped; one retry if too few survive. */
 export async function POST(req: Request) {
   try {
+    const ai = aiFor(req);
     const { ctx } = lessonBody.parse(await req.json());
     const messages = [
       { role: 'system' as const, content: 'You are an expert Indian school teacher and instructional designer who teaches through pictures, animation and hands-on interaction. Output JSON only.' },
@@ -19,7 +21,7 @@ export async function POST(req: Request) {
     ];
     let lesson = sanitizeLesson(null);
     for (let attempt = 0; attempt < 2 && lesson.scenes.length < 3; attempt++) {
-      lesson = sanitizeLesson(await chatJSON(messages, VISUAL_JSON_SCHEMA, { temperature: 0.5, signal: req.signal }));
+      lesson = sanitizeLesson(await chatJSON(ai, messages, VISUAL_JSON_SCHEMA, { temperature: 0.5, signal: req.signal }));
     }
     if (lesson.scenes.length < 3) throw new OllamaError('The model could not build a visual lesson. Try again or use a larger model.', 502, 'no_scenes');
     return NextResponse.json(lesson);

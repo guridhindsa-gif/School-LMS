@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { isJunior } from '@/components/AppShell';
 import { ContinueCard, ExamPrep, MissionCard, QuickTools, RevisionList, SubjectsSection, WeekChart } from '@/components/cockpit';
 import { JuniorHome } from '@/components/junior/JuniorWorld';
+import { TodayPrep } from '@/components/prep/PrepPlanner';
 import { Notice, Reveal, Skeleton } from '@/components/ui';
 import { badges, dailyMission, level } from '@/lib/achievements';
 import { recommend, type Candidate } from '@/lib/adaptive';
@@ -92,6 +93,8 @@ function SeniorHome() {
             level={{ ...lv, badges: earned.filter(b => b.earned).length, total: earned.length }} />
         </Reveal>
       </div>
+
+      <TodayPrep />
 
       <QuickTools firstSubject={subjects[0]?.id} senior={(profile.cls ?? 9) >= 9} />
 

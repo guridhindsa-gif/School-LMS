@@ -5,6 +5,7 @@ import { Bar, Empty, Notice, PageHeader, Reveal, Skeleton, VerifiedPill, cx } fr
 import { useLMS, useHydrated } from '@/lib/store';
 import { useCourse } from '@/lib/use-course';
 import { useT } from '@/lib/i18n';
+import { PrepPlanner, boardPlanId, useBoardTitle, type PlannerSubject } from '@/components/prep/PrepPlanner';
 
 export default function SyllabusPage() {
   const hydrated = useHydrated();
@@ -13,6 +14,7 @@ export default function SyllabusPage() {
   const skills = useLMS(s => s.skills);
   const setProfile = useLMS(s => s.setProfile);
   const { data, error } = useCourse(profile, true);
+  const boardTitle = useBoardTitle();
 
   if (!hydrated) return <Skeleton lines={8} />;
   if (!profile.board) return <Empty title={t('syl.first')} icon={<BookOpen size={24} />} action={<Link href="/student/onboarding" className="btn-primary">{t('syl.getStarted')}</Link>}>{t('syl.firstDesc')}</Empty>;
@@ -54,6 +56,15 @@ export default function SyllabusPage() {
         </Reveal>
       ))}
 
+      {data && profile.cls && profile.cls >= 9 && profile.cls <= 12 && (
+        <Reveal delay={0.08}>
+          <div id="prep" className="scroll-mt-24">
+            <PrepPlanner planId={boardPlanId(profile.board, profile.cls, profile.stream)} kind="board"
+              title={boardTitle(boardPlanId(profile.board, profile.cls, profile.stream))} subjects={boardSubjects(data.groups)} />
+          </div>
+        </Reveal>
+      )}
+
       {data && (
         <Reveal delay={0.1}>
           <section className="grid gap-3">
@@ -83,4 +94,15 @@ export default function SyllabusPage() {
       )}
     </div>
   );
+}
+
+/** Board subjects for the planner: the first (compulsory) group is pre-selected, except the
+ *  alternative of a pair (e.g. Mathematics Basic beside Standard, Hindi B beside Hindi A). */
+function boardSubjects(groups: { subjects: { id: string; name: string; units?: { id: string; name: string }[] }[] }[]): PlannerSubject[] {
+  const all = groups.flatMap((g, gi) => g.subjects.map(s => ({ s, gi })));
+  return all.filter(({ s }) => s.units?.length).map(({ s, gi }) => {
+    const first = s.name.split(' ')[0];
+    const alt = /\s(Basic|B)$/.test(s.name) && all.some(o => o.s !== s && o.s.name.startsWith(first + ' '));
+    return { id: s.id, name: s.name, defaultOn: gi === 0 && !alt, units: s.units!.map(u => ({ id: u.id, name: u.name, subject: s.name })) };
+  });
 }
