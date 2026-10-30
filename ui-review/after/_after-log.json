@@ -1,0 +1,842 @@
+{
+ "shots": [
+  {
+   "file": "a01-landing-desktop.png",
+   "route": "/",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a03-senior-dashboard-desktop.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "Seeded sample learner, Class 11"
+  },
+  {
+   "file": "a05-lesson-ai-unavailable-desktop.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "No AI connected: honest unavailable state"
+  },
+  {
+   "file": "a06-lesson-syllabus-fallback-desktop.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "a06b-lesson-transcript-desktop.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "a05b-lesson-studio-after-completion.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a06c-notes-ai-unavailable.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "a07-tutor-unavailable-desktop.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "a08-practice-desktop.png",
+   "route": "/student/practice/…",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "Questions are the preview demo set, labelled [Demo]"
+  },
+  {
+   "file": "a09-labs-desktop.png",
+   "route": "/student/labs",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a11-teacher-default-desktop.png",
+   "route": "/teacher",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "Default: school data not connected"
+  },
+  {
+   "file": "a11b-teacher-demo-mode-desktop.png",
+   "route": "/teacher",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a12-parent-default-desktop.png",
+   "route": "/parent",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a13-principal-default-desktop.png",
+   "route": "/principal",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a14-admin-desktop.png",
+   "route": "/admin",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a15-settings-in-shell-desktop.png",
+   "route": "/settings",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a16-progress-desktop.png",
+   "route": "/student/progress",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "a17-exams-desktop.png",
+   "route": "/student/exams",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "b01-hindi-senior-dashboard.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "b02-hindi-lesson.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "b03-hindi-teacher.png",
+   "route": "/teacher",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "b04-punjabi-parent.png",
+   "route": "/parent",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "b05-punjabi-landing.png",
+   "route": "/",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "c01-junior-home-desktop.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "New Class 3 learner"
+  },
+  {
+   "file": "c02-junior-learn.png",
+   "route": "/student/junior/learn",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "c03-junior-play.png",
+   "route": "/student/junior/play",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "c04-junior-stars.png",
+   "route": "/student/junior/stars",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "c02b-junior-learn-chapters.png",
+   "route": "/student/junior/learn",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "c05-junior-lesson.png",
+   "route": "junior lesson",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "AI unavailable state in junior lesson"
+  },
+  {
+   "file": "c06-punjabi-junior-home.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "c07-hindi-junior-stars.png",
+   "route": "/student/junior/stars",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d05-junior-home-mobile-dark.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d05b-junior-home-mobile-dark-viewport.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "d01-landing-mobile-dark.png",
+   "route": "/",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "d02-senior-dashboard-mobile-dark.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d02b-senior-dashboard-mobile-viewport.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "d03-lesson-mobile-dark.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d04-teacher-role-menu-mobile.png",
+   "route": "/teacher",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": ""
+  },
+  {
+   "file": "d04b-teacher-mobile-dark.png",
+   "route": "/teacher",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d06-parent-mobile-dark.png",
+   "route": "/parent",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d07-labs-mobile-dark.png",
+   "route": "/student/labs",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "d08-admin-mobile-dark.png",
+   "route": "/admin",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "e01-tablet-dashboard.png",
+   "route": "/student",
+   "viewport": "834x1112",
+   "full_page": true,
+   "note": ""
+  },
+  {
+   "file": "e02-tablet-lesson.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "834x1112",
+   "full_page": false,
+   "note": ""
+  }
+ ],
+ "tests": [
+  {
+   "test": "No floating tutor control overlapping content",
+   "status": "PASS",
+   "note": "[]"
+  },
+  {
+   "test": "Untouched subjects collapsed into one group",
+   "status": "PASS",
+   "note": "summary present=1"
+  },
+  {
+   "test": "No 0% subject rings on the dashboard",
+   "status": "PASS",
+   "note": "0 tiles show 0%"
+  },
+  {
+   "test": "Single tutor entry on lesson page at desktop (side panel only)",
+   "status": "PASS",
+   "note": "header Vidya visible=False"
+  },
+  {
+   "test": "AI-unavailable fallback is clearly labelled as not AI",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Narration speed, captions and transcript controls",
+   "status": "PASS",
+   "note": "speed=1 captions=1 transcriptItems=10"
+  },
+  {
+   "test": "Lesson completion persists after reload (Learn step done)",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Five-step path Learn→Explore→Practise→Assess→Review",
+   "status": "PASS",
+   "note": "5 steps"
+  },
+  {
+   "test": "Mastery shown once in lesson header",
+   "status": "PASS",
+   "note": "1 rings"
+  },
+  {
+   "test": "Notes: AI down shows official syllabus topics, labelled",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Tutor: unreachable AI shows an error + Try again (no fake reply)",
+   "status": "PASS",
+   "note": "The AI service is not reachable. Check that the app is running and Ollama is configured.\nTry again"
+  },
+  {
+   "test": "Teacher: honest \"not connected\" state by default",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Demo data is opt-in and bannered",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Settings uses the same app shell navigation",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Admin form errors announced and linked (role=alert, aria-invalid, focus)",
+   "status": "PASS",
+   "note": "alerts=1 invalid=3 focusInvalid=true"
+  },
+  {
+   "test": "Command palette by keyboard",
+   "status": "PASS",
+   "note": "/student/learn/cbse-11-physics~2"
+  },
+  {
+   "test": "Tutor drawer: focus trapped, Escape closes, focus returns",
+   "status": "PASS",
+   "note": "trapped=True back=Ask Vidya, the AI tutor"
+  },
+  {
+   "test": "Visible focus indicator",
+   "status": "PASS",
+   "note": "solid 3px"
+  },
+  {
+   "test": "Hindi interface + <html lang> after reload",
+   "status": "PASS",
+   "note": "lang=hi"
+  },
+  {
+   "test": "Punjabi interface on role app",
+   "status": "PASS",
+   "note": "lang=pa"
+  },
+  {
+   "test": "Onboarding → Class 3 learner",
+   "status": "PASS",
+   "note": "/student"
+  },
+  {
+   "test": "Junior home: no placement/revision/exam jargon or analytics",
+   "status": "PASS",
+   "note": "[]"
+  },
+  {
+   "test": "Junior: four illustrated destinations",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Junior: large touch targets (≥ 44px)",
+   "status": "PASS",
+   "note": "min=46.75"
+  },
+  {
+   "test": "Junior: audio buttons for instructions",
+   "status": "PASS",
+   "note": "5 listen buttons"
+  },
+  {
+   "test": "Mobile: search is an icon button (not cramped field)",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Mobile role menu opens and Escape closes",
+   "status": "PASS",
+   "note": "true->false"
+  },
+  {
+   "test": "Mobile: no clipped role switcher",
+   "status": "PASS",
+   "note": "0 clipped links"
+  },
+  {
+   "test": "Tablet lesson: Vidya reachable from header (no side panel)",
+   "status": "PASS",
+   "note": ""
+  }
+ ],
+ "console": [],
+ "overflow": [],
+ "a11y": {
+  "landing": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\"",
+    "A 86x20 \"Settings & AI\""
+   ],
+   "contrast": [],
+   "checked": 25
+  },
+  "senior-dashboard": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\"",
+    "A 101x20 \"Full syllabus →\""
+   ],
+   "contrast": [],
+   "checked": 47
+  },
+  "lesson": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\"",
+    "A 101x20 \"CBSE · Class 11\"",
+    "A 51x20 \"Physics\""
+   ],
+   "contrast": [],
+   "checked": 43
+  },
+  "labs": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\"",
+    "INPUT 582x8 \"Angle of incidence40°\""
+   ],
+   "contrast": [],
+   "checked": 39
+  },
+  "teacher": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 21
+  },
+  "parent": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 23
+  },
+  "principal": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 12
+  },
+  "admin": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 160x20 \"schools.aglasem.com\n(opens in \"",
+    "A 133x20 \"competishun.com\n(opens in a ne\"",
+    "A 160x20 \"schools.aglasem.com\n(opens in \"",
+    "A 133x20 \"competishun.com\n(opens in a ne\"",
+    "A 160x20 \"schools.aglasem.com\n(opens in \"",
+    "A 160x20 \"schools.aglasem.com\n(opens in \"",
+    "A 102x20 \"vedantu.com\n(opens in a new ta\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 160x20 \"schools.aglasem.com\n(opens in \"",
+    "A 102x20 \"vedantu.com\n(opens in a new ta\"",
+    "A 102x20 \"vedantu.com\n(opens in a new ta\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 101x20 \"shaalaa.com\n(opens in a new ta\"",
+    "A 89x20 \"ncert.nic.in\n(opens in a new t\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 108x20 \"edustud.nic.in\n(opens in a new\"",
+    "A 89x20 \"ncert.nic.in\n(opens in a new t\"",
+    "A 89x20 \"ncert.nic.in\n(opens in a new t\"",
+    "A 108x20 \"edustud.nic.in\n(opens in a new\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 133x20 \"competishun.com\n(opens in a ne\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 108x20 \"edustud.nic.in\n(opens in a new\"",
+    "A 108x20 \"edustud.nic.in\n(opens in a new\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 108x20 \"edustud.nic.in\n(opens in a new\"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 63x20 \"edzy.ai\n(opens in a new tab)\"",
+    "A 102x20 \"teachoo.com\n(opens in a new ta\"",
+    "A 121x20 \"ciet.ncert.gov.in\n(opens in a \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 152x20 \"cbseacademic.nic.in\n(opens in \"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\"",
+    "A 76x20 \"cisce.org\n(opens in a new tab)\""
+   ],
+   "contrast": [],
+   "checked": 424
+  },
+  "settings": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 22
+  },
+  "student/progress": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 27
+  },
+  "student/exams": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 128x16 \"Start as a new student\"",
+    "BUTTON 45x16 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 29
+  },
+  "junior-home": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 136x17 \"Start as a new student\"",
+    "BUTTON 48x17 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 24
+  },
+  "/student/junior/learn": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 136x17 \"Start as a new student\"",
+    "BUTTON 48x17 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 19
+  },
+  "/student/junior/play": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 136x17 \"Start as a new student\"",
+    "BUTTON 48x17 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 18
+  },
+  "/student/junior/stars": {
+   "names": [],
+   "labels": [],
+   "h1": 1,
+   "main": 1,
+   "dupIds": [],
+   "targets": [
+    "BUTTON 136x17 \"Start as a new student\"",
+    "BUTTON 48x17 \"All roles\"",
+    "A 1x1 \"Skip to content\""
+   ],
+   "contrast": [],
+   "checked": 17
+  }
+ }
+}

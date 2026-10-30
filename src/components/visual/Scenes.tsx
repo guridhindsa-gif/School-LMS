@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2, RotateCcw, XCircle, Play } from 'lucide-react';
+import { useT } from '@/lib/i18n';
 import { compile } from '@/lib/expr';
 import type { Scene } from '@/lib/visual';
 import { LabView } from '../labs/LabView';
@@ -37,6 +38,7 @@ export function IntroScene({ scene, onDone }: SceneProps<'intro'>) {
 
 /* ---------- concept map ---------- */
 export function ConceptMapScene({ scene, onDone }: SceneProps<'concept_map'>) {
+  const { t: tx } = useT();
   const [sel, setSel] = useState<number | null>(null);
   const [seen, setSeen] = useState<Set<number>>(new Set());
   const n = scene.nodes.length;
@@ -61,7 +63,7 @@ export function ConceptMapScene({ scene, onDone }: SceneProps<'concept_map'>) {
         ))}
       </div>
       <div className="min-h-16 rounded-2xl bg-surface2 px-4 py-3 text-center" aria-live="polite">
-        {sel === null ? <span className="text-muted">Tap an idea around the circle.</span>
+        {sel === null ? <span className="text-muted">{tx('sc.tapIdea')}</span>
           : <span key={sel} className="v-up inline-block"><b>{scene.nodes[sel].label}:</b> {scene.nodes[sel].detail || ''}</span>}
       </div>
     </div>
@@ -70,6 +72,7 @@ export function ConceptMapScene({ scene, onDone }: SceneProps<'concept_map'>) {
 
 /* ---------- steps (process flow) ---------- */
 export function StepsScene({ scene, onDone }: SceneProps<'steps'>) {
+  const { t: tx } = useT();
   const [cur, setCur] = useState(0);
   const [auto, setAuto] = useState(true);
   const N = scene.steps.length;
@@ -97,7 +100,7 @@ export function StepsScene({ scene, onDone }: SceneProps<'steps'>) {
       </ol>
       <div key={cur} className="v-up flex items-start gap-4 rounded-2xl bg-surface2 p-4">
         <E e={st.emoji} className="text-4xl" />
-        <div><p className="font-mono text-xs uppercase tracking-widest text-muted">Step {cur + 1} of {N}</p><b className="text-lg">{st.label}</b>{st.detail && <p className="text-muted">{st.detail}</p>}</div>
+        <div><p className="text-xs font-semibold text-muted">{tx('sc.stepOf', { n: cur + 1, total: N })}</p><b className="text-lg">{st.label}</b>{st.detail && <p className="text-muted">{st.detail}</p>}</div>
         <button className="btn-ghost ml-auto shrink-0 text-sm" onClick={() => { setCur(0); setAuto(true); }}><RotateCcw size={15} /> Replay</button>
       </div>
     </div>
@@ -106,6 +109,7 @@ export function StepsScene({ scene, onDone }: SceneProps<'steps'>) {
 
 /* ---------- cycle ---------- */
 export function CycleScene({ scene, onDone }: SceneProps<'cycle'>) {
+  const { t: tx } = useT();
   const [cur, setCur] = useState(0);
   const [auto, setAuto] = useState(true);
   const N = scene.stages.length;
@@ -135,7 +139,7 @@ export function CycleScene({ scene, onDone }: SceneProps<'cycle'>) {
         <p className="font-mono text-xs uppercase tracking-widest text-muted">Stage {cur + 1} of {N}</p>
         <div className="flex items-center gap-3"><E e={scene.stages[cur].emoji} className="text-5xl" /><b className="text-xl">{scene.stages[cur].label}</b></div>
         {scene.stages[cur].detail && <p className="text-muted">{scene.stages[cur].detail}</p>}
-        <button className="btn-ghost justify-self-start text-sm" onClick={() => setAuto(a => !a)}>{auto ? 'Pause' : <><Play size={14} /> Play cycle</>}</button>
+        <button className="btn-ghost justify-self-start text-sm" onClick={() => setAuto(a => !a)}>{auto ? tx('vl.pause') : <><Play size={14} aria-hidden /> {tx('sc.playCycle')}</>}</button>
       </div>
     </div>
   );
@@ -159,6 +163,7 @@ export function CompareScene({ scene, onDone }: SceneProps<'compare'>) {
 
 /* ---------- sort (drag or tap to place) ---------- */
 export function SortScene({ scene, onDone }: SceneProps<'sort'>) {
+  const { t: tx } = useT();
   const [placed, setPlaced] = useState<Record<number, number>>({});
   const [held, setHeld] = useState<number | null>(null);
   const [wrong, setWrong] = useState<number | null>(null);
@@ -170,13 +175,13 @@ export function SortScene({ scene, onDone }: SceneProps<'sort'>) {
   }
   return (
     <div className="grid gap-5">
-      <div className="flex min-h-16 flex-wrap justify-center gap-2 rounded-2xl border border-dashed border-line p-3" aria-label="Items to sort">
+      <div className="flex min-h-16 flex-wrap justify-center gap-2 rounded-2xl border border-dashed border-line p-3" aria-label={tx('sc.itemsToSort')}>
         {left.length ? left.map((i, k) => (
           <button key={i} draggable onDragStart={e => e.dataTransfer.setData('text/plain', String(i))} onClick={() => setHeld(held === i ? null : i)} style={delay(k, 0.06)}
             className={cx('v-pop flex items-center gap-2 rounded-full border bg-surface px-3 py-2 font-semibold shadow-soft transition', held === i ? '-translate-y-1 border-marigold ring-2 ring-marigold' : 'border-line hover:border-board', wrong === i && 'v-shake border-bad')}>
             <E e={scene.items[i].emoji} className="text-xl" />{scene.items[i].label}
           </button>
-        )) : <span className="v-pop self-center font-semibold text-good">All sorted! 🎉</span>}
+        )) : <span className="v-pop self-center font-semibold text-good">{tx('sc.allSorted')}</span>}
       </div>
       <p className="text-center text-sm text-muted">{held !== null ? `Now tap the group for “${scene.items[held].label}”.` : 'Tap an item, then tap its group — or drag it.'}</p>
       <div className={cx('grid gap-3', scene.buckets.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2')}>
@@ -196,6 +201,7 @@ export function SortScene({ scene, onDone }: SceneProps<'sort'>) {
 
 /* ---------- hotspot (labelled picture) ---------- */
 export function HotspotScene({ scene, onDone }: SceneProps<'hotspot'>) {
+  const { t: tx } = useT();
   const [open, setOpen] = useState<Set<number>>(new Set());
   const [sel, setSel] = useState<number | null>(null);
   const N = scene.parts.length;
@@ -221,7 +227,7 @@ export function HotspotScene({ scene, onDone }: SceneProps<'hotspot'>) {
         ))}
       </div>
       <div className="min-h-16 rounded-2xl bg-surface2 px-4 py-3 text-center" aria-live="polite">
-        {sel === null ? <span className="text-muted">Tap the glowing labels to uncover each part ({open.size}/{N}).</span>
+        {sel === null ? <span className="text-muted">{tx('sc.tapLabels', { a: open.size, b: N })}</span>
           : <span key={sel} className="v-up inline-block"><b>{scene.parts[sel].label}:</b> {scene.parts[sel].detail}</span>}
       </div>
     </div>
@@ -230,6 +236,7 @@ export function HotspotScene({ scene, onDone }: SceneProps<'hotspot'>) {
 
 /* ---------- formula with sliders + live graph ---------- */
 export function FormulaScene({ scene, onDone }: SceneProps<'formula'>) {
+  const { t: tx } = useT();
   const c = useMemo(() => { try { return compile(scene.expression, scene.degrees); } catch { return null; } }, [scene.expression, scene.degrees]);
   const [vals, setVals] = useState<Record<string, number>>(() => Object.fromEntries(scene.variables.map(v => [v.symbol, v.value])));
   const [sweeping, setSweeping] = useState(false);
@@ -251,7 +258,7 @@ export function FormulaScene({ scene, onDone }: SceneProps<'formula'>) {
     const t = setInterval(() => { x += step; if (x > v0.max) { clearInterval(t); setSweeping(false); onDone(); return; } setVals(v => ({ ...v, [v0.symbol]: +x.toFixed(4) })); }, 40);
     return () => clearInterval(t);
   }, [sweeping, v0, onDone]);
-  if (!c) return <p className="text-bad">This formula could not be displayed.</p>;
+  if (!c) return <p className="text-bad">{tx('sc.badFormula')}</p>;
   const fmt = (n: number) => (!isFinite(n) ? '—' : Math.abs(n) >= 1000 || (Math.abs(n) < 0.01 && n !== 0) ? n.toExponential(2) : (+n.toFixed(2)).toString());
   return (
     <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
@@ -260,18 +267,18 @@ export function FormulaScene({ scene, onDone }: SceneProps<'formula'>) {
         {scene.variables.map(v => (
           <label key={v.symbol} className="grid grid-cols-[minmax(6rem,auto)_1fr_auto] items-center gap-3 text-sm">
             <span><b className="font-mono">{v.symbol}</b> <span className="text-muted">{v.label}</span></span>
-            <input type="range" min={v.min} max={v.max} step={v.step} value={vals[v.symbol]} onChange={e => set(v.symbol, Number(e.target.value))} className="w-full accent-[rgb(var(--marigold))]" aria-label={v.label} />
+            <input type="range" min={v.min} max={v.max} step={v.step} value={vals[v.symbol]} onChange={e => set(v.symbol, Number(e.target.value))} className="w-full accent-[rgb(var(--primary))]" aria-label={v.label} />
             <span className="min-w-[5.5rem] text-right font-mono tabular-nums">{fmt(vals[v.symbol])} {v.unit}</span>
           </label>
         ))}
-        <button className="btn-ghost justify-self-start text-sm" onClick={() => setSweeping(true)} disabled={sweeping}><Play size={14} /> Animate {v0.label.toLowerCase()}</button>
+        <button className="btn-ghost justify-self-start text-sm" onClick={() => setSweeping(true)} disabled={sweeping}><Play size={14} aria-hidden /> {tx('sc.animate', { x: v0.label.toLowerCase() })}</button>
       </div>
       <div className="grid content-start gap-3">
         <div className="rounded-2xl bg-surface2 p-4 text-center">
           <p className="text-sm text-muted">{scene.result.label}</p>
           <p className="font-display text-5xl font-bold tabular-nums text-primary">{scene.result.symbol} = {fmt(result)}<span className="ml-1 text-2xl text-muted">{scene.result.unit}</span></p>
         </div>
-        <svg viewBox="0 0 100 60" className="w-full rounded-2xl border border-line bg-surface" role="img" aria-label={`${scene.result.label} against ${v0.label}`}>
+        <svg viewBox="0 0 100 60" className="w-full rounded-2xl border border-line bg-surface" role="img" aria-label={tx('sc.graphAria', { y: scene.result.label, x: v0.label })}>
           <line x1="8" y1="52" x2="96" y2="52" stroke="rgb(var(--line))" strokeWidth=".4" /><line x1="8" y1="6" x2="8" y2="52" stroke="rgb(var(--line))" strokeWidth=".4" />
           <path d={path} fill="none" stroke="rgb(var(--primary))" strokeWidth="1.1" />
           {isFinite(result) && <circle cx={X(vals[v0.symbol])} cy={Y(result)} r="1.8" fill="rgb(var(--marigold))" style={{ transition: 'all .15s' }} />}
@@ -307,6 +314,7 @@ export function TimelineScene({ scene, onDone }: SceneProps<'timeline'>) {
 
 /* ---------- flashcards ---------- */
 export function FlashcardsScene({ scene, onDone }: SceneProps<'flashcards'>) {
+  const { t: tx } = useT();
   const [flipped, setFlipped] = useState<Set<number>>(new Set());
   useEffect(() => { if (flipped.size === scene.cards.length) onDone(); }, [flipped, scene.cards.length, onDone]);
   return (
@@ -315,7 +323,7 @@ export function FlashcardsScene({ scene, onDone }: SceneProps<'flashcards'>) {
         <button key={i} onClick={() => setFlipped(s => { const n = new Set(s); n.has(i) ? n.delete(i) : n.add(i); return n; })} aria-pressed={flipped.has(i)}
           className={cx('flip v-pop relative block h-44 w-full', flipped.has(i) && 'on')} style={delay(i, 0.08)}>
           <div className="flip-inner">
-            <div className="flip-face border border-line bg-surface shadow-soft"><div className="grid gap-2"><E e={c.emoji} className="text-4xl" /><b className="text-base leading-tight">{c.front}</b><span className="text-xs text-muted">Tap to flip</span></div></div>
+            <div className="flip-face border border-line bg-surface shadow-soft"><div className="grid gap-2"><E e={c.emoji} className="text-4xl" /><b className="text-base leading-tight">{c.front}</b><span className="text-xs text-muted">{tx('sc.tapFlip')}</span></div></div>
             <div className="flip-face flip-back chalkboard"><span className="text-sm leading-snug">{c.back}</span></div>
           </div>
         </button>
@@ -326,6 +334,7 @@ export function FlashcardsScene({ scene, onDone }: SceneProps<'flashcards'>) {
 
 /* ---------- order (tap in sequence) ---------- */
 export function OrderScene({ scene, onDone }: SceneProps<'order'>) {
+  const { t: tx } = useT();
   const shuffled = useMemo(() => { const a = scene.items.map((t, i) => ({ t, i })); for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(((k * 7919) % 13) / 13 * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } if (a.every((x, k) => x.i === k)) a.reverse(); return a; }, [scene.items]);
   const [done, setDone] = useState<number[]>([]);
   const [wrong, setWrong] = useState<number | null>(null);
@@ -334,14 +343,14 @@ export function OrderScene({ scene, onDone }: SceneProps<'order'>) {
   return (
     <div className="grid gap-5 md:grid-cols-2">
       <div className="grid content-start gap-2">
-        <p className="text-sm font-semibold text-muted">Tap in the right order</p>
+        <p className="text-sm font-semibold text-muted">{tx('sc.tapOrder')}</p>
         {shuffled.map(({ t, i }, k) => (
           <button key={i} onClick={() => tap(i)} disabled={done.includes(i)} style={delay(k, 0.07)}
             className={cx('v-left rounded-xl border px-4 py-3 text-left font-semibold transition', done.includes(i) ? 'border-line bg-surface2 text-muted line-through opacity-60' : 'border-line bg-surface hover:border-board', wrong === i && 'v-shake border-bad bg-bad/10')}>{t}</button>
         ))}
       </div>
       <ol className="grid content-start gap-2">
-        <p className="text-sm font-semibold text-muted">Your sequence</p>
+        <p className="text-sm font-semibold text-muted">{tx('sc.yourSeq')}</p>
         {scene.items.map((t, k) => (
           <li key={k} className={cx('flex items-center gap-3 rounded-xl border-2 border-dashed px-4 py-3 transition', done[k] !== undefined ? 'v-pop border-good bg-good/10' : 'border-line')}>
             <span className={cx('grid h-7 w-7 place-items-center rounded-full text-sm font-bold', done[k] !== undefined ? 'bg-good text-white' : 'bg-surface2 text-muted')}>{k + 1}</span>
@@ -355,6 +364,7 @@ export function OrderScene({ scene, onDone }: SceneProps<'order'>) {
 
 /* ---------- quiz ---------- */
 export function QuizScene({ scene, onDone, onQuiz }: SceneProps<'quiz'>) {
+  const { t: tx } = useT();
   const [pick, setPick] = useState<number | null>(null);
   const ok = pick === scene.answer;
   return (
@@ -371,7 +381,7 @@ export function QuizScene({ scene, onDone, onQuiz }: SceneProps<'quiz'>) {
           </button>
         ))}
       </div>
-      {pick !== null && <div className={cx('v-up rounded-2xl px-4 py-3', ok ? 'bg-good/10' : 'bg-bad/10')}><b>{ok ? 'Correct! 🎉' : 'Not quite.'}</b> {scene.explanation}</div>}
+      {pick !== null && <div className={cx('v-up rounded-2xl px-4 py-3', ok ? 'bg-good/10' : 'bg-bad/10')}><b>{ok ? tx('sc.correct') : tx('sc.notQuite')}</b> {scene.explanation}</div>}
     </div>
   );
 }

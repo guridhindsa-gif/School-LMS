@@ -1,13 +1,15 @@
 'use client';
+import { useT } from '@/lib/i18n';
 import { useState } from 'react';
 import { cssVar, useCanvas } from './useCanvas';
 import { LabNote, Legend, Readout, Slider } from './Slider';
 
-const MEDIA = [{ n: 1.0, name: 'Air' }, { n: 1.33, name: 'Water' }, { n: 1.5, name: 'Glass' }, { n: 2.42, name: 'Diamond' }];
+const MEDIA = [{ n: 1.0, name: 'Air', key: 'lb.rf.air' }, { n: 1.33, name: 'Water', key: 'lb.rf.water' }, { n: 1.5, name: 'Glass', key: 'lb.rf.glass' }, { n: 2.42, name: 'Diamond', key: 'lb.rf.diamond' }];
 
 /** Snell's law with photons, partial reflection and total internal reflection. */
 export default function RefractionLab() {
   const [angle, setAngle] = useState(40);
+  const { t: tt, lang } = useT();
   const [top, setTop] = useState(0);    // index into MEDIA (incident medium)
   const [bottom, setBottom] = useState(2);
   const n1 = MEDIA[top].n, n2 = MEDIA[bottom].n;
@@ -41,10 +43,11 @@ export default function RefractionLab() {
     x.fillStyle = chalk; x.font = '600 14px Figtree, sans-serif';
     x.fillText(`i = ${angle}°`, P.x - 110, P.y - 60);
     if (r !== null) x.fillText(`r = ${((r * 180) / Math.PI).toFixed(1)}°`, P.x + 24, P.y + 74);
-    else x.fillText('Total internal reflection', P.x + 20, P.y - 20);
+    else x.fillText(tt('lb.rf.tir'), P.x + 20, P.y - 20);
     x.font = '700 13px "IBM Plex Mono", monospace';
-    x.fillText(`${MEDIA[top].name.toUpperCase()}  n = ${n1}`, 14, 24);
-    x.fillText(`${MEDIA[bottom].name.toUpperCase()}  n = ${n2}`, 14, h - 14);
+    const up = (s: string) => (lang === 'en' ? s.toUpperCase() : s);
+    x.fillText(`${up(tt(MEDIA[top].key))}  n = ${n1}`, 14, 24);
+    x.fillText(`${up(tt(MEDIA[bottom].key))}  n = ${n2}`, 14, h - 14);
     // photons: speed ∝ 1/n
     const seg = Math.min(L, h * 0.9);
     for (let k = 0; k < 7; k++) {
@@ -64,24 +67,24 @@ export default function RefractionLab() {
 
   return (
     <div className="grid gap-4">
-      <div className="overflow-hidden rounded-card"><canvas ref={ref} role="img" aria-label={`Light going from ${MEDIA[top].name} into ${MEDIA[bottom].name} at ${angle} degrees: ${r === null ? 'total internal reflection' : `refracted at ${((r * 180) / Math.PI).toFixed(1)} degrees`}`} /></div>
-      <Legend items={[['rgb(var(--accent))', 'Light ray'], ['rgb(var(--on-night))', 'Normal (dashed)']]} />
-      <Slider id="refr-angle" label="Angle of incidence" value={angle} min={0} max={85} unit="°" onChange={setAngle} />
+      <div className="overflow-hidden rounded-card"><canvas ref={ref} role="img" aria-label={tt('lb.rf.aria', { a: tt(MEDIA[top].key), b: tt(MEDIA[bottom].key), deg: angle, result: r === null ? tt('lb.rf.tir') : tt('lb.rf.refracted', { deg: ((r * 180) / Math.PI).toFixed(1) }) })} /></div>
+      <Legend items={[['rgb(var(--accent))', tt('lb.rf.ray')], ['rgb(var(--on-night))', tt('lb.rf.normal')]]} />
+      <Slider id="refr-angle" label={tt('lb.rf.angle')} value={angle} min={0} max={85} unit="°" onChange={setAngle} />
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="grid gap-1 text-sm font-semibold">Light comes from
-          <select className="input" value={top} onChange={e => setTop(+e.target.value)}>{MEDIA.map((m, k) => <option key={m.name} value={k}>{m.name} (n = {m.n})</option>)}</select>
+        <label className="grid gap-1 text-sm font-semibold">{tt('lb.rf.from')}
+          <select className="input" value={top} onChange={e => setTop(+e.target.value)}>{MEDIA.map((m, k) => <option key={m.name} value={k}>{tt(m.key)} (n = {m.n})</option>)}</select>
         </label>
-        <label className="grid gap-1 text-sm font-semibold">Into
-          <select className="input" value={bottom} onChange={e => setBottom(+e.target.value)}>{MEDIA.map((m, k) => <option key={m.name} value={k}>{m.name} (n = {m.n})</option>)}</select>
+        <label className="grid gap-1 text-sm font-semibold">{tt('lb.rf.into')}
+          <select className="input" value={bottom} onChange={e => setBottom(+e.target.value)}>{MEDIA.map((m, k) => <option key={m.name} value={k}>{tt(m.key)} (n = {m.n})</option>)}</select>
         </label>
       </div>
       <Readout items={[
-        ['Snell’s law', `${n1}·sin i = ${n2}·sin r`],
-        ['Refraction angle', r === null ? 'none (TIR)' : `${((r * 180) / Math.PI).toFixed(1)}°`],
-        ['Critical angle', critical ? `${critical.toFixed(1)}°` : 'n/a (n₁ < n₂)'],
-        ['Speed in 2nd medium', `${(3 / n2).toFixed(2)} × 10⁸ m/s`],
+        [tt('lb.rf.snell'), `${n1}·sin i = ${n2}·sin r`],
+        [tt('lb.rf.refrAngle'), r === null ? tt('lb.rf.none') : `${((r * 180) / Math.PI).toFixed(1)}°`],
+        [tt('lb.rf.critical'), critical ? `${critical.toFixed(1)}°` : tt('lb.rf.na')],
+        [tt('lb.rf.speed'), `${(3 / n2).toFixed(2)} × 10⁸ m/s`],
       ]} />
-      <LabNote>Going into a denser medium the ray bends <b>towards</b> the normal. From dense to less dense, past the critical angle, all light reflects back: <b>total internal reflection</b> (optical fibres, diamonds sparkling). Try Glass → Air at 45°.</LabNote>
+      <LabNote>{tt('lb.rf.note')}</LabNote>
     </div>
   );
 }

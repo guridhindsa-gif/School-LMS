@@ -7,6 +7,9 @@ import type { Profile } from './types';
 
 export interface ChapterRef { id: string; name: string; subject: string; kind: 'board' | 'exam' }
 export interface DayLog { day: string; answered: number; correct: number; minutes: number }
+/** Lesson path steps completed per chapter (epoch ms when done). */
+export type LessonStep = 'learn' | 'explore' | 'assess';
+export type StepLog = Partial<Record<LessonStep, number>> & { assessScore?: number };
 
 interface State {
   profile: Profile;
@@ -16,11 +19,13 @@ interface State {
   xp: number;
   streak: { current: number; best: number; lastDay: string };
   seen: Record<string, string[]>; // question stems already shown per chapter (avoid repeats)
+  steps: Record<string, StepLog>; // persistent lesson-path completion per chapter
   setProfile: (p: Partial<Profile>) => void;
   resetProfile: () => void;
   recordAnswer: (ch: ChapterRef, e: AnswerEvent & { stem?: string }) => SkillState;
   endSession: (chapterId: string, accuracy: number, minutes: number) => void;
   resetProgress: () => void;
+  markStep: (chapterId: string, step: LessonStep, score?: number) => void;
 }
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -36,6 +41,7 @@ export const useLMS = create<State>()(
       xp: 0,
       streak: { current: 0, best: 0, lastDay: '' },
       seen: {},
+      steps: {},
       setProfile: p => set(s => ({ profile: { ...s.profile, ...p } })),
       resetProfile: () => set({ profile: defaultProfile }),
       recordAnswer: (ch, e) => {
@@ -74,7 +80,12 @@ export const useLMS = create<State>()(
         const log = s.log.map(l => (l.day === d ? { ...l, minutes: l.minutes + minutes } : l));
         set({ skills: { ...s.skills, [chapterId]: finishSession(sk, accuracy) }, log });
       },
-      resetProgress: () => set({ skills: {}, chapters: {}, log: [], xp: 0, streak: { current: 0, best: 0, lastDay: '' }, seen: {} }),
+      resetProgress: () => set({ skills: {}, chapters: {}, log: [], xp: 0, streak: { current: 0, best: 0, lastDay: '' }, seen: {}, steps: {} }),
+      markStep: (chapterId, step, score) => set(s => {
+        const prev = s.steps[chapterId] || {};
+        if (prev[step] && score === undefined) return {};
+        return { steps: { ...s.steps, [chapterId]: { ...prev, [step]: prev[step] || Date.now(), ...(score !== undefined ? { assessScore: Math.max(score, prev.assessScore ?? 0) } : {}) } } };
+      }),
     }),
     { name: 'school-lms', storage: createJSONStorage(() => localStorage), version: 1 },
   ),

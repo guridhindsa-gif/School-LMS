@@ -11,6 +11,7 @@ import { friendlyError, getQuestions } from '@/lib/ai-client';
 import { useLMS, type ChapterRef } from '@/lib/store';
 import { useTutor } from '@/lib/tutor-store';
 import type { Difficulty, LearnContext, Question } from '@/lib/types';
+import { useT } from '@/lib/i18n';
 
 export type QuizMode = 'adaptive' | 'test' | 'diagnostic' | 'mock';
 
@@ -29,12 +30,13 @@ interface Props {
 
 interface Answered { q: Question; choice: number | null; correct: boolean; hint: boolean; ms: number; unitId?: string }
 
-const DIFF_LABEL: Record<Difficulty, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 const DIFF_CLS: Record<Difficulty, string> = { easy: 'bg-good/15 text-good', medium: 'bg-primary/12 text-primary', hard: 'bg-violet/15 text-violet' };
 
 export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], total, secondsPerQ, doneHref }: Props) {
   const N = total ?? (mode === 'adaptive' ? 8 : mode === 'test' ? 10 : mode === 'diagnostic' ? Math.min(12, Math.max(6, units.length)) : 15);
   const live = mode === 'adaptive';
+  const { t, locale } = useT();
+  const markStep = useLMS(s => s.markStep);
   const lang = useLMS(s => s.profile.language);
   const recordAnswer = useLMS(s => s.recordAnswer);
   const endSession = useLMS(s => s.endSession);
@@ -67,6 +69,8 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
   const ctl = useRef<AbortController | null>(null);
   const [masteryNow, setMasteryNow] = useState(startMastery.current);
   const [targetDiff, setTargetDiff] = useState<Difficulty>(nextDifficulty(ability.current));
+  const [tick, setTick] = useState(0);   // bumps when a request settles
+  const refills = useRef(0);
 
   const baseCtx = useMemo(() => {
     const { unitId: _u, ...rest } = ctx;
@@ -74,20 +78,32 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
   }, [ctx, lang, startSkill]);
 
   const fetchBatch = useCallback(async (n: number, difficulty: Difficulty | 'mixed', append: boolean) => {
-    if (fetching.current) return;
+    // one request at a time; an aborted request (unmount, React strict-mode re-run) no longer blocks the next
+    if (fetching.current && ctl.current && !ctl.current.signal.aborted) return;
+    const me = new AbortController();
+    ctl.current = me;
     fetching.current = true; setErr('');
     if (!append) setLoading(true);
-    ctl.current = new AbortController();
     try {
       const purpose = mode === 'adaptive' ? 'practice' : mode === 'diagnostic' ? 'diagnostic' : mode;
-      const avoid = [...(seen || []), ...done.map(d => d.q.q)].slice(-20);
+      // avoid everything already queued (answered or still waiting), not only answered questions
+      const avoid = [...(seen || []), ...queueRef.current.map(q => q.q)].slice(-20);
       const ctxForQ = mode === 'diagnostic' ? { ...baseCtx, units: units.map(u => u.name).slice(0, 40) } : baseCtx;
-      const qs = await getQuestions(ctxForQ, { n, difficulty, purpose, avoid }, ctl.current.signal);
-      setQueue(q => (append ? [...q, ...qs] : qs));
+      const qs = await getQuestions(ctxForQ, { n, difficulty, purpose, avoid }, me.signal);
+      if (me.signal.aborted) return;
+      setQueue(q => {
+        const base = append ? q : [];
+        const have = new Set(base.map(x => stemKey(x.q)));
+        const fresh = qs.filter(x => { const k = stemKey(x.q); if (have.has(k)) return false; have.add(k); return true; });
+        return [...base, ...fresh];
+      });
     } catch (e) {
+      if (me.signal.aborted) return;
       const m = friendlyError(e); if (m) setErr(m);
-    } finally { fetching.current = false; setLoading(false); }
-  }, [mode, baseCtx, units, seen, done]);
+    } finally {
+      if (ctl.current === me) { fetching.current = false; setLoading(false); setTick(x => x + 1); }
+    }
+  }, [mode, baseCtx, units, seen]);
 
   // initial load
   useEffect(() => {
@@ -114,6 +130,15 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
 
   /* ---------- adaptive (live feedback) ---------- */
   const current = queue[idx];
+
+  // If a prefetched batch was all repeats (dropped above), ask again — at most twice, then offer Try again.
+  useEffect(() => {
+    if (current) { refills.current = 0; return; }
+    if (!live || finished || loading || fetching.current || err || !queue.length || done.length >= N || refills.current >= 2) return;
+    refills.current++;
+    fetchBatch(Math.min(3, N - done.length), nextDifficulty(ability.current), true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, tick, live, finished, loading, err, queue.length, done.length]);
 
   function check() {
     if (choice === null || !current) return;
@@ -157,6 +182,8 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
     const acc = res.filter(r => r.correct).length / Math.max(1, res.length);
     const touched = new Set(res.map(r => r.unitId).filter(Boolean) as string[]);
     touched.forEach(id => endSession(id, acc, Math.round((Date.now() - t0.current) / 60000 / Math.max(1, touched.size))));
+    // a finished chapter test completes the lesson path's "Assess" step (persisted)
+    if (mode === 'test' && chapter) markStep(chapter.id, 'assess', Math.round(acc * 100));
     if (acc >= 0.8) setFire(f => f + 1);
   }
 
@@ -171,12 +198,12 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
   if (err && !queue.length) {
     return (
       <div role="alert" className="card grid gap-3 border-bad/40 p-6">
-        <h2 className="text-xl text-bad">Could not create questions</h2>
+        <h2 className="text-xl text-bad">{t('quiz.errTitle')}</h2>
         <p>{err}</p>
-        <p className="text-sm text-muted">No questions were shown and nothing was recorded. Your progress is unchanged.</p>
+        <p className="text-sm text-muted">{t('quiz.errNothing')}</p>
         <div className="flex flex-wrap gap-2">
-          <button className="btn-primary" onClick={() => fetchBatch(live ? 3 : N, live ? targetDiff : 'mixed', false)}><RotateCcw size={16} /> Try again</button>
-          <Link href="/settings" className="btn-ghost">Check AI settings</Link>
+          <button className="btn-primary" onClick={() => fetchBatch(live ? 3 : N, live ? targetDiff : 'mixed', false)}><RotateCcw size={16} aria-hidden /> {t('common.tryAgain')}</button>
+          <Link href="/settings" className="btn-ghost">{t('quiz.checkAi')}</Link>
         </div>
       </div>
     );
@@ -185,8 +212,8 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
     return (
       <div className="card grid justify-items-center gap-4 p-10 text-center" role="status" aria-live="polite">
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2.4, ease: 'linear' }}><Sparkles className="text-primary" size={34} /></motion.div>
-        <p className="font-semibold">{live ? `Picking ${DIFF_LABEL[targetDiff].toLowerCase()} questions for your level…` : `Setting ${N} questions…`}</p>
-        <p className="text-sm text-muted">Your tutor writes fresh questions each time, matched to the official syllabus.</p>
+        <p className="font-semibold">{live ? t('quiz.picking', { d: t(`quiz.d.${targetDiff}`) }) : t('quiz.setting', { n: N })}</p>
+        <p className="text-sm text-muted">{t('quiz.fresh')}</p>
         <Dots />
       </div>
     );
@@ -196,34 +223,42 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
 
   if (live) {
     const q = current;
-    if (!q) return <div className="card grid justify-items-center gap-3 p-10"><Dots /><p className="text-muted">Choosing your next question…</p>{err && <p className="text-bad">{err}</p>}</div>;
+    if (!q) {
+      const stuck = !fetching.current && (refills.current >= 2 || !!err);
+      return (
+        <div className="card grid justify-items-center gap-3 p-10" role="status" aria-live="polite">
+          {!stuck && <Dots />}<p className="text-muted">{t('quiz.choosingNext')}</p>{err && <p className="text-bad">{err}</p>}
+          {stuck && <button className="btn-primary" onClick={() => { refills.current = 0; fetchBatch(Math.min(3, N - done.length), targetDiff, true); }}><RotateCcw size={16} aria-hidden /> {t('common.tryAgain')}</button>}
+        </div>
+      );
+    }
     return (
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
         <div className="grid gap-4">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-sm text-muted">Question {idx + 1} of {N}</span>
+            <span className="font-mono text-sm text-muted">{t('quiz.qOf', { i: idx + 1, n: N })}</span>
             <Bar value={done.length / N} className="flex-1" color="rgb(var(--primary))" />
           </div>
           <QuestionCard q={q} choice={choice} setChoice={setChoice} revealed={revealed} hint={hint} />
           <div className="flex flex-wrap gap-2">
-            {!revealed && <button className="btn-primary" disabled={choice === null} onClick={check}>Check answer</button>}
-            {!revealed && !hint && <button className="btn-ghost" onClick={() => setHint(true)}><Lightbulb size={16} /> Hint</button>}
-            {revealed && <button className="btn-primary" onClick={next} autoFocus>{done.length >= N ? 'See results' : 'Next question'} <ArrowRight size={16} /></button>}
+            {!revealed && <button className="btn-primary" disabled={choice === null} onClick={check}>{t('quiz.check')}</button>}
+            {!revealed && !hint && <button className="btn-ghost" onClick={() => setHint(true)}><Lightbulb size={16} aria-hidden /> {t('quiz.hint')}</button>}
+            {revealed && <button className="btn-primary" onClick={next} autoFocus>{done.length >= N ? t('quiz.results') : t('quiz.nextQ')} <ArrowRight size={16} aria-hidden /></button>}
             {revealed && !done[done.length - 1]?.correct && (
-              <button className="btn-ghost" onClick={() => ask(`I got this wrong:\n\n${q.q}\n\nI chose "${q.options[choice ?? 0]}". The answer is "${q.options[q.answer]}". Help me understand why, step by step.`)}>
-                <Sparkles size={16} className="text-primary" /> Explain with tutor</button>
+              <button className="btn-ghost" onClick={() => ask(t('quiz.explainPrompt', { q: q.q, mine: q.options[choice ?? 0], ans: q.options[q.answer] }))}>
+                <Sparkles size={16} className="text-primary" aria-hidden /> {t('quiz.explain')}</button>
             )}
           </div>
         </div>
         <aside className="card grid content-start gap-4 p-5">
-          <p className="eyebrow">Live mastery</p>
-          <div className="flex items-center gap-4"><Ring value={masteryNow} size={76} stroke={8} /><div className="text-sm text-muted">Updates after every answer (Bayesian knowledge tracing).</div></div>
+          <p className="eyebrow">{t('quiz.liveMastery')}</p>
+          <div className="flex items-center gap-4"><Ring value={masteryNow} size={76} stroke={8} /><div className="text-sm text-muted">{t('quiz.bkt')}</div></div>
           <div className="grid gap-1">
-            <span className="flex items-center gap-1.5 text-sm font-semibold"><Gauge size={15} /> Next difficulty</span>
-            <AnimatePresence mode="wait"><motion.span key={targetDiff} initial={{ y: 6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -6, opacity: 0 }} className={cx('pill w-fit', DIFF_CLS[targetDiff])}>{DIFF_LABEL[targetDiff]}</motion.span></AnimatePresence>
-            <span className="text-xs text-muted">Chosen so you get about 7 in 10 right — hard enough to learn, easy enough to keep going.</span>
+            <span className="flex items-center gap-1.5 text-sm font-semibold"><Gauge size={15} aria-hidden /> {t('quiz.nextDiff')}</span>
+            <AnimatePresence mode="wait"><motion.span key={targetDiff} initial={{ y: 6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -6, opacity: 0 }} className={cx('pill w-fit', DIFF_CLS[targetDiff])}>{t(`quiz.${targetDiff}`)}</motion.span></AnimatePresence>
+            <span className="text-xs text-muted">{t('quiz.sevenTen')}</span>
           </div>
-          <div className="flex gap-1" role="img" aria-label={`${done.filter(d => d.correct).length} correct out of ${done.length} answered`}>{Array.from({ length: N }, (_, i) => <span key={i} className={cx('h-2 flex-1 rounded-full', i < done.length ? (done[i].correct ? 'bg-good' : 'bg-accent') : 'bg-surface2')} />)}</div>
+          <div className="flex gap-1" role="img" aria-label={t('quiz.correctOfAnswered', { c: done.filter(d => d.correct).length, n: done.length })}>{Array.from({ length: N }, (_, i) => <span key={i} className={cx('h-2 flex-1 rounded-full', i < done.length ? (done[i].correct ? 'bg-good' : 'bg-accent') : 'bg-surface2')} />)}</div>
         </aside>
         <Confetti fire={fire} />
       </div>
@@ -237,27 +272,27 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="font-mono text-sm text-muted">Question {idx + 1} of {queue.length}</span>
-          <span role="timer" aria-label={`Time left ${fmt(left)}`} className={cx('pill ml-auto', left < 60 ? 'bg-bad/15 text-bad' : 'bg-surface2 text-ink')}><Clock size={13} aria-hidden /> {fmt(left)}</span>
-          {marking[1] > 0 && <span className="pill bg-surface2 text-muted">+{marking[0]} / −{marking[1]}</span>}
+          <span className="font-mono text-sm text-muted">{t('quiz.qOf', { i: idx + 1, n: queue.length })}</span>
+          <span role="timer" aria-label={t('quiz.timeLeft', { t: fmt(left) })} className={cx('pill ml-auto', left < 60 ? 'bg-bad/15 text-bad' : 'bg-surface2 text-ink')}><Clock size={13} aria-hidden /> {fmt(left)}</span>
+          {marking[1] > 0 && <span className="pill bg-surface2 text-muted" title={t('quiz.marking', { p: marking[0], n: marking[1] })}>+{marking[0]} / −{marking[1]}<span className="sr-only">{t('quiz.marking', { p: marking[0], n: marking[1] })}</span></span>}
         </div>
         {q && <QuestionCard q={q} choice={answers[idx] ?? null} setChoice={c => setAnswers(a => ({ ...a, [idx]: c! }))} revealed={false} hint={false} />}
         <div className="flex flex-wrap gap-2">
-          <button className="btn-ghost" disabled={idx === 0} onClick={() => setIdx(i => i - 1)}>Previous</button>
-          {idx < queue.length - 1 ? <button className="btn-primary" onClick={() => setIdx(i => i + 1)}>Save &amp; next <ArrowRight size={16} /></button> : null}
-          <button className="btn-soft" onClick={() => setAnswers(a => { const n = { ...a }; delete n[idx]; return n; })}>Clear</button>
+          <button className="btn-ghost" disabled={idx === 0} onClick={() => setIdx(i => i - 1)}>{t('quiz.prev')}</button>
+          {idx < queue.length - 1 ? <button className="btn-primary" onClick={() => setIdx(i => i + 1)}>{t('quiz.saveNext')} <ArrowRight size={16} aria-hidden /></button> : null}
+          <button className="btn-soft" onClick={() => setAnswers(a => { const n = { ...a }; delete n[idx]; return n; })}>{t('quiz.clear')}</button>
           <ConfirmSubmit unanswered={queue.length - answeredCount} onSubmit={submitAll} />
         </div>
       </div>
       <aside className="card grid content-start gap-3 p-5">
-        <p className="eyebrow">Question palette</p>
-        <div className="grid grid-cols-5 gap-2" role="group" aria-label="Jump to question">
+        <p className="eyebrow">{t('quiz.palette')}</p>
+        <div className="grid grid-cols-5 gap-2" role="group" aria-label={t('quiz.jump')}>
           {queue.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)} aria-label={`Question ${i + 1}${answers[i] !== undefined ? ', answered' : ''}`} aria-current={i === idx ? 'step' : undefined}
+            <button key={i} onClick={() => setIdx(i)} aria-label={answers[i] !== undefined ? t('quiz.qNanswered', { n: i + 1 }) : t('quiz.qN', { n: i + 1 })} aria-current={i === idx ? 'step' : undefined}
               className={cx('h-10 rounded-lg border font-bold', answers[i] !== undefined ? 'border-good bg-good text-white' : 'border-line bg-surface', i === idx && 'ring-2 ring-primary ring-offset-2 ring-offset-surface')}>{i + 1}</button>
           ))}
         </div>
-        <p className="text-sm text-muted">{answeredCount} answered · {queue.length - answeredCount} left</p>
+        <p className="text-sm text-muted" aria-live="polite">{t('quiz.answeredLeft', { a: answeredCount, l: queue.length - answeredCount })}</p>
       </aside>
       <Confetti fire={fire} />
     </div>
@@ -266,34 +301,34 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
   function Summary() {
     const right = done.filter(d => d.correct).length, wrong = done.filter(d => d.choice !== null && !d.correct).length, skip = done.length - right - wrong;
     const score = +(right * marking[0] - wrong * marking[1]).toFixed(2), max = done.length * marking[0];
-    const weak = Object.entries(done.filter(d => !d.correct).reduce<Record<string, number>>((m, d) => { const k = d.q.topic || 'General'; m[k] = (m[k] || 0) + 1; return m; }, {})).sort((a, b) => b[1] - a[1]);
+    const weak = Object.entries(done.filter(d => !d.correct).reduce<Record<string, number>>((m, d) => { const k = d.q.topic || t('quiz.general'); m[k] = (m[k] || 0) + 1; return m; }, {})).sort((a, b) => b[1] - a[1]);
     const after = chapter ? useLMS.getState().skills[chapter.id] : undefined;
     const perUnit = mode === 'diagnostic' ? units.map(u => ({ u, list: done.filter(d => d.unitId === u.id) })).filter(x => x.list.length) : [];
     return (
       <div className="grid gap-5">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="panel-night grid gap-5 rounded-card p-6 shadow-lift" aria-label="Result summary">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="panel-night grid gap-5 rounded-card p-6 shadow-lift" aria-label={t('quiz.summary')}>
           <div className="flex flex-wrap items-center gap-5">
             <Trophy className="text-accent" size={36} aria-hidden />
-            <div className="flex-1"><p className="font-mono text-xs uppercase tracking-widest text-onnight/70">{mode === 'diagnostic' ? 'Your starting level' : mode === 'adaptive' ? 'Practice complete' : 'Result'}</p>
+            <div className="flex-1"><p className="font-mono text-xs uppercase tracking-widest text-onnight/70">{mode === 'diagnostic' ? t('quiz.startLevel') : mode === 'adaptive' ? t('quiz.practiceDone') : t('quiz.result')}</p>
               <h2 className="text-3xl">{score} / {max}</h2></div>
-            {chapter && after && <div className="flex items-center gap-3"><Ring value={after.pKnown} size={74} color="rgb(var(--accent))" /><div className="text-sm text-onnight/80">Mastery<br />{Math.round(startMastery.current * 100)}% → <b className="text-onnight">{Math.round(after.pKnown * 100)}%</b></div></div>}
+            {chapter && after && <div className="flex items-center gap-3"><Ring value={after.pKnown} size={74} color="rgb(var(--accent))" /><div className="text-sm text-onnight/80">{t('quiz.masteryChange')}<br />{Math.round(startMastery.current * 100)}% → <b className="text-onnight">{Math.round(after.pKnown * 100)}%</b></div></div>}
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[['Correct', right], ['Wrong', wrong], ['Skipped', skip], ['Accuracy', `${Math.round((right / Math.max(1, done.length)) * 100)}%`]].map(([k, v]) => (
+            {[[t('quiz.correct'), right], [t('quiz.wrong'), wrong], [t('quiz.skipped'), skip], [t('quiz.accuracy'), `${Math.round((right / Math.max(1, done.length)) * 100)}%`]].map(([k, v]) => (
               <div key={k} className="rounded-xl bg-white/[.08] px-4 py-3"><p className="text-xs text-onnight/70">{k}</p><p className="font-display text-2xl font-bold">{v}</p></div>
             ))}
           </div>
-          {after && <p className="flex items-center gap-2 text-onnight/85"><CalendarClock size={16} /> Next review: <b>{new Date(after.nextReview).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}</b> (spaced repetition)</p>}
+          {after && <p className="flex items-center gap-2 text-onnight/85"><CalendarClock size={16} aria-hidden /> {t('quiz.nextReview', { date: new Date(after.nextReview).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' }) })}</p>}
         </motion.section>
 
         {perUnit.length > 0 && (
           <section className="card grid gap-3 p-5">
-            <h3 className="text-xl">Where to start</h3>
+            <h3 className="text-xl">{t('quiz.whereStart')}</h3>
             {perUnit.map(({ u, list }) => {
               const acc = list.filter(d => d.correct).length / list.length;
               return (
                 <Link key={u.id} href={`/student/learn/${encodeURIComponent(u.id)}`} className="grid grid-cols-[minmax(0,1fr)_80px_auto] items-center gap-3 rounded-ctl px-2 py-1.5 hover:bg-surface2 sm:grid-cols-[minmax(0,1fr)_120px_auto]">
-                  <span className="truncate font-semibold">{u.name}</span><Bar value={acc} /><span className="text-sm text-muted">{acc >= 0.7 ? 'Strong' : acc >= 0.4 ? 'Revise' : 'Start here'}</span>
+                  <span className="truncate font-semibold">{u.name}</span><Bar value={acc} /><span className="text-sm text-muted">{acc >= 0.7 ? t('quiz.lvStrong') : acc >= 0.4 ? t('quiz.lvRevise') : t('quiz.lvStart')}</span>
                 </Link>
               );
             })}
@@ -302,24 +337,25 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
 
         {weak.length > 0 && (
           <section className="card grid gap-2 p-5">
-            <h3 className="text-xl">Revise next</h3>
-            <div className="flex flex-wrap gap-2">{weak.slice(0, 8).map(([t, n]) => <span key={t} className="pill bg-accent/15 text-warn">{t} · {n} missed</span>)}</div>
+            <h3 className="text-xl">{t('quiz.reviseNext')}</h3>
+            <div className="flex flex-wrap gap-2">{weak.slice(0, 8).map(([tp, n]) => <span key={tp} className="pill whitespace-normal bg-accent/15 text-warn">{t('quiz.missed', { t: tp, n })}</span>)}</div>
           </section>
         )}
 
         <section className="grid gap-3">
-          <h3 className="text-xl">Review answers</h3>
+          <h3 className="text-xl">{t('quiz.review')}</h3>
           {done.map((d, i) => (
             <details key={i} className="card p-4" open={!d.correct && i < 3}>
               <summary className="flex cursor-pointer items-start gap-3">
-                {d.correct ? <CheckCircle2 className="mt-0.5 shrink-0 text-good" size={19} /> : <XCircle className="mt-0.5 shrink-0 text-bad" size={19} />}
+                {d.correct ? <CheckCircle2 className="mt-0.5 shrink-0 text-good" size={19} aria-hidden /> : <XCircle className="mt-0.5 shrink-0 text-bad" size={19} aria-hidden />}
+                <span className="sr-only">{d.correct ? t('quiz.answeredState') : t('quiz.wrongState')}</span>
                 <span className="min-w-0 flex-1"><Markdown text={d.q.q} className="prose-lms !max-w-none" /></span>
-                <span className={cx('pill', DIFF_CLS[d.q.difficulty])}>{DIFF_LABEL[d.q.difficulty]}</span>
+                <span className={cx('pill', DIFF_CLS[d.q.difficulty])}>{t(`quiz.${d.q.difficulty}`)}</span>
               </summary>
               <div className="mt-3 grid gap-2 pl-8 text-sm">
-                {d.choice !== null && !d.correct && <p className="text-bad">Your answer: {d.q.options[d.choice]}{d.q.whyWrong?.[d.choice] ? ` — ${d.q.whyWrong[d.choice]}` : ''}</p>}
-                {d.choice === null && <p className="text-muted">Not answered</p>}
-                <p className="text-good">Correct: {d.q.options[d.q.answer]}</p>
+                {d.choice !== null && !d.correct && <p className="text-bad">{t('quiz.yours', { a: d.q.options[d.choice] })}{d.q.whyWrong?.[d.choice] ? ` — ${d.q.whyWrong[d.choice]}` : ''}</p>}
+                {d.choice === null && <p className="text-muted">{t('quiz.notAnswered')}</p>}
+                <p className="text-good">{t('quiz.correctIs', { a: d.q.options[d.q.answer] })}</p>
                 <Markdown text={d.q.explanation} className="prose-lms !max-w-none text-muted" />
               </div>
             </details>
@@ -327,9 +363,9 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
         </section>
 
         <div className="flex flex-wrap gap-2">
-          <button className="btn-primary" onClick={() => location.reload()}><RotateCcw size={16} /> New set</button>
-          <Link href={doneHref} className="btn-ghost">Back to chapter</Link>
-          {weak.length > 0 && <button className="btn-ghost" onClick={() => ask(`I just did a ${mode} on ${ctx.unit || ctx.subject || ctx.exam}. I struggled with: ${weak.map(w => w[0]).slice(0, 4).join(', ')}. Can you help me fix these one at a time?`)}><Sparkles size={16} className="text-primary" /> Fix my weak spots with the tutor</button>}
+          <button className="btn-primary" onClick={() => location.reload()}><RotateCcw size={16} aria-hidden /> {t('quiz.newSet')}</button>
+          <Link href={doneHref} className="btn-ghost">{t('quiz.backChapter')}</Link>
+          {weak.length > 0 && <button className="btn-ghost" onClick={() => ask(t('quiz.fixPrompt', { mode: t(`quiz.mode.${mode}`), topic: ctx.unit || ctx.subject || ctx.exam || '', list: weak.map(w => w[0]).slice(0, 4).join(', ') }))}><Sparkles size={16} className="text-primary" aria-hidden /> {t('quiz.fixWeak')}</button>}
         </div>
         <Confetti fire={fire} />
       </div>
@@ -338,15 +374,16 @@ export function QuizRunner({ mode, ctx, chapter, units = [], marking = [1, 0], t
 }
 
 function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; choice: number | null; setChoice: (c: number | null) => void; revealed: boolean; hint: boolean }) {
+  const { t } = useT();
   return (
     <AnimatePresence mode="wait">
       <motion.article key={q.id + q.q.slice(0, 20)} initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -18 }} transition={{ duration: 0.22 }} className="card grid gap-4 p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className={cx('pill', DIFF_CLS[q.difficulty])}>{DIFF_LABEL[q.difficulty]}</span>
+          <span className={cx('pill', DIFF_CLS[q.difficulty])}>{t(`quiz.${q.difficulty}`)}</span>
           {q.topic && <span className="tag">{q.topic}</span>}
         </div>
         <Markdown text={q.q} className="prose-lms !max-w-none text-lg font-semibold" />
-        <div className="grid gap-2" role="radiogroup" aria-label="Answer options">
+        <div className="grid gap-2" role="radiogroup" aria-label={t('quiz.options')}>
           {q.options.map((o, i) => {
             const isAns = revealed && i === q.answer, isWrong = revealed && i === choice && i !== q.answer;
             return (
@@ -357,16 +394,16 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
                   isAns ? 'border-good bg-good/10' : isWrong ? 'border-bad bg-bad/10' : choice === i ? 'border-primary bg-primary/10 ring-1 ring-primary' : 'border-line bg-surface hover:border-primary/50')}>
                 <b className="font-mono text-muted">{'ABCDEF'[i]}</b>
                 <span className="min-w-0 flex-1"><Markdown text={o} className="opt-md" /></span>
-                {isAns && <CheckCircle2 size={18} className="text-good" />}{isWrong && <XCircle size={18} className="text-bad" />}
+                {isAns && <><CheckCircle2 size={18} className="text-good" aria-hidden /><span className="sr-only">{t('quiz.isCorrect')}</span></>}{isWrong && <><XCircle size={18} className="text-bad" aria-hidden /><span className="sr-only">{t('quiz.isWrong')}</span></>}
               </motion.button>
             );
           })}
         </div>
-        {hint && !revealed && <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="rounded-ctl border-l-4 border-accent bg-accent/10 px-4 py-3" role="note"><b className="flex items-center gap-1"><Lightbulb size={15} /> Hint</b><Markdown text={q.hint} className="prose-lms !max-w-none" /></motion.div>}
+        {hint && !revealed && <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="rounded-ctl border-l-4 border-accent bg-accent/10 px-4 py-3" role="note"><b className="flex items-center gap-1"><Lightbulb size={15} aria-hidden /> {t('quiz.hint')}</b><Markdown text={q.hint} className="prose-lms !max-w-none" /></motion.div>}
         {revealed && (
           <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} role="status" className={cx('rounded-ctl border-l-4 px-4 py-3', choice === q.answer ? 'border-good bg-good/10' : 'border-bad bg-bad/10')}>
-            <b>{choice === q.answer ? 'Correct!' : 'Not quite.'}</b>
-            {choice !== null && choice !== q.answer && q.whyWrong?.[choice] && <p className="text-sm">Why “{q.options[choice]}” is wrong: {q.whyWrong[choice]}</p>}
+            <b>{choice === q.answer ? t('quiz.right') : t('quiz.notQuite')}</b>
+            {choice !== null && choice !== q.answer && q.whyWrong?.[choice] && <p className="text-sm">{t('quiz.whyWrong', { o: q.options[choice], w: q.whyWrong[choice] })}</p>}
             <Markdown text={q.explanation} className="prose-lms !max-w-none" />
           </motion.div>
         )}
@@ -377,8 +414,12 @@ function QuestionCard({ q, choice, setChoice, revealed, hint }: { q: Question; c
 
 function ConfirmSubmit({ unanswered, onSubmit }: { unanswered: number; onSubmit: () => void }) {
   const [sure, setSure] = useState(false);
-  if (!sure && unanswered > 0) return <button className="btn-board ml-auto" onClick={() => setSure(true)}>Submit test</button>;
-  return <button className={cx('ml-auto', unanswered > 0 ? 'btn-accent' : 'btn-board')} onClick={onSubmit}>{unanswered > 0 ? `${unanswered} unanswered · submit anyway` : 'Submit test'}</button>;
+  const { t } = useT();
+  if (!sure && unanswered > 0) return <button className="btn-board ml-auto" onClick={() => setSure(true)}>{t('quiz.submit')}</button>;
+  return <button className={cx('ml-auto', unanswered > 0 ? 'btn-accent' : 'btn-board')} onClick={onSubmit} autoFocus={sure}>{unanswered > 0 ? t('quiz.submitAnyway', { n: unanswered }) : t('quiz.submit')}</button>;
 }
+
+/** Normalised question stem, used to drop repeats from a batch. */
+const stemKey = (s: string) => s.toLowerCase().replace(/\[demo[^\]]*\]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 
 const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;

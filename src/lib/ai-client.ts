@@ -1,5 +1,7 @@
 'use client';
 import type { Difficulty, LearnContext, Question } from './types';
+import { translate, type Lang } from './i18n/core';
+import { useLMS } from './store';
 
 export class AIError extends Error {
   constructor(message: string, public code = 'error') { super(message); }
@@ -38,5 +40,19 @@ export async function getQuestions(ctx: LearnContext, opts: { n: number; difficu
   return j.questions as Question[];
 }
 
-export const friendlyError = (e: unknown) =>
-  e instanceof AIError ? e.message : (e as Error)?.name === 'AbortError' ? '' : 'Could not reach the AI service. Check that the app is running and Ollama is configured.';
+const CODE_KEY: Record<string, string> = {
+  unreachable: 'ai.unreachable', unauthorized: 'ai.unauthorized', model_not_found: 'ai.modelMissing',
+  invalid_json: 'ai.badOutput', no_scenes: 'ai.badOutput', no_questions: 'ai.badOutput', bad_request: 'ai.badRequest',
+};
+
+/**
+ * A short, translated explanation of an AI failure for learners and staff ('' when the user stopped it).
+ * Known server error codes map to translated messages; unknown server messages are passed through.
+ */
+export function friendlyError(e: unknown): string {
+  if ((e as Error)?.name === 'AbortError') return '';
+  let lang: Lang = 'en';
+  try { lang = (useLMS.getState().profile.language || 'en') as Lang; } catch { /* store unavailable */ }
+  if (e instanceof AIError) return CODE_KEY[e.code] ? translate(lang, CODE_KEY[e.code]) : e.message;
+  return translate(lang, 'ai.unreachable');
+}

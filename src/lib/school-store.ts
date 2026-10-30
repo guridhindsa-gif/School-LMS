@@ -14,14 +14,18 @@ export type ReviewState = 'draft' | 'review' | 'approved';
 export interface SavedLesson { id: string; cls: number; subject: string; topic: string; text: string; state: ReviewState; savedAt: number }
 export interface SavedAssignment { id: string; cls: number; section: string; topic: string; due: string; questions: Question[]; savedAt: number }
 export interface ParentNote { id: string; child: string; curiosity: string; note: string; savedAt: number }
+export type Frequency = 'urgent' | 'daily' | 'weekly';
 export interface AdminFlag { id: string; subjectId: string; subjectName: string; reason: string; note: string; savedAt: number }
 
 interface SchoolState {
   lessons: SavedLesson[];
   assignments: SavedAssignment[];
   parentNotes: ParentNote[];
-  parentPrefs: { frequency: string; language: 'en' | 'hi' | 'pa' };
+  parentPrefs: { frequency: Frequency };
   flags: AdminFlag[];
+  /** Show clearly labelled, invented demo figures on teacher/parent/principal pages. Off by default. */
+  demo: boolean;
+  setDemo: (on: boolean) => void;
   saveLesson: (l: SavedLesson) => void;
   setLessonState: (id: string, state: ReviewState) => void;
   removeLesson: (id: string) => void;
@@ -41,8 +45,10 @@ export const useSchool = create<SchoolState>()(
       lessons: [],
       assignments: [],
       parentNotes: [],
-      parentPrefs: { frequency: 'Weekly digest', language: 'en' },
+      parentPrefs: { frequency: 'weekly' },
       flags: [],
+      demo: false,
+      setDemo: demo => set({ demo }),
       saveLesson: l => set(s => ({ lessons: [l, ...s.lessons.filter(x => x.id !== l.id)].slice(0, 30) })),
       setLessonState: (id, state) => set(s => ({ lessons: s.lessons.map(l => (l.id === id ? { ...l, state } : l)) })),
       removeLesson: id => set(s => ({ lessons: s.lessons.filter(l => l.id !== id) })),
@@ -53,11 +59,21 @@ export const useSchool = create<SchoolState>()(
       addFlag: f => set(s => ({ flags: [f, ...s.flags].slice(0, 100) })),
       removeFlag: id => set(s => ({ flags: s.flags.filter(f => f.id !== id) })),
     }),
-    { name: 'school-lms-school', storage: createJSONStorage(() => localStorage), version: 1 },
+    {
+      name: 'school-lms-school', storage: createJSONStorage(() => localStorage), version: 2,
+      // v1 stored English labels and a parent-only language; the language is now global (learner profile).
+      migrate: (old: unknown) => {
+        const o = (old || {}) as Record<string, unknown> & { parentPrefs?: { frequency?: string } };
+        const f = o.parentPrefs?.frequency || '';
+        const frequency: Frequency = /urgent/i.test(f) ? 'urgent' : /daily/i.test(f) ? 'daily' : 'weekly';
+        return { ...o, parentPrefs: { frequency }, demo: false } as unknown as SchoolState;
+      },
+    },
   ),
 );
 
-export const LOCAL_NOTE = 'Saved on this device only. It reaches students, parents or staff once the school server is connected.';
+/** Translation key for the honest local-only save note. */
+export const LOCAL_NOTE_KEY = 'roles.localNote';
 
 /** True once the saved staff work has loaded in the browser (avoids SSR/client mismatch). */
 export function useSchoolHydrated() {

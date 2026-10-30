@@ -1,4 +1,5 @@
 'use client';
+import { useT } from '@/lib/i18n';
 import { useRef, useState } from 'react';
 import { Rocket } from 'lucide-react';
 import { cssVar, useCanvas } from './useCanvas';
@@ -8,6 +9,7 @@ const G = 9.8;
 
 export default function ProjectileLab() {
   const [u, setU] = useState(20);
+  const { t: tt } = useT();
   const [deg, setDeg] = useState(45);
   const [h0, setH0] = useState(0);
   const launch = useRef<{ t0: number; u: number; a: number; h0: number } | null>(null);
@@ -67,20 +69,20 @@ export default function ProjectileLab() {
 
   return (
     <div className="grid gap-4">
-      <div className="overflow-hidden rounded-card"><canvas ref={ref} role="img" aria-label="Projectile motion simulation" /></div>
+      <div className="overflow-hidden rounded-card"><canvas ref={ref} role="img" aria-label={tt('lb.pj.aria')} /></div>
       <div className="grid gap-3">
-        <Slider id="pj-u" label="Speed u" value={u} min={5} max={30} unit=" m/s" onChange={setU} />
-        <Slider id="pj-a" label="Angle θ" value={deg} min={5} max={85} unit="°" onChange={setDeg} />
-        <Slider id="pj-h" label="Launch height" value={h0} min={0} max={20} unit=" m" onChange={setH0} />
+        <Slider id="pj-u" label={tt('lb.pj.speed')} value={u} min={5} max={30} unit=" m/s" onChange={setU} />
+        <Slider id="pj-a" label={tt('lb.pj.angle')} value={deg} min={5} max={85} unit="°" onChange={setDeg} />
+        <Slider id="pj-h" label={tt('lb.pj.height')} value={h0} min={0} max={20} unit=" m" onChange={setH0} />
       </div>
       <div className="flex flex-wrap gap-2">
         <button className="btn-primary" onClick={() => { launch.current = { t0: -1, u, a, h0 }; }}><Rocket size={17} /> Launch</button>
-        <button className="btn-ghost" onClick={() => { trails.current = []; }}>Clear trails</button>
-        <span className="sr-only" aria-live="polite">{`Predicted range ${R.toFixed(1)} metres`}</span>
+        <button className="btn-ghost" onClick={() => { trails.current = []; }}>{tt('lb.pj.clear')}</button>
+        <span className="sr-only" aria-live="polite">{tt('lb.pj.predicted', { r: R.toFixed(1) })}</span>
       </div>
-      <Readout items={[['Time of flight', `${T.toFixed(2)} s`], ['Max height', `${H.toFixed(1)} m`], ['Range', `${R.toFixed(1)} m`], ['uₓ, uᵧ', `${ux.toFixed(1)}, ${uy.toFixed(1)} m/s`]]} />
-      <Legend items={[['rgb(var(--accent))', 'Path'], ['#9ad1ff', 'Horizontal velocity'], ['#ffb4a2', 'Vertical velocity']]} />
-      <LabNote>Blue arrow: horizontal velocity (constant). Red arrow: vertical velocity (changes by g every second). From the ground, range is greatest at 45°, and θ and 90° − θ land at the same spot — try 30° and 60°.</LabNote>
+      <Readout items={[[tt('lb.pj.tof'), `${T.toFixed(2)} s`], [tt('lb.pj.maxH'), `${H.toFixed(1)} m`], [tt('lb.pj.range'), `${R.toFixed(1)} m`], ['uₓ, uᵧ', `${ux.toFixed(1)}, ${uy.toFixed(1)} m/s`]]} />
+      <Legend items={[['rgb(var(--accent))', tt('lb.pj.path')], ['#9ad1ff', tt('lb.pj.hv')], ['#ffb4a2', tt('lb.pj.vv')]]} />
+      <LabNote>{tt('lb.pj.note')}</LabNote>
     </div>
   );
 }

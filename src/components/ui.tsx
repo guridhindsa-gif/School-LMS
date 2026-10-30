@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import clsx from 'clsx';
 import { useEffect, useRef, type ReactNode, type RefObject } from 'react';
 import type { MasteryBand } from '@/lib/adaptive';
+import { useT } from '@/lib/i18n';
 
 export const cx = clsx;
 
@@ -60,22 +61,24 @@ export function Bar({ value, color, className }: { value: number; color?: string
   );
 }
 
-const BAND: Record<MasteryBand, [string, string]> = {
-  new: ['Not started', 'bg-surface2 text-muted'],
-  learning: ['Learning', 'bg-accent/20 text-warn'],
-  practising: ['Practising', 'bg-primary/12 text-primary'],
-  strong: ['Strong', 'bg-good/15 text-good'],
-  mastered: ['Mastered', 'bg-good text-white'],
+const BAND: Record<MasteryBand, string> = {
+  new: 'bg-surface2 text-muted',
+  learning: 'bg-accent/20 text-warn',
+  practising: 'bg-primary/12 text-primary',
+  strong: 'bg-good/15 text-good',
+  mastered: 'bg-good text-white',
 };
 export function BandPill({ band }: { band: MasteryBand }) {
-  return <span className={cx('pill', BAND[band][1])}>{BAND[band][0]}</span>;
+  const { t } = useT();
+  return <span className={cx('pill', BAND[band])}>{t(`mastery.${band}`)}</span>;
 }
 
 export function VerifiedPill({ v }: { v: string | boolean }) {
-  if (v === 'draft') return <span className="pill bg-marigold/20 text-warn">Draft · not from official PDF</span>;
-  if (v === 'secondary_only' || v === false) return <span className="pill bg-marigold/20 text-warn">Verify</span>;
-  if (v === 'partly_official') return <span className="pill bg-primary/12 text-primary">Partly verified</span>;
-  return <span className="pill bg-good/15 text-good">Official syllabus</span>;
+  const { t } = useT();
+  if (v === 'draft') return <span className="pill bg-accent/20 text-warn">{t('vp.draft')}</span>;
+  if (v === 'secondary_only' || v === false) return <span className="pill bg-accent/20 text-warn">{t('vp.verify')}</span>;
+  if (v === 'partly_official') return <span className="pill bg-primary/12 text-primary">{t('vp.partly')}</span>;
+  return <span className="pill bg-good/15 text-good">{t('vp.official')}</span>;
 }
 
 export function Skeleton({ lines = 4 }: { lines?: number }) {
@@ -147,8 +150,9 @@ export function Notice({ tone = 'info', title, children, action, className }: { 
 }
 
 /** Small label for numbers that come from sample (not live) data. */
-export function SampleBadge({ children = 'Sample data' }: { children?: ReactNode }) {
-  return <span className="pill border border-dashed border-line bg-surface text-muted" title="These figures are illustrative until the school data service is connected">{children}</span>;
+export function SampleBadge({ children }: { children?: ReactNode }) {
+  const { t } = useT();
+  return <span className="pill border border-dashed border-line bg-surface text-muted" title={t('common.sampleTip')}>{children ?? t('common.sampleData')}</span>;
 }
 
 /** Keeps keyboard focus inside a dialog, closes on Escape and returns focus to the opener. */

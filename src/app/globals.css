@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,13 +18,13 @@
   --primary: 79 70 229;
   --primary-2: 67 56 202;
   --on-primary: 255 255 255;
-  --teal: 13 148 136;
+  --teal: 15 118 110;
   --accent: 245 158 11;
   --night: 16 23 50;
   --night-2: 29 39 78;
   --on-night: 237 240 255;
-  --good: 5 150 105;
-  --warn: 180 83 9;
+  --good: 4 120 87;
+  --warn: 154 52 18;
   --bad: 214 48 64;
   --violet: 124 58 237;
 
@@ -41,8 +40,9 @@
   --ease: cubic-bezier(.22, 1, .36, 1);
 
   /* type: senior stage by default; junior (Classes 1–5) is friendlier */
-  --font-display: "Bricolage Grotesque", "Noto Sans Devanagari", "Noto Sans Gurmukhi", system-ui, sans-serif;
-  --font-body: Figtree, "Noto Sans Devanagari", "Noto Sans Gurmukhi", "Segoe UI", system-ui, sans-serif;
+  /* Families come from next/font (self-hosted, see layout.tsx). Indic scripts fall through to Noto. */
+  --font-display: var(--font-bricolage, "Bricolage Grotesque"), var(--font-deva, "Noto Sans Devanagari"), var(--font-guru, "Noto Sans Gurmukhi"), system-ui, sans-serif;
+  --font-body: var(--font-figtree, Figtree), var(--font-deva, "Noto Sans Devanagari"), var(--font-guru, "Noto Sans Gurmukhi"), "Segoe UI", system-ui, sans-serif;
   --base-size: 16px;
   color-scheme: light;
 }
@@ -73,7 +73,7 @@
 }
 /* Classes 1–5: rounder, larger, friendlier headings */
 [data-stage="junior"] {
-  --font-display: "Baloo 2", "Noto Sans Devanagari", "Noto Sans Gurmukhi", system-ui, sans-serif;
+  --font-display: var(--font-baloo, "Baloo 2"), var(--font-deva, "Noto Sans Devanagari"), var(--font-guru, "Noto Sans Gurmukhi"), system-ui, sans-serif;
   --r-card: 1.5rem;
   --r-ctl: 1rem;
   --base-size: 17px;
@@ -83,7 +83,9 @@ html, body { height: 100%; }
 html { font-size: var(--base-size); }
 body { @apply bg-bg text-ink font-body antialiased; line-height: 1.55; font-feature-settings: "ss01", "cv11"; }
 h1, h2, h3, h4 { @apply font-display font-bold; line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
-[data-stage="junior"] h1, [data-stage="junior"] h2, [data-stage="junior"] h3 { letter-spacing: 0; }
+[data-stage="junior"] h1, [data-stage="junior"] h2, [data-stage="junior"] h3, :lang(hi) :is(h1,h2,h3,h4), :lang(pa) :is(h1,h2,h3,h4) { letter-spacing: 0; }
+:lang(hi) body, :lang(pa) body { line-height: 1.65; }
+:lang(hi) :is(h1,h2,h3,h4), :lang(pa) :is(h1,h2,h3,h4) { line-height: 1.3; }
 /* Grid children may shrink below their content, so long unbroken text can never widen the page. */
 :where(.grid) > :where(*) { min-width: 0; }
 :focus-visible { outline: 3px solid rgb(var(--primary)); outline-offset: 2px; border-radius: 6px; }
@@ -105,7 +107,7 @@ h1, h2, h3, h4 { @apply font-display font-bold; line-height: 1.12; letter-spacin
   .btn-icon { @apply btn h-10 w-10 border border-line bg-surface !px-0 hover:bg-surface2; }
   .pill { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap; }
   .tag { @apply inline-flex max-w-full items-center rounded-md px-2 py-0.5 font-mono text-[0.7rem] bg-surface2 text-muted break-words; }
-  .input { @apply w-full rounded-ctl border border-line bg-surface px-3 py-2 placeholder:text-muted/70 transition focus:border-primary/60; }
+  .input { @apply w-full rounded-ctl border border-line bg-surface px-3 py-2 placeholder:text-muted transition focus:border-primary/60; }
   .input[aria-invalid="true"] { @apply border-bad; }
   .seg { @apply flex gap-1 rounded-ctl bg-surface2 p-1; }
   .seg > button { @apply rounded-[calc(var(--r-ctl)-.25rem)] px-3 py-1.5 text-sm font-semibold text-muted transition hover:text-ink; }

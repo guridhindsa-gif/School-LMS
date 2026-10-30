@@ -31,25 +31,36 @@ function lesson(prompt) {
   return `## What is ${unit}?\n\nThis is a **demo lesson** from the mock AI server. Connect Ollama to get a real lesson written for your class.\n\n${topics.map((t, i) => `## ${i + 1}. ${t}\n\nA short, clear explanation of ${t.toLowerCase()} with an everyday example from home or school.\n`).join('\n')}\n### Worked example\n\n1. Read the question and list what is given.\n2. Choose the right idea or formula, for example $v = u + at$.\n3. Substitute and solve: $v = 2 + 3 \\times 4 = 14$ m/s.\n\n> **Remember**\n> - Write what is given first.\n> - Check units at every step.\n> - Draw a diagram when you can.\n\n## Common mistakes\n\n- Mixing up units (cm vs m).\n- Skipping the diagram.\n\n## Quick check\n\n1. Name one example of ${unit} in daily life.\n**Answer:** Any correct everyday example.\n2. What is the first step in solving a problem?\n**Answer:** List what is given.\n3. Why check units?\n**Answer:** To catch mistakes early.\n`;
 }
 
+// Demo questions are built from the chapter's own official sub-topics, so a Class 12 Physics
+// chapter never gets primary-school arithmetic. They are clearly labelled as demo content.
+const OFF_TOPIC = ['Cricket scoring rules', 'Cooking a dal tadka', 'Film editing software', 'Traffic signal timings', 'Folk dance steps', 'Stock market charts', 'Mobile phone plans', 'Gardening tools'];
 function questions(prompt) {
   const n = Math.min(Number((prompt.match(/Create (\d+)/) || [])[1] || 5), 20);
-  const unit = pick(prompt, 'Chapter / unit') || pick(prompt, 'Exam') || 'the chapter';
+  const unit = pick(prompt, 'Chapter / unit') || pick(prompt, 'Exam') || 'this chapter';
+  const subject = pick(prompt, 'Subject') || pick(prompt, 'Subject / section') || '';
+  const topics = (pick(prompt, 'Official sub-topics') || pick(prompt, 'Units in scope') || unit)
+    .split(/;|\|/).map(s => s.trim()).filter(Boolean);
+  const avoid = pick(prompt, 'Do not repeat these questions');
   const diff = (prompt.match(/all (easy|medium|hard)/) || [])[1];
   const levels = ['easy', 'medium', 'hard'];
   const out = [];
+  // start where earlier batches stopped, so prefetched batches do not repeat
+  const offset = avoid ? avoid.split('|').length : 0;
   for (let i = 0; i < n; i++) {
-    const a = 2 + i, b = 3 + (i % 4), ans = (i * 7) % 4;
-    const opts = [a * b - 1, a * b + 1, a + b, a * b + 2].map(String);
-    opts[ans] = String(a * b);
+    const k = offset + i;
+    const topic = topics[k % topics.length];
+    const ans = (k * 7) % 4;
+    const wrong = [0, 1, 2].map(j => OFF_TOPIC[(k * 3 + j) % OFF_TOPIC.length]);
+    const opts = [...wrong]; opts.splice(ans, 0, topic);
     out.push({
-      q: `[Demo · ${unit}] What is ${a} × ${b}?`,
+      q: `[Demo · ${unit}] Which of these is part of the official ${subject ? subject + ' ' : ''}syllabus for this chapter? (set ${k + 1})`,
       options: opts,
       answer: ans,
-      explanation: `${a} × ${b} = ${a * b}. (Demo question from the mock AI server.)`,
-      hint: `Add ${a} to itself ${b} times.`,
-      difficulty: diff || levels[i % 3],
-      topic: `Demo topic ${1 + (i % 3)}`,
-      whyWrong: opts.map((o, k) => (k === ans ? '' : `${o} is not ${a} × ${b}.`)),
+      explanation: `"${topic}" is listed in the official syllabus for ${unit}. (Demo question from the mock AI server: connect Ollama for real questions.)`,
+      hint: 'Look for the option that belongs to this subject.',
+      difficulty: diff || levels[k % 3],
+      topic,
+      whyWrong: opts.map((o, j) => (j === ans ? '' : `"${o}" is not part of ${unit}.`)),
     });
   }
   return JSON.stringify({ questions: out });

@@ -1,4 +1,5 @@
 'use client';
+import { useT } from '@/lib/i18n';
 import { useState } from 'react';
 import { cssVar, useCanvas } from './useCanvas';
 import { LabNote, Legend, Readout, Slider } from './Slider';
@@ -7,6 +8,7 @@ type Kind = 'quadratic' | 'sine' | 'linear';
 
 export default function GrapherLab() {
   const [kind, setKind] = useState<Kind>('quadratic');
+  const { t: tt } = useT();
   const [a, setA] = useState(1), [b, setB] = useState(-2), [c, setC] = useState(-3);
   const f = (x: number) => kind === 'quadratic' ? a * x * x + b * x + c : kind === 'sine' ? a * Math.sin(b * x + c) : a * x + b;
   const D = b * b - 4 * a * c;
@@ -42,24 +44,24 @@ export default function GrapherLab() {
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <div className="seg" role="radiogroup" aria-label="Function type">
+        <div className="seg" role="radiogroup" aria-label={tt('lb.gr.type')}>
         {(['quadratic', 'linear', 'sine'] as Kind[]).map(k => (
-          <button key={k} role="radio" aria-checked={kind === k} onClick={() => setKind(k)} className="capitalize">{k}</button>
+          <button key={k} role="radio" aria-checked={kind === k} onClick={() => setKind(k)} className="capitalize">{tt(`lb.gr.${k}`)}</button>
         ))}
         </div>
         <span className="ml-auto rounded-ctl bg-surface2 px-3 py-1 font-mono text-sm" aria-live="polite">{eq}</span>
       </div>
-      <div className="overflow-hidden rounded-card border border-line"><canvas ref={ref} role="img" aria-label={`Graph of ${eq}`} /></div>
+      <div className="overflow-hidden rounded-card border border-line"><canvas ref={ref} role="img" aria-label={tt('lb.gr.graphOf', { eq })} /></div>
       <Slider id="g-a" label="a" value={a} min={-3} max={3} step={0.5} onChange={setA} />
       <Slider id="g-b" label="b" value={b} min={-6} max={6} step={0.5} onChange={setB} />
       {kind !== 'linear' && <Slider id="g-c" label="c" value={c} min={-6} max={6} step={0.5} onChange={setC} />}
       {kind === 'quadratic' && (
-        <Readout items={[['Discriminant D', D.toFixed(2)], ['Roots', roots.length ? roots.map(r => r.toFixed(2)).join(', ') : 'none (D < 0)'], ['Vertex', a ? `(${vx.toFixed(2)}, ${vy.toFixed(2)})` : '—'], ['Opens', a > 0 ? 'upward' : a < 0 ? 'downward' : 'line']]} />
+        <Readout items={[[tt('lb.gr.disc'), D.toFixed(2)], [tt('lb.gr.roots'), roots.length ? roots.map(r => r.toFixed(2)).join(', ') : tt('lb.gr.noRoots')], [tt('lb.gr.vertex'), a ? `(${vx.toFixed(2)}, ${vy.toFixed(2)})` : '—'], [tt('lb.gr.opens'), a > 0 ? tt('lb.gr.up') : a < 0 ? tt('lb.gr.down') : tt('lb.gr.line')]]} />
       )}
-      {kind === 'sine' && <Readout items={[['Amplitude', String(Math.abs(a))], ['Period', b ? `${(2 * Math.PI / Math.abs(b)).toFixed(2)}` : '∞'], ['Phase shift', b ? (-c / b).toFixed(2) : '—'], ['Range', `[−${Math.abs(a)}, ${Math.abs(a)}]`]]} />}
-      {kind === 'linear' && <Readout items={[['Slope', String(a)], ['y-intercept', String(b)], ['x-intercept', a ? (-b / a).toFixed(2) : 'none'], ['Angle', `${(Math.atan(a) * 180 / Math.PI).toFixed(1)}°`]]} />}
-      <Legend items={[['rgb(var(--primary))', 'Graph'], ['rgb(var(--accent))', 'Roots (x-intercepts)'], ...(kind === 'quadratic' ? [['rgb(var(--bad))', 'Vertex'] as [string, string]] : [])]} />
-      <LabNote>Amber dots are where the graph cuts the x-axis (the roots); the red dot is the vertex. When D &lt; 0 the parabola never touches the x-axis, so there are no real roots.</LabNote>
+      {kind === 'sine' && <Readout items={[[tt('lb.gr.amp'), String(Math.abs(a))], [tt('lb.gr.period'), b ? `${(2 * Math.PI / Math.abs(b)).toFixed(2)}` : '∞'], [tt('lb.gr.phase'), b ? (-c / b).toFixed(2) : '—'], [tt('lb.gr.range'), `[−${Math.abs(a)}, ${Math.abs(a)}]`]]} />}
+      {kind === 'linear' && <Readout items={[[tt('lb.gr.slope'), String(a)], [tt('lb.gr.yint'), String(b)], [tt('lb.gr.xint'), a ? (-b / a).toFixed(2) : tt('lb.gr.none')], [tt('lb.gr.angle'), `${(Math.atan(a) * 180 / Math.PI).toFixed(1)}°`]]} />}
+      <Legend items={[['rgb(var(--primary))', tt('lb.gr.graph')], ['rgb(var(--accent))', tt('lb.gr.rootsLegend')], ...(kind === 'quadratic' ? [['rgb(var(--bad))', tt('lb.gr.vertex')] as [string, string]] : [])]} />
+      <LabNote>{tt('lb.gr.note')}</LabNote>
     </div>
   );
 }

@@ -42,7 +42,7 @@ const config: Config = {
       fontFamily: {
         display: ['var(--font-display)'],
         body: ['var(--font-body)'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        mono: ['var(--font-plex, "IBM Plex Mono")', 'ui-monospace', 'monospace'],
       },
       borderRadius: { xl2: '1.25rem', card: 'var(--r-card)', ctl: 'var(--r-ctl)' },
       boxShadow: {

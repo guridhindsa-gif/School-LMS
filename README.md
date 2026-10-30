@@ -38,6 +38,10 @@ On Windows, run `set OLLAMA_HOST=http://127.0.0.1:11999 && set OLLAMA_MODEL=mock
 
 ### Student app (`/student`)
 
+The interface is fully translated into **English, हिंदी and ਪੰਜਾਬੀ**, using the language switch in the header. The choice is saved and applies to every page, lesson, the narration and Vidya.
+
+- **Junior Learning World (Classes 1–5).** A separate picture-led home with four destinations: Learn, Play & Explore, My Stars and Ask Vidya. It has big touch targets, a listen button for every instruction, optional voice navigation, and stars earned from correct answers. There is no exam or analytics language.
+
 - **Onboarding.** The student picks a name, board, class, and a stream for Classes 11–12; repeater JEE and NEET batches are supported.
 - **Home (learning cockpit).**
   - A **Continue learning** card shows the single best next step from the adaptive plan: due reviews first, then weak chapters, then chapters to continue, then new ones. Three follow-ups sit below it.
@@ -60,19 +64,12 @@ On Windows, run `set OLLAMA_HOST=http://127.0.0.1:11999 && set OLLAMA_MODEL=mock
   - Three modes: **Guide me** (Socratic hints), **Explain**, and **Check my work** (finds the first mistake).
   - It knows the current chapter, the student's mastery and their weak topics.
   - It is available as a full page and as a drawer on every screen.
-- **Visual labs.** Seven interactive simulations, linked to chapters automatically:
-  - counting mangoes
-  - fractions with a roti
-  - refraction, including total internal reflection
-  - projectile motion with velocity vectors
-  - spring–mass SHM that draws its own graph
-  - a function grapher showing roots and vertex
-  - an Ohm's-law circuit, series or parallel
+- **Visual labs (46).** A class-wise library across Maths, EVS, Physics, Chemistry, Biology and Geography, from place-value blocks, clocks and rupee money in Class 1 to titration, capacitors and the photoelectric effect in Class 12. The catalogue has search, a class picker with per-class counts, and subject filters. Labs also open inside the chapters they belong to; the lesson's Lab tab switches between all matching labs. Labs are organised in packs (`src/components/labs/packs/*`), each with its own components, chapter matching and translations.
 - **Progress.** Level and badges, mastery by subject, a 12-week activity heatmap, the review queue, and a progress reset.
 
 ### Other roles
 
-Each role has its own information hierarchy. Figures with no data service behind them yet are marked **Sample data**. Things a teacher, parent or admin saves (approved lessons, assignments, notes, flags) are kept in the browser (`src/lib/school-store.ts`). The interface says so, rather than claiming they reached anyone.
+Each role has its own information hierarchy. Teacher, parent and principal screens show an honest **"School data is not connected yet"** state by default, because no school data service exists yet. **Demo data is opt-in**, bannered and marked **Sample data**. The required APIs, and the missing authentication and role-based access control, are documented in [docs/BACKEND_APIS.md](docs/BACKEND_APIS.md). Things a teacher, parent or admin saves (approved lessons, assignments, notes, flags) are kept in the browser (`src/lib/school-store.ts`). The interface says so, rather than claiming they reached anyone.
 
 
 - **Teacher:** today's priorities (next class, students who need support), class mastery and coverage against plan, answer clustering, an AI lesson builder with a Draft → In review → Approved flow, and an assignment maker where each question is approved or removed and the assignment is validated before saving.
@@ -135,6 +132,8 @@ scripts/mock-ollama.mjs                     Ollama-compatible mock for demos
 ```
 
 ## Design system
+
+Fonts are self-hosted with `next/font` (no runtime Google Fonts). The interface uses an SVG illustration system (`src/components/art`) instead of emoji.
 
 See [DESIGN.md](DESIGN.md) for the tokens (midnight ink, electric indigo, teal, warm amber), typography, the junior and senior stages, components and design rules.
 

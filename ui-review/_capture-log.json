@@ -1,0 +1,742 @@
+{
+ "shots": [
+  {
+   "file": "01-landing-desktop-full.png",
+   "route": "/",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "01b-landing-desktop-viewport.png",
+   "route": "/",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "03-student-dashboard-desktop-full.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "Seeded sample learner (preview mode)",
+   "captured": true
+  },
+  {
+   "file": "03b-student-dashboard-desktop-viewport.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "04-syllabus-catalogue-desktop-full.png",
+   "route": "/student/syllabus",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "04b-subject-chapters-desktop-full.png",
+   "route": "/student/subject/cbse-11-physics",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "05-lesson-studio-desktop-viewport.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "05b-lesson-studio-desktop-full.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "06-lesson-player-scene2-concept-map.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "06b-lesson-player-sorting-game.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "06c-lesson-player-formula-explorer.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "06d-lesson-player-autoplay-on.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "07-tutor-panel-during-lesson-desktop.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "AI reply is the preview canned demo reply, not a real model",
+   "captured": true
+  },
+  {
+   "file": "08-practice-question-desktop.png",
+   "route": "/student/practice/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "08b-practice-feedback-desktop.png",
+   "route": "/student/practice/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "09-labs-catalogue-desktop-full.png",
+   "route": "/student/labs",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "09b-labs-filter-maths.png",
+   "route": "/student/labs",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "10-lab-projectile-desktop.png",
+   "route": "/student/labs?lab=projectile",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "10b-lab-function-grapher-desktop.png",
+   "route": "/student/labs?lab=grapher",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "11-teacher-desktop-full.png",
+   "route": "/teacher",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "12-parent-desktop-full.png",
+   "route": "/parent",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "13-principal-desktop-full.png",
+   "route": "/principal",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "14-admin-desktop-full.png",
+   "route": "/admin",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "12b-parent-note-saved.png",
+   "route": "/parent",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "14b-admin-flag-validation.png",
+   "route": "/admin",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16c-command-palette-desktop.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "02-onboarding-step1-desktop.png",
+   "route": "/student/onboarding",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "Fresh learner (empty local state)",
+   "captured": true
+  },
+  {
+   "file": "02b-onboarding-name-validation.png",
+   "route": "/student/onboarding",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "02c-onboarding-board.png",
+   "route": "/student/onboarding",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "15-landing-mobile-full.png",
+   "route": "/",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "15b-landing-mobile-viewport.png",
+   "route": "/",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16-student-dashboard-mobile-full.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16b-student-dashboard-mobile-viewport.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16e-lesson-mobile-full.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16f-tutor-drawer-mobile.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16g-practice-mobile.png",
+   "route": "/student/practice/cbse-11-physics~2",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16h-labs-mobile-full.png",
+   "route": "/student/labs?lab=refraction",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16i-teacher-mobile-full.png",
+   "route": "/teacher",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16j-parent-mobile-full.png",
+   "route": "/parent",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16k-principal-mobile-full.png",
+   "route": "/principal",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "16l-admin-mobile-full.png",
+   "route": "/admin",
+   "viewport": "390x844",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "18-tablet-dashboard-full.png",
+   "route": "/student",
+   "viewport": "834x1112",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "18b-tablet-lesson-viewport.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "834x1112",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17-dark-landing-desktop-viewport.png",
+   "route": "/",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17b-dark-dashboard-desktop-full.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17c-dark-lesson-desktop-viewport.png",
+   "route": "/student/learn/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17d-dark-labs-desktop-viewport.png",
+   "route": "/student/labs?lab=refraction",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17e-dark-teacher-desktop-full.png",
+   "route": "/teacher",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17f-dark-principal-desktop-full.png",
+   "route": "/principal",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "17g-dark-dashboard-mobile-reduced-motion.png",
+   "route": "/student",
+   "viewport": "390x844",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "08b-practice-feedback-desktop.png",
+   "route": "/student/practice/cbse-11-physics~2",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "After choosing B and pressing Check answer",
+   "captured": true
+  },
+  {
+   "file": "12b-parent-note-saved.png",
+   "route": "/parent",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "14b-admin-flag-validation.png",
+   "route": "/admin",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "Save flag pressed with empty form",
+   "captured": true
+  },
+  {
+   "file": "02d-onboarding-class.png",
+   "route": "/student/onboarding",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  },
+  {
+   "file": "03c-student-dashboard-new-junior-class4.png",
+   "route": "/student",
+   "viewport": "1440x1000",
+   "full_page": true,
+   "note": "New Class 4 learner, no activity",
+   "captured": true
+  },
+  {
+   "file": "05c-lesson-junior-class4-desktop.png",
+   "route": "/student/learn/cbse-4-english~1",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "Junior lesson; AI = canned/offline demo in preview",
+   "captured": true
+  },
+  {
+   "file": "16d-progress-empty-state.png",
+   "route": "/student/progress",
+   "viewport": "1440x1000",
+   "full_page": false,
+   "note": "",
+   "captured": true
+  }
+ ],
+ "tests": [
+  {
+   "test": "Landing primary CTA \"Start learning\" navigates",
+   "status": "PASS",
+   "note": "/student"
+  },
+  {
+   "test": "Landing \"I'm an educator\" scrolls to roles",
+   "status": "PASS",
+   "note": "scrollY=1572"
+  },
+  {
+   "test": "Continue-learning primary link opens chapter",
+   "status": "PASS",
+   "note": "/student/learn/cbse-11-physics~1"
+  },
+  {
+   "test": "Lesson scene progression (Next)",
+   "status": "PASS",
+   "note": "Scene 6: Anatomy of a projectile"
+  },
+  {
+   "test": "Narration toggle changes state",
+   "status": "PASS",
+   "note": "aria-pressed false->true; audio output itself NOT verifiable headless"
+  },
+  {
+   "test": "Autoplay advances passive scene (voice off, 6 s)",
+   "status": "PASS",
+   "note": "Scene 2: The big ideas"
+  },
+  {
+   "test": "Tutor shows Stop while streaming",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Tutor streams a reply",
+   "status": "PASS",
+   "note": "canned preview reply: Good question! We're working on Unit II: Kinematics. What do you already know ab"
+  },
+  {
+   "test": "Tutor retry after AI failure",
+   "status": "NOT TESTED",
+   "note": "no way to force an AI failure in the preview harness"
+  },
+  {
+   "test": "Lab subject filter",
+   "status": "PASS",
+   "note": "3 labs"
+  },
+  {
+   "test": "Lab slider keyboard control",
+   "status": "PASS",
+   "note": "20->22"
+  },
+  {
+   "test": "Teacher lesson builder rejects empty topic",
+   "status": "PASS",
+   "note": "alerts=1"
+  },
+  {
+   "test": "Parent note validation on empty submit",
+   "status": "PASS",
+   "note": "Write at least a short sentence (10 characters or more)."
+  },
+  {
+   "test": "Admin catalogue search filters rows",
+   "status": "PASS",
+   "note": "9 rows for \"physics\""
+  },
+  {
+   "test": "Theme toggle switches to dark",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Command palette keyboard search + Enter",
+   "status": "PASS",
+   "note": "/student/learn/cbse-11-physics~2"
+  },
+  {
+   "test": "Tutor drawer traps Tab focus",
+   "status": "PASS",
+   "note": ""
+  },
+  {
+   "test": "Tutor drawer Escape closes and returns focus",
+   "status": "PASS",
+   "note": "Ask Vidya, the AI tutor"
+  },
+  {
+   "test": "Skip link present",
+   "status": "PASS",
+   "note": "#main"
+  },
+  {
+   "test": "Onboarding name validation",
+   "status": "PASS",
+   "note": "aria-invalid=true"
+  },
+  {
+   "test": "Mobile bottom nav lists all main sections",
+   "status": "PASS",
+   "note": "Home, Syllabus, Labs, Exams, Progress"
+  },
+  {
+   "test": "Mobile nav link works (Labs)",
+   "status": "PASS",
+   "note": "/student/labs"
+  },
+  {
+   "test": "Quiz: choose option + Check answer shows feedback",
+   "status": "PASS",
+   "note": "Not quite.  Why \u201c7\u201d is wrong: 7 is not 2 \u00d7 3.  2 \u00d7 3 = 6."
+  },
+  {
+   "test": "Parent note save shows honest local-only message",
+   "status": "PASS",
+   "note": "Saved on this device only\u2026"
+  },
+  {
+   "test": "Admin flag form shows validation errors",
+   "status": "PASS",
+   "note": "26 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | Choose a subject \u2014 use the Flag button in the table, or pick one here. | Choose a reason. |"
+  },
+  {
+   "test": "Admin flag errors announced to screen readers",
+   "status": "FAIL",
+   "note": "role=alert count=0; errors are plain spans"
+  },
+  {
+   "test": "Onboarding completes (name \u2192 CBSE \u2192 Class 4)",
+   "status": "PASS",
+   "note": "/student"
+  },
+  {
+   "test": "Junior stage applied for Class 4",
+   "status": "PASS",
+   "note": "junior"
+  }
+ ],
+ "console": [
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[834l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[834l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[834l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[834l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[834l] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[834l] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[1440d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype.",
+  "[390d] error: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390d] warning: Warning: KaTeX doesn't work in quirks mode. Make sure your website has a suitable doctype."
+ ],
+ "failed": [
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[834l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[834l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[834l] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[1440d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED",
+  "[390d] https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;7 net::ERR_TUNNEL_CONNECTION_FAILED"
+ ],
+ "overflow": [],
+ "fonts": {
+  "Bricolage Grotesque": true,
+  "Figtree": true,
+  "Baloo 2": true,
+  "IBM Plex Mono": true
+ }
+}

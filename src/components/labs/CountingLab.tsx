@@ -1,11 +1,12 @@
 'use client';
+import { useT } from '@/lib/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Volume2, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Confetti } from '../Confetti';
 import { cx } from '../ui';
 
-const say = (t: string) => { try { const u = new SpeechSynthesisUtterance(t); u.lang = 'en-IN'; u.rate = 0.9; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch { /* no audio */ } };
+const say = (t: string, lang = 'en-IN') => { try { const u = new SpeechSynthesisUtterance(t); u.lang = lang; u.rate = 0.9; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch { /* no audio */ } };
 
 function Mango() {
   return (
@@ -20,6 +21,7 @@ function Mango() {
 /** Foundational stage: count mangoes that drop into a basket; voice instructions. */
 export default function CountingLab() {
   const [n, setN] = useState(3);
+  const { t, locale } = useT();
   const [round, setRound] = useState(0);
   const [stars, setStars] = useState(0);
   const [wrong, setWrong] = useState<number | null>(null);
@@ -31,21 +33,21 @@ export default function CountingLab() {
   function tap(k: number) {
     if (right) return;
     if (k === n) {
-      setRight(true); setStars(s => Math.min(5, s + 1)); setFire(f => f + 1); say(`Well done! ${n} mangoes.`);
+      setRight(true); setStars(s => Math.min(5, s + 1)); setFire(f => f + 1); say(t('lb.cnt.well', { n }), locale);
       setTimeout(() => setRound(r => r + 1), 1500);
-    } else { setWrong(k); say('Count again, slowly.'); setTimeout(() => setWrong(null), 500); }
+    } else { setWrong(k); say(t('lb.cnt.again'), locale); setTimeout(() => setWrong(null), 500); }
   }
 
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-3">
-        <h3 className="font-display text-2xl">How many mangoes are in the basket?</h3>
-        <button className="btn-primary" onClick={() => say('How many mangoes are in the basket?')}><Volume2 size={17} /> Listen</button>
-        <div className="ml-auto flex gap-1" role="img" aria-label={`${stars} of 5 stars`}>
+        <h3 className="font-display text-2xl">{t('lb.cnt.q')}</h3>
+        <button className="btn-primary" onClick={() => say(t('lb.cnt.q'), locale)}><Volume2 size={17} aria-hidden /> {t('common.listen')}</button>
+        <div className="ml-auto flex gap-1" role="img" aria-label={t('lb.cnt.stars', { n: stars })}>
           {Array.from({ length: 5 }, (_, i) => <Star key={i} size={24} className={i < stars ? 'fill-accent text-accent' : 'text-line'} aria-hidden />)}
         </div>
       </div>
-      <div className="relative h-60 overflow-hidden rounded-card bg-gradient-to-b from-primary/10 to-surface2" role="img" aria-label="Mangoes in a basket">
+      <div className="relative h-60 overflow-hidden rounded-card bg-gradient-to-b from-primary/10 to-surface2" role="img" aria-label={t('lb.cnt.basket')}>
         <AnimatePresence>
           {Array.from({ length: n }, (_, i) => (
             <motion.div key={`${round}-${i}`} className="absolute" style={{ left: `calc(50% - 150px + ${(i / Math.max(1, n - 1)) * 260}px)`, bottom: 58 + (i % 2) * 18 }}
@@ -62,13 +64,13 @@ export default function CountingLab() {
       </div>
       <div className="grid grid-cols-5 gap-2 sm:grid-cols-9">
         {Array.from({ length: 9 }, (_, i) => i + 1).map(k => (
-          <motion.button key={k} onClick={() => tap(k)} whileTap={{ scale: 0.92 }} aria-label={`${k} mangoes`}
+          <motion.button key={k} onClick={() => tap(k)} whileTap={{ scale: 0.92 }} aria-label={t('lb.cnt.btn', { n: k })}
             animate={wrong === k ? { x: [0, -6, 6, -4, 0] } : right && k === n ? { scale: [1, 1.2, 1] } : {}}
             className={cx('rounded-2xl py-3 font-display text-3xl font-extrabold transition', right && k === n ? 'bg-good text-white' : wrong === k ? 'bg-bad/15 text-bad' : 'bg-surface2 hover:bg-surface3')}>{k}</motion.button>
         ))}
       </div>
-      <p className="sr-only" role="status">{right ? `Correct, ${n} mangoes` : wrong ? 'Not quite, count again' : ''}</p>
-      <p className="text-sm text-muted">Made for Classes 1–2: picture-first, voice instructions, big tap targets, and no reading needed.</p>
+      <p className="sr-only" role="status">{right ? t('lb.cnt.correct', { n }) : wrong ? t('lb.cnt.notQuite') : ''}</p>
+      <p className="text-sm text-muted">{t('lb.cnt.note')}</p>
       <Confetti fire={fire} />
     </div>
   );

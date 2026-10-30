@@ -1,3 +1,7 @@
+import { PACKS } from './registry';
+
+const PACK_ART: Record<string, JSX.Element> = Object.assign({}, ...PACKS.map(p => p.art || {}));
+
 /** Small, purposeful illustration for each lab card (decorative; the card text carries the meaning). */
 export function LabArt({ id, className = '' }: { id: string; className?: string }) {
   const p = 'rgb(var(--primary))', t = 'rgb(var(--teal))', a = 'rgb(var(--accent))', n = 'rgb(var(--on-night))';
@@ -12,7 +16,7 @@ export function LabArt({ id, className = '' }: { id: string; className?: string 
   };
   return (
     <svg viewBox="0 0 68 64" className={className} aria-hidden focusable="false">
-      {art[id] ?? <circle cx="34" cy="32" r="16" fill={p} />}
+      {art[id] ?? PACK_ART[id] ?? <circle cx="34" cy="32" r="16" fill={p} />}
     </svg>
   );
 }

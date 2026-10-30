@@ -1,0 +1,1116 @@
+{
+ "labs": {
+  "counting": {
+   "d": {
+    "title": "Count the mangoes",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 3
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Count the mangoes",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 3
+   }
+  },
+  "fractions": {
+   "d": {
+    "title": "Share the roti",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Share the roti",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "refraction": {
+   "d": {
+    "title": "Bending light",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Bending light",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "projectile": {
+   "d": {
+    "title": "Projectile launcher",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Projectile launcher",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "waves": {
+   "d": {
+    "title": "Oscillations & waves",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Oscillations & waves",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "grapher": {
+   "d": {
+    "title": "Function grapher",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Function grapher",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "circuit": {
+   "d": {
+    "title": "Ohm's law circuit",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Ohm's law circuit",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "place-value": {
+   "d": {
+    "title": "Place value blocks",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 4
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Place value blocks",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 4
+   }
+  },
+  "number-line": {
+   "d": {
+    "title": "Hop on the number line",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Hop on the number line",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "shapes": {
+   "d": {
+    "title": "Shape detective",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Shape detective",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "clock": {
+   "d": {
+    "title": "Tell the time",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Tell the time",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   }
+  },
+  "money": {
+   "d": {
+    "title": "Rupee shop",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [
+     "2.52 18px \"Start again\" inline-flex min-h-12 min-w-12 items-center justify-center ga"
+    ],
+    "targets": []
+   },
+   "m": {
+    "title": "Rupee shop",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "arrays": {
+   "d": {
+    "title": "Multiplication arrays",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Multiplication arrays",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   }
+  },
+  "measure": {
+   "d": {
+    "title": "Measure with a ruler",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Measure with a ruler",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   }
+  },
+  "plant-needs": {
+   "d": {
+    "title": "What plants need",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "What plants need",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "water-cycle": {
+   "d": {
+    "title": "The water cycle",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "The water cycle",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "food-groups": {
+   "d": {
+    "title": "Food groups",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Food groups",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "area-perimeter": {
+   "d": {
+    "title": "Area and perimeter",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Area and perimeter",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "angles": {
+   "d": {
+    "title": "Angles and the protractor",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Angles and the protractor",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "integers": {
+   "d": {
+    "title": "Integers on the number line",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Integers on the number line",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "symmetry": {
+   "d": {
+    "title": "Mirror and turn symmetry",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Mirror and turn symmetry",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "data-handling": {
+   "d": {
+    "title": "Data handling",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Data handling",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "ratio": {
+   "d": {
+    "title": "Ratio paint mixer",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Ratio paint mixer",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "algebra-balance": {
+   "d": {
+    "title": "Equation balance",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [
+     "3.45 14px \"Divide both sides by 2\" btn min-h-10 border text-sm border-line bg-surface hover:bg-"
+    ],
+    "targets": []
+   },
+   "m": {
+    "title": "Equation balance",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "pythagoras": {
+   "d": {
+    "title": "Pythagoras with squares",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Pythagoras with squares",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "circle": {
+   "d": {
+    "title": "Circle: circumference and area",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Circle: circumference and area",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "magnets": {
+   "d": {
+    "title": "Fun with magnets",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Fun with magnets",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "shadows": {
+   "d": {
+    "title": "Light and shadows",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Light and shadows",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "density": {
+   "d": {
+    "title": "Sink or float",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Sink or float",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "ph": {
+   "d": {
+    "title": "Acids, bases and indicators",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Acids, bases and indicators",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "states": {
+   "d": {
+    "title": "Heating water: states of matter",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Heating water: states of matter",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   }
+  },
+  "lever": {
+   "d": {
+    "title": "Lever and moments",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Lever and moments",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   }
+  },
+  "cell": {
+   "d": {
+    "title": "Plant cell and animal cell",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Plant cell and animal cell",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 1
+   }
+  },
+  "food-chain": {
+   "d": {
+    "title": "Food chain and energy",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Food chain and energy",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "earth-sun": {
+   "d": {
+    "title": "Day, night and seasons",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Day, night and seasons",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "lens": {
+   "d": {
+    "title": "Lens ray diagrams",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Lens ray diagrams",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "motion-graphs": {
+   "d": {
+    "title": "Motion graphs",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 4
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Motion graphs",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 4
+   }
+  },
+  "newton": {
+   "d": {
+    "title": "Force, friction and F = ma",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Force, friction and F = ma",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "gas-laws": {
+   "d": {
+    "title": "Gas laws in a piston",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Gas laws in a piston",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   }
+  },
+  "titration": {
+   "d": {
+    "title": "Acid–base titration",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Acid–base titration",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   }
+  },
+  "coulomb": {
+   "d": {
+    "title": "Coulomb's law",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Coulomb's law",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "capacitor": {
+   "d": {
+    "title": "Charging a capacitor",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 3
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Charging a capacitor",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 3
+   }
+  },
+  "photoelectric": {
+   "d": {
+    "title": "Photoelectric effect",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Photoelectric effect",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 2
+   }
+  },
+  "derivative": {
+   "d": {
+    "title": "From secant to tangent",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "From secant to tangent",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  },
+  "probability": {
+   "d": {
+    "title": "Coins, dice and chance",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Coins, dice and chance",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "button",
+    "canvas_or_svg": 2
+   }
+  },
+  "vectors": {
+   "d": {
+    "title": "Adding vectors",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   },
+   "a11y": {
+    "noName": [],
+    "noLabel": [],
+    "contrast": [],
+    "targets": []
+   },
+   "m": {
+    "title": "Adding vectors",
+    "rendered": true,
+    "overflow": false,
+    "errors": [],
+    "acted": "slider button",
+    "canvas_or_svg": 1
+   }
+  }
+ },
+ "console": [],
+ "catalogue": {
+  "search_angle_results": 15
+ }
+}

@@ -7,18 +7,19 @@ import { Dots, cx } from './ui';
 import { friendlyError, streamText } from '@/lib/ai-client';
 import { ctxKey, useTutor, type TutorMsg } from '@/lib/tutor-store';
 import { useLMS } from '@/lib/store';
+import { useT } from '@/lib/i18n';
+import { Vidya } from './art';
 
 type Mode = 'socratic' | 'explain' | 'check';
-const MODES: { id: Mode; label: string; icon: typeof Lightbulb; tip: string }[] = [
-  { id: 'socratic', label: 'Guide me', icon: Lightbulb, tip: 'Hints and questions, not answers' },
-  { id: 'explain', label: 'Explain', icon: MessageSquareText, tip: 'A clear explanation with an example' },
-  { id: 'check', label: 'Check my work', icon: CheckCheck, tip: 'Paste your working; find the first mistake' },
+const MODES: { id: Mode; icon: typeof Lightbulb }[] = [
+  { id: 'socratic', icon: Lightbulb }, { id: 'explain', icon: MessageSquareText }, { id: 'check', icon: CheckCheck },
 ];
 
 /** The AI tutor conversation. Used in the drawer and on the full Tutor page. */
 export function TutorChat({ compact = false }: { compact?: boolean }) {
   const { ctx, ctxLabel, threads, setThread, draft, setDraft } = useTutor();
   const language = useLMS(s => s.profile.language);
+  const { t } = useT();
   const skills = useLMS(s => s.skills);
   const key = ctxKey(ctx);
   const msgs = threads[key] || [];
@@ -60,33 +61,33 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
   }
 
   const starters = ctx?.unit
-    ? [`Explain "${short(ctx.unit)}" simply`, 'Give me a practice question', 'What are common mistakes here?', 'Make a 5-point revision summary']
-    : ['How do I plan my study week?', 'Explain photosynthesis simply', 'Help me with quadratic equations', 'Tips for board exams'];
+    ? [t('tc.s1', { unit: short(ctx.unit) }), t('tc.s2'), t('tc.s3'), t('tc.s4')]
+    : [t('tc.g1'), t('tc.g2'), t('tc.g3'), t('tc.g4')];
 
   return (
     <div className={cx('flex min-h-0 flex-col', compact ? 'h-full' : 'h-[calc(100dvh-11rem)] min-h-[420px]')}>
       <div className="flex flex-wrap items-center gap-2 border-b border-line pb-3">
-        <span className="pill max-w-full truncate bg-primary/10 text-primary" title={`Vidya is helping with: ${ctxLabel}`}><Sparkles size={13} /> {ctxLabel}</span>
-        <div className="seg ml-auto" role="radiogroup" aria-label="Tutor mode">
+        <span className="pill max-w-full truncate bg-primary/10 text-primary" title={t('tc.helping', { label: ctxLabel })}><Sparkles size={13} /> {ctxLabel}</span>
+        <div className="seg ml-auto" role="radiogroup" aria-label={t('tc.mode')}>
           {MODES.map(m => (
-            <button key={m.id} role="radio" aria-checked={mode === m.id} title={m.tip} onClick={() => setMode(m.id)}
+            <button key={m.id} role="radio" aria-checked={mode === m.id} title={t(`tc.tip.${m.id}`)} onClick={() => setMode(m.id)}
               className="!flex items-center gap-1 !px-2.5 !py-1 !text-xs">
-              <m.icon size={13} />{m.label}
+              <m.icon size={13} aria-hidden />{t(`tc.mode.${m.id}`)}
             </button>
           ))}
         </div>
       </div>
 
-      <p className="sr-only" aria-live="polite">{busy ? 'Vidya is writing a reply' : ''}</p>
-      <p className="pt-2 text-xs text-muted">{MODES.find(m => m.id === mode)?.tip}</p>
+      <p className="sr-only" aria-live="polite">{busy ? t('tc.writing') : ''}</p>
+      <p className="pt-2 text-xs text-muted">{t(`tc.tip.${mode}`)}</p>
       <div className="min-h-0 flex-1 overflow-y-auto py-4">
         {!msgs.length && (
           <div className="grid gap-4">
             <div className="flex items-start gap-3">
               <Avatar />
               <div className="rounded-2xl rounded-tl-sm bg-surface2 px-4 py-3">
-                <p className="font-semibold">Namaste! I’m Vidya, your AI tutor.</p>
-                <p className="text-muted">I'll guide you with hints so you learn it yourself. Ask anything{ctx?.unit ? ` about ${short(ctx.unit)}` : ''}.</p>
+                <p className="font-semibold">{t('tc.hello')}</p>
+                <p className="text-muted">{ctx?.unit ? t('tc.introUnit', { unit: short(ctx.unit) }) : t('tc.intro')}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pl-11">
@@ -98,7 +99,7 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
           <AnimatePresence initial={false}>
             {msgs.map((m, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={cx('flex items-start gap-3', m.role === 'user' && 'flex-row-reverse')}>
-                {m.role === 'assistant' ? <Avatar /> : <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/25 text-[11px] font-bold">You</span>}
+                {m.role === 'assistant' ? <Avatar /> : <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/25 text-[11px] font-bold">{t('tc.you')}</span>}
                 <div className={cx('max-w-[85%] min-w-0 rounded-2xl px-4 py-3', m.role === 'user' ? 'rounded-tr-sm bg-primary text-onprimary' : 'rounded-tl-sm bg-surface2')}>
                   {m.role === 'assistant'
                     ? (m.content ? <Markdown text={m.content} className="prose-lms text-[0.97rem]" /> : <span className="flex items-center gap-2 text-muted"><Dots /> Thinking…</span>)
@@ -111,21 +112,21 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
         {err && (
           <div role="alert" className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-bad/30 bg-bad/10 px-3 py-2 text-sm">
             <span className="flex-1 text-bad">{err}</span>
-            {lastAsk && <button className="btn-ghost h-8 min-h-0 px-3 text-xs" onClick={() => send(lastAsk)}>Try again</button>}
+            {lastAsk && <button className="btn-ghost h-8 min-h-0 px-3 text-xs" onClick={() => send(lastAsk)}>{t('common.tryAgain')}</button>}
           </div>
         )}
         <div ref={end} />
       </div>
 
       <form className="flex items-end gap-2 border-t border-line pt-3" onSubmit={e => { e.preventDefault(); send(); }}>
-        <button type="button" className="btn-ghost h-11 w-11 shrink-0 !px-0" title="Clear conversation" aria-label="Clear conversation" onClick={() => setThread(key, [])}><Trash2 size={17} /></button>
+        <button type="button" className="btn-ghost h-11 w-11 shrink-0 !px-0" title={t('tc.clear')} aria-label={t('tc.clear')} onClick={() => setThread(key, [])}><Trash2 size={17} /></button>
         <textarea ref={input} id="tutor-input" value={draft} onChange={e => setDraft(e.target.value)} rows={1}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}
-          placeholder={mode === 'check' ? 'Paste your working or answer…' : 'Ask your tutor…'}
-          className="input max-h-40 min-h-11 flex-1 resize-none" aria-label="Message to tutor" />
+          placeholder={mode === 'check' ? t('tc.phCheck') : t('tc.ph')}
+          className="input max-h-40 min-h-11 flex-1 resize-none" aria-label={t('tc.message')} />
         {busy
-          ? <button type="button" className="btn-ghost h-11 w-11 shrink-0 !px-0" aria-label="Stop" onClick={() => ctl.current?.abort()}><Square size={16} /></button>
-          : <button type="submit" className="btn-primary h-11 w-11 shrink-0 !px-0" aria-label="Send" disabled={!draft.trim()}><SendHorizonal size={17} /></button>}
+          ? <button type="button" className="btn-ghost h-11 w-11 shrink-0 !px-0" aria-label={t('common.stop')} onClick={() => ctl.current?.abort()}><Square size={16} /></button>
+          : <button type="submit" className="btn-primary h-11 w-11 shrink-0 !px-0" aria-label={t('tc.send')} disabled={!draft.trim()}><SendHorizonal size={17} /></button>}
       </form>
     </div>
   );
@@ -133,8 +134,8 @@ export function TutorChat({ compact = false }: { compact?: boolean }) {
 
 function Avatar() {
   return (
-    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary text-onprimary shadow-soft" aria-hidden>
-      <Sparkles size={15} />
+    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface2 ring-1 ring-line" aria-hidden>
+      <Vidya size={28} />
     </span>
   );
 }

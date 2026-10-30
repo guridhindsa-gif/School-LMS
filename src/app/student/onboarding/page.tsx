@@ -2,31 +2,26 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, GraduationCap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useT } from '@/lib/i18n';
 import { cx } from '@/components/ui';
 import { useLMS } from '@/lib/store';
 import type { Board, Stream } from '@/lib/types';
 
-const STAGES: [string, string, number[]][] = [
-  ['Foundational', 'Play-based, picture-first', [1, 2]],
-  ['Preparatory', 'Reading, numbers, discovery', [3, 4, 5]],
-  ['Middle', 'Subjects and experiments', [6, 7, 8]],
-  ['Secondary', 'Board exam years', [9, 10]],
-  ['Senior secondary', 'Streams and entrances', [11, 12]],
-];
-const BOARDS: [Board, string, string][] = [
-  ['CBSE', 'Central Board of Secondary Education', 'NCERT books, NCF-SE 2023 · two Class 10 board exams'],
-  ['CISCE', 'ICSE (9–10) · ISC (11–12)', 'Council for the Indian School Certificate Examinations · school-chosen books in 1–8'],
-];
-const STREAMS: { id: Stream; label: string; core: string; leads: string }[] = [
-  { id: 'PCM', label: 'Science · PCM', core: 'Physics, Chemistry, Maths', leads: 'JEE, BITSAT, NDA, state CETs' },
-  { id: 'PCB', label: 'Science · PCB', core: 'Physics, Chemistry, Biology', leads: 'NEET-UG' },
-  { id: 'COM', label: 'Commerce', core: 'Accountancy, Business Studies, Economics', leads: 'CUET, CA Foundation, IPMAT, CLAT' },
-  { id: 'HUM', label: 'Humanities', core: 'History, Political Science, Geography…', leads: 'CUET, CLAT, design entrances' },
+const STAGES: [string, number[]][] = [['found', [1, 2]], ['prep', [3, 4, 5]], ['middle', [6, 7, 8]], ['sec', [9, 10]], ['senior', [11, 12]]];
+const BOARDS: [Board, string][] = [['CBSE', 'cbse'], ['CISCE', 'cisce']];
+// labels/core are translation keys; `leads` is either a key or a literal list of exam names
+const STREAMS: { id: Stream; key: string; leads: string }[] = [
+  { id: 'PCM', key: 'pcm', leads: 'onb.s.pcm.leads' },
+  { id: 'PCB', key: 'pcb', leads: 'NEET-UG' },
+  { id: 'COM', key: 'com', leads: 'CUET, CA Foundation, IPMAT, CLAT' },
+  { id: 'HUM', key: 'hum', leads: 'onb.s.hum.leads' },
 ];
 
 export default function Onboarding() {
   const router = useRouter();
+  const { t } = useT();
+  const nameRef = useRef<HTMLInputElement>(null);
   const reduce = useReducedMotion();
   const setProfile = useLMS(s => s.setProfile);
   const existing = useLMS(s => s.profile);
@@ -37,13 +32,13 @@ export default function Onboarding() {
   const [cls, setCls] = useState<number | null>(existing.cls);
   const [stream, setStream] = useState<Stream | null>(existing.stream);
   const needsStream = (cls ?? 0) >= 11;
-  const steps = ['Your name', 'Board', 'Class', ...(needsStream ? [cls === 13 ? 'Batch' : 'Stream'] : [])];
+  const steps = [t('onb.step.name'), t('onb.step.board'), t('onb.step.class'), ...(needsStream ? [cls === 13 ? t('onb.step.batch') : t('onb.step.stream')] : [])];
+  const cName = (c: number) => (c === 13 ? t('shell.repeater') : t('shell.class', { n: c }));
 
   function submitName() {
     const n = name.trim();
-    if (!n) { setNameErr('Please type your first name so we know what to call you.'); return; }
-    if (n.length > 30) { setNameErr('Please keep your name under 30 characters.'); return; }
-    if (!/\p{L}/u.test(n)) { setNameErr('A name needs at least one letter.'); return; }
+    const err = !n ? 'onb.err.empty' : n.length > 30 ? 'onb.err.long' : !/\p{L}/u.test(n) ? 'onb.err.letter' : '';
+    if (err) { setNameErr(err); nameRef.current?.focus(); return; }
     setNameErr(''); setStep(1);
   }
   function save(c: number, st: Stream | null) {
@@ -60,9 +55,9 @@ export default function Onboarding() {
       <aside className="panel-night grid content-start gap-6 rounded-card p-6 shadow-lift lg:sticky lg:top-24 lg:self-start">
         <div className="flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center rounded-ctl bg-white/10"><GraduationCap size={20} /></span>
-          <div><p className="font-mono text-xs uppercase tracking-widest text-onnight/70">Set up</p><p className="font-display text-xl font-bold">Your learning path</p></div>
+          <div><p className="font-mono text-xs uppercase tracking-widest text-onnight/70">{t('onb.setUp')}</p><p className="font-display text-xl font-bold">{t('onb.path')}</p></div>
         </div>
-        <ol className="grid gap-3" aria-label={`Step ${step + 1} of ${steps.length}`}>
+        <ol className="grid gap-3" aria-label={t('onb.stepOf', { n: step + 1, total: steps.length })}>
           {steps.map((s, i) => (
             <li key={s} className="flex items-center gap-3" aria-current={i === step ? 'step' : undefined}>
               <span className={cx('grid h-7 w-7 place-items-center rounded-full text-xs font-bold transition', i < step ? 'bg-teal text-white' : i === step ? 'bg-accent text-[#2b1b02]' : 'bg-white/10 text-onnight/60')}>{i < step ? <Check size={14} /> : i + 1}</span>
@@ -71,7 +66,7 @@ export default function Onboarding() {
           ))}
         </ol>
         <dl className="grid gap-2 border-t border-white/10 pt-4 text-sm">
-          {[['Name', name.trim() || '—'], ['Board', board || '—'], ['Class', cls ? (cls === 13 ? 'Repeater batch' : `Class ${cls}`) : '—'], ...(needsStream ? [['Stream', stream || '—']] : [])].map(([k, v]) => (
+          {[[t('onb.sum.name'), name.trim() || '—'], [t('onb.step.board'), board || '—'], [t('onb.step.class'), cls ? cName(cls) : '—'], ...(needsStream ? [[t('onb.step.stream'), stream || '—']] : [])].map(([k, v]) => (
             <div key={k} className="flex justify-between gap-3"><dt className="text-onnight/60">{k}</dt><dd className="truncate font-semibold">{v}</dd></div>
           ))}
         </dl>
@@ -81,26 +76,26 @@ export default function Onboarding() {
         <motion.section key={step} className="card grid content-start gap-6 p-6 sm:p-8" {...motionProps} aria-labelledby="ob-title">
           {step === 0 && (
             <form className="grid gap-5" onSubmit={e => { e.preventDefault(); submitName(); }} noValidate>
-              <h1 id="ob-title" className="h-page">Welcome! What should we call you?</h1>
+              <h1 id="ob-title" className="h-page">{t('onb.welcome')}</h1>
               <div className="grid gap-1.5">
-                <label htmlFor="ob-name" className="text-sm font-semibold">First name</label>
-                <input id="ob-name" className="input h-12 text-lg" placeholder="e.g. Harpreet" value={name} autoComplete="given-name" maxLength={40}
+                <label htmlFor="ob-name" className="text-sm font-semibold">{t('onb.firstName')}</label>
+                <input ref={nameRef} id="ob-name" className="input h-12 text-lg" placeholder={t('onb.namePh')} value={name} autoComplete="given-name" maxLength={40}
                   onChange={e => { setName(e.target.value); if (nameErr) setNameErr(''); }} aria-invalid={!!nameErr} aria-describedby={nameErr ? 'ob-name-err' : 'ob-name-help'} autoFocus />
-                {nameErr ? <p id="ob-name-err" className="text-sm font-semibold text-bad" role="alert">{nameErr}</p>
-                  : <p id="ob-name-help" className="text-sm text-muted">Used for greetings only. It stays in this browser.</p>}
+                {nameErr ? <p id="ob-name-err" className="text-sm font-semibold text-bad" role="alert">{t(nameErr)}</p>
+                  : <p id="ob-name-help" className="text-sm text-muted">{t('onb.nameHelp')}</p>}
               </div>
-              <button type="submit" className="btn-primary justify-self-start">Next <ArrowRight size={17} /></button>
+              <button type="submit" className="btn-primary justify-self-start">{t('common.next')} <ArrowRight size={17} /></button>
             </form>
           )}
           {step === 1 && (
             <>
-              <h1 id="ob-title" className="h-page">Choose your board</h1>
+              <h1 id="ob-title" className="h-page">{t('onb.chooseBoard')}</h1>
               <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby="ob-title">
-                {BOARDS.map(([b, sub, d]) => (
+                {BOARDS.map(([b, k]) => (
                   <button key={b} role="radio" aria-checked={board === b} onClick={() => { setBoard(b); setStep(2); }} className={choice(board === b)}>
                     <span className="flex items-center justify-between gap-2"><span className="font-display text-3xl font-bold">{b}</span>{board === b && <Check className="text-primary" />}</span>
-                    <span className="font-semibold">{sub}</span>
-                    <span className="text-sm text-muted">{d}</span>
+                    <span className="font-semibold">{t(`onb.${k}.sub`)}</span>
+                    <span className="text-sm text-muted">{t(`onb.${k}.desc`)}</span>
                   </button>
                 ))}
               </div>
@@ -108,42 +103,42 @@ export default function Onboarding() {
           )}
           {step === 2 && (
             <>
-              <h1 id="ob-title" className="h-page">Which class are you in?</h1>
+              <h1 id="ob-title" className="h-page">{t('onb.whichClass')}</h1>
               <div className="grid gap-4">
-                {STAGES.map(([g, hint, cs]) => (
-                  <div key={g} className="grid gap-2 sm:grid-cols-[190px_1fr] sm:items-center" role="group" aria-label={g}>
-                    <span><b className="block">{g}</b><span className="text-xs text-muted">{hint}</span></span>
+                {STAGES.map(([g, cs]) => (
+                  <div key={g} className="grid gap-2 sm:grid-cols-[minmax(170px,auto)_1fr] sm:items-center" role="group" aria-label={t(`onb.stage.${g}`)}>
+                    <span><b className="block">{t(`onb.stage.${g}`)}</b><span className="text-xs text-muted">{t(`onb.stage.${g}.hint`)}</span></span>
                     <div className="flex flex-wrap gap-2">
                       {cs.map(c => (
-                        <button key={c} aria-pressed={cls === c} aria-label={`Class ${c}`}
+                        <button key={c} aria-pressed={cls === c} aria-label={t('shell.class', { n: c })}
                           onClick={() => { setCls(c); if (c >= 11) setStep(3); else save(c, null); }}
                           className={cx('h-14 w-16 rounded-ctl border border-line bg-surface font-display text-2xl font-bold transition hover:border-primary hover:text-primary', cls === c && 'border-primary bg-primary text-onprimary hover:text-onprimary')}>{c}</button>
                       ))}
                     </div>
                   </div>
                 ))}
-                <div className="grid gap-2 sm:grid-cols-[190px_1fr] sm:items-center">
-                  <span><b className="block">After Class 12</b><span className="text-xs text-muted">Full-time entrance prep</span></span>
-                  <button aria-pressed={cls === 13} onClick={() => { setCls(13); setStep(3); }} className={cx('justify-self-start rounded-ctl border border-line bg-surface px-4 py-3 font-semibold transition hover:border-primary', cls === 13 && 'border-primary bg-primary text-onprimary')}>Repeater JEE / NEET batch</button>
+                <div className="grid gap-2 sm:grid-cols-[minmax(170px,auto)_1fr] sm:items-center">
+                  <span><b className="block">{t('onb.after12')}</b><span className="text-xs text-muted">{t('onb.after12.hint')}</span></span>
+                  <button aria-pressed={cls === 13} onClick={() => { setCls(13); setStep(3); }} className={cx('justify-self-start rounded-ctl border border-line bg-surface px-4 py-3 font-semibold transition hover:border-primary', cls === 13 && 'border-primary bg-primary text-onprimary')}>{t('onb.repeater')}</button>
                 </div>
               </div>
             </>
           )}
           {step === 3 && (
             <>
-              <h1 id="ob-title" className="h-page">{cls === 13 ? 'Choose your entrance batch' : 'Choose your stream'}</h1>
+              <h1 id="ob-title" className="h-page">{cls === 13 ? t('onb.chooseBatch') : t('onb.chooseStream')}</h1>
               <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby="ob-title">
                 {STREAMS.filter(s => cls !== 13 || s.id === 'PCM' || s.id === 'PCB').map(s => (
                   <button key={s.id} role="radio" aria-checked={stream === s.id} onClick={() => { setStream(s.id); save(cls ?? 11, s.id); }} className={choice(stream === s.id)}>
-                    <span className="font-display text-xl font-bold">{s.label}</span>
-                    <span className="text-muted">{s.core}</span>
-                    <span className="text-sm font-semibold text-primary">Leads to: {s.leads}</span>
+                    <span className="font-display text-xl font-bold">{t(`onb.s.${s.key}`)}</span>
+                    <span className="text-muted">{t(`onb.s.${s.key}.core`)}</span>
+                    <span className="text-sm font-semibold text-primary">{t('onb.leadsTo', { exams: s.leads.startsWith('onb.') ? t(s.leads) : s.leads })}</span>
                   </button>
                 ))}
               </div>
             </>
           )}
-          {step > 0 && <button className="btn-soft justify-self-start" onClick={() => setStep(step - 1)}><ArrowLeft size={16} /> Back</button>}
+          {step > 0 && <button className="btn-soft justify-self-start" onClick={() => setStep(step - 1)}><ArrowLeft size={16} /> {t('common.back')}</button>}
         </motion.section>
       </AnimatePresence>
     </div>
